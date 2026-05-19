@@ -3,136 +3,64 @@ import { useNavigate } from 'react-router-dom'
 import ProjectCard from './ProjectCard'
 import { projects } from '../data/projects'
 
-const featured = projects.filter(p => p.featured)
+// Tri par année décroissante
+const featured  = projects.filter(p => p.featured) .sort((a, b) => b.year - a.year)
+const secondary = projects.filter(p => !p.featured) .sort((a, b) => b.year - a.year)
+
 // Double pour boucle infinie
-const doubled = [...featured, ...featured]
+const doubledFeatured  = [...featured,  ...featured]
+const doubledSecondary = [...secondary, ...secondary]
 
 export default function Projects() {
-  const trackRef = useRef(null)
   const [paused, setPaused] = useState(false)
   const navigate = useNavigate()
 
   return (
-    <section id="projets" style={styles.section}>
+    <section id="projets" className="projects-section">
       <div className="container">
-        <div style={styles.header}>
+        <div className="projects-header">
           <div>
             <p className="section-label">Projets</p>
-            <h2 style={styles.title}>Sélection récente</h2>
+            <h2 className="projects-title">Sélection récente</h2>
           </div>
           <button
-            style={styles.seeAll}
+            className="projects-see-all"
             onClick={() => navigate('/projects')}
           >
-            Voir tous les projets
-            <span style={styles.count}>{projects.length}</span>
+            Tous les projets
+            <span className="projects-count">{projects.length}</span>
           </button>
         </div>
       </div>
 
-      {/* Slider full width */}
+      {/* Deux lignes de slider */}
       <div
-        style={styles.sliderWrapper}
+        className="projects-rows"
         onMouseEnter={() => setPaused(true)}
         onMouseLeave={() => setPaused(false)}
       >
-        {/* Fade edges */}
-        <div style={styles.fadeLeft} />
-        <div style={styles.fadeRight} />
+        {/* Ligne 1 : projets featured → défilement gauche */}
+        <div className="projects-slider-wrapper">
+          <div className="projects-fade-left"  />
+          <div className="projects-fade-right" />
+          <div className={`projects-track projects-track--left ${paused ? 'projects-track--paused' : ''}`}>
+            {doubledFeatured.map((project, i) => (
+              <ProjectCard key={`feat-${project.slug}-${i}`} project={project} />
+            ))}
+          </div>
+        </div>
 
-        <div
-          ref={trackRef}
-          style={{
-            ...styles.track,
-            animationPlayState: paused ? 'paused' : 'running',
-          }}
-        >
-          {doubled.map((project, i) => (
-            <ProjectCard key={`${project.slug}-${i}`} project={project} />
-          ))}
+        {/* Ligne 2 : projets secondaires → défilement droite */}
+        <div className="projects-slider-wrapper">
+          <div className="projects-fade-left"  />
+          <div className="projects-fade-right" />
+          <div className={`projects-track projects-track--right ${paused ? 'projects-track--paused' : ''}`}>
+            {doubledSecondary.map((project, i) => (
+              <ProjectCard key={`sec-${project.slug}-${i}`} project={project} />
+            ))}
+          </div>
         </div>
       </div>
-
-      <style>{`
-        @keyframes scrollLeft {
-          from { transform: translateX(0); }
-          to   { transform: translateX(-50%); }
-        }
-      `}</style>
     </section>
   )
-}
-
-const styles = {
-  section: {
-    padding: 'var(--sp-2xl) 0',
-    overflow: 'hidden',
-  },
-  header: {
-    display: 'flex',
-    alignItems: 'flex-end',
-    justifyContent: 'space-between',
-    marginBottom: '2.5rem',
-    gap: '1rem',
-  },
-  title: {
-    fontSize: 'clamp(1.5rem, 3vw, 2.2rem)',
-    color: 'var(--text)',
-    marginTop: '0.5rem',
-  },
-  seeAll: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '0.5rem',
-    fontFamily: 'var(--font-display)',
-    fontSize: '0.8rem',
-    fontWeight: 500,
-    color: 'var(--text-muted)',
-    border: '1px solid var(--border)',
-    padding: '0.45rem 1rem',
-    borderRadius: '8px',
-    transition: 'all var(--t-fast)',
-    flexShrink: 0,
-  },
-  count: {
-    background: 'rgba(251,195,115,0.1)',
-    border: '1px solid rgba(251,195,115,0.2)',
-    color: 'var(--gold-light)',
-    fontFamily: 'var(--font-display)',
-    fontSize: '0.65rem',
-    fontWeight: 700,
-    padding: '0.1rem 0.45rem',
-    borderRadius: '999px',
-  },
-  sliderWrapper: {
-    position: 'relative',
-  },
-  fadeLeft: {
-    position: 'absolute',
-    left: 0,
-    top: 0,
-    bottom: 0,
-    width: 120,
-    background: 'linear-gradient(to right, var(--black), transparent)',
-    zIndex: 2,
-    pointerEvents: 'none',
-  },
-  fadeRight: {
-    position: 'absolute',
-    right: 0,
-    top: 0,
-    bottom: 0,
-    width: 120,
-    background: 'linear-gradient(to left, var(--black), transparent)',
-    zIndex: 2,
-    pointerEvents: 'none',
-  },
-  track: {
-    display: 'flex',
-    gap: '1rem',
-    padding: '1rem 1.5rem',
-    width: 'max-content',
-    animation: 'scrollLeft 30s linear infinite',
-    willChange: 'transform',
-  },
 }

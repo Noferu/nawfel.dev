@@ -1,16 +1,19 @@
 import { useState, useEffect, useRef } from 'react'
 import { resume } from '../data/resume'
+import { deviconMap } from '../data/deviconMap'
+import '../styles/cv.css'
 
 const SECTIONS = [
-  { id: 'exp',   label: 'Expériences'  },
-  { id: 'form',  label: 'Formations'   },
-  { id: 'comp',  label: 'Compétences'  },
-  { id: 'lang',  label: 'Langues'      },
+  { id: 'exp',   label: 'Expériences' },
+  { id: 'form',  label: 'Formations'  },
+  { id: 'comp',  label: 'Compétences' },
+  { id: 'lang',  label: 'Langues'     },
 ]
 
 export default function CV() {
   const [active,   setActive]   = useState('exp')
   const [expanded, setExpanded] = useState({})
+
   const refs = {
     exp:  useRef(null),
     form: useRef(null),
@@ -18,14 +21,14 @@ export default function CV() {
     lang: useRef(null),
   }
 
-  // Intersection observer pour le sommaire actif
+  // Intersection Observer — détection de la section active au scroll
   useEffect(() => {
     const observers = SECTIONS.map(({ id }) => {
       const el = refs[id]?.current
       if (!el) return null
       const obs = new IntersectionObserver(
         ([entry]) => { if (entry.isIntersecting) setActive(id) },
-        { rootMargin: '-40% 0px -50% 0px' }
+        { rootMargin: '-25% 0px -65% 0px' }
       )
       obs.observe(el)
       return obs
@@ -33,90 +36,82 @@ export default function CV() {
     return () => observers.forEach(o => o?.disconnect())
   }, [])
 
+  // Au clic : active immédiat + scroll (fix pour la petite section Langues)
   const scrollTo = (id) => {
+    setActive(id)
     refs[id]?.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
   }
 
   const toggle = (key) => setExpanded(prev => ({ ...prev, [key]: !prev[key] }))
 
   return (
-    <div className="page" style={styles.page}>
-      <div className="container" style={styles.layout}>
+    <div className="page cv-page">
+      <div className="container cv-layout">
 
-        {/* ── Sommaire latéral ── */}
-        <aside style={styles.sidebar}>
-          <div style={styles.sidebarSticky}>
-            <p style={styles.sidebarTitle}>Sommaire</p>
-            <nav style={styles.nav}>
+        {/* ── Sidebar ── */}
+        <aside className="cv-sidebar">
+          <div className="cv-sidebar-sticky">
+
+            {/* Photo de profil */}
+            <div className="cv-sidebar-photo">
+              <img src="/assets/img/nawfel.webp" alt="Nawfel Ida-Ali" />
+            </div>
+
+            <p className="cv-sidebar-title">Sommaire</p>
+            <nav className="cv-nav">
               {SECTIONS.map(s => (
                 <button
                   key={s.id}
                   onClick={() => scrollTo(s.id)}
-                  style={{
-                    ...styles.navItem,
-                    ...(active === s.id ? styles.navItemActive : {}),
-                  }}
+                  className={`cv-nav-item ${active === s.id ? 'cv-nav-item--active' : ''}`}
                 >
-                  <span style={{
-                    ...styles.navDot,
-                    ...(active === s.id ? styles.navDotActive : {}),
-                  }} />
+                  <span className={`cv-nav-dot ${active === s.id ? 'cv-nav-dot--active' : ''}`} />
                   {s.label}
                 </button>
               ))}
             </nav>
 
-            {/* Infos rapides */}
-            <div style={styles.quickInfo}>
-              <p style={styles.quickName}>{resume.name}</p>
-              <p style={styles.quickTitle}>{resume.title}</p>
-              <p style={styles.quickLoc}>{resume.location}</p>
-            </div>
           </div>
         </aside>
 
         {/* ── Contenu ── */}
-        <main style={styles.content}>
+        <main className="cv-content">
 
-          {/* Header page */}
-          <div style={styles.pageHeader}>
+          <div className="cv-page-header">
             <p className="section-label">Curriculum Vitæ</p>
-            <h1 style={styles.pageTitle}>{resume.name}</h1>
-            <p style={styles.pageSubtitle}>{resume.title}</p>
+            <h1 className="cv-page-title">{resume.name}</h1>
+            <p className="cv-page-subtitle">{resume.title}</p>
           </div>
 
           {/* ── Expériences ── */}
-          <div ref={refs.exp} id="exp" style={styles.block}>
-            <h2 style={styles.blockTitle}>Expériences</h2>
-            <div style={styles.timeline}>
+          <div ref={refs.exp} id="exp" className="cv-block">
+            <h2 className="cv-block-title">Expériences</h2>
+            <div className="cv-timeline">
               {resume.experiences.map((exp, i) => (
-                <div key={i} style={styles.timelineItem}>
-                  <div style={styles.timelineLine}>
-                    <div style={styles.timelineDot} />
-                    {i < resume.experiences.length - 1 && <div style={styles.timelineBar} />}
+                <div key={i} className="cv-timeline-item">
+                  <div className="cv-timeline-line">
+                    <div className="cv-timeline-dot" />
+                    {i < resume.experiences.length - 1 && <div className="cv-timeline-bar" />}
                   </div>
-                  <div style={styles.timelineContent}>
+                  <div className="cv-timeline-content">
                     <button
-                      style={styles.expHeader}
+                      className="cv-exp-header"
                       onClick={() => toggle(`exp-${i}`)}
                     >
                       <div>
-                        <p style={styles.expTitle}>{exp.poste}</p>
-                        <p style={styles.expMeta}>{exp.lieu} · {exp.periode}</p>
+                        <p className="cv-exp-title">{exp.poste}</p>
+                        <p className="cv-exp-meta">{exp.lieu} · {exp.periode}</p>
                       </div>
-                      <span style={{
-                        ...styles.expandIcon,
-                        transform: expanded[`exp-${i}`] ? 'rotate(45deg)' : 'rotate(0deg)',
-                      }}>+</span>
+                      <span className={`cv-expand-icon ${expanded[`exp-${i}`] ? 'cv-expand-icon--open' : ''}`}>
+                        +
+                      </span>
                     </button>
 
-                    {expanded[`exp-${i}`] && (
-                      <ul style={styles.expPoints}>
-                        {exp.points.map((pt, j) => (
-                          <li key={j} style={styles.expPoint}>{pt}</li>
-                        ))}
-                      </ul>
-                    )}
+                    <ul className={`cv-exp-points ${expanded[`exp-${i}`] ? 'cv-exp-points--open' : ''}`}>
+                      {exp.points.map((pt, j) => (
+                        <li key={j} className="cv-exp-point">{pt}</li>
+                      ))}
+                    </ul>
                   </div>
                 </div>
               ))}
@@ -124,19 +119,42 @@ export default function CV() {
           </div>
 
           {/* ── Formations ── */}
-          <div ref={refs.form} id="form" style={styles.block}>
-            <h2 style={styles.blockTitle}>Formations</h2>
-            <div style={styles.timeline}>
+          <div ref={refs.form} id="form" className="cv-block">
+            <h2 className="cv-block-title">Formations</h2>
+            <div className="cv-timeline">
               {resume.formations.map((f, i) => (
-                <div key={i} style={styles.timelineItem}>
-                  <div style={styles.timelineLine}>
-                    <div style={styles.timelineDot} />
-                    {i < resume.formations.length - 1 && <div style={styles.timelineBar} />}
+                <div key={i} className="cv-timeline-item">
+                  <div className="cv-timeline-line">
+                    <div className="cv-timeline-dot" />
+                    {i < resume.formations.length - 1 && <div className="cv-timeline-bar" />}
                   </div>
-                  <div style={styles.timelineContent}>
-                    <p style={styles.expTitle}>{f.titre}</p>
-                    <p style={styles.expMeta}>{f.lieu} · {f.periode}</p>
-                    {f.desc && <p style={styles.formDesc}>{f.desc}</p>}
+                  <div className="cv-timeline-content">
+                    {/* Formations avec desc sont expandables */}
+                    {f.desc ? (
+                      <button
+                        className="cv-exp-header"
+                        onClick={() => toggle(`form-${i}`)}
+                      >
+                        <div>
+                          <p className="cv-exp-title">{f.titre}</p>
+                          <p className="cv-exp-meta">{f.lieu} · {f.periode}</p>
+                        </div>
+                        <span className={`cv-expand-icon ${expanded[`form-${i}`] ? 'cv-expand-icon--open' : ''}`}>
+                          +
+                        </span>
+                      </button>
+                    ) : (
+                      <div>
+                        <p className="cv-exp-title">{f.titre}</p>
+                        <p className="cv-exp-meta">{f.lieu} · {f.periode}</p>
+                      </div>
+                    )}
+
+                    {f.desc && (
+                      <p className={`cv-form-desc ${expanded[`form-${i}`] ? 'cv-form-desc--open' : ''}`}>
+                        {f.desc}
+                      </p>
+                    )}
                   </div>
                 </div>
               ))}
@@ -144,16 +162,22 @@ export default function CV() {
           </div>
 
           {/* ── Compétences ── */}
-          <div ref={refs.comp} id="comp" style={styles.block}>
-            <h2 style={styles.blockTitle}>Compétences</h2>
-            <div style={styles.compGrid}>
+          <div ref={refs.comp} id="comp" className="cv-block">
+            <h2 className="cv-block-title">Compétences</h2>
+            <div className="cv-comp-grid">
               {resume.competences.map((cat) => (
-                <div key={cat.categorie} style={styles.compCat}>
-                  <p style={styles.compCatTitle}>{cat.categorie}</p>
-                  <div style={styles.compTags}>
-                    {cat.items.map(item => (
-                      <span key={item} style={styles.compTag}>{item}</span>
-                    ))}
+                <div key={cat.categorie} className="cv-comp-cat">
+                  <p className="cv-comp-cat-title">{cat.categorie}</p>
+                  <div className="cv-comp-tags">
+                    {cat.items.map(item => {
+                      const iconClass = deviconMap[item]
+                      return (
+                        <span key={item} className="cv-comp-tag">
+                          {iconClass && <i className={`devicon ${iconClass}`} aria-hidden="true" />}
+                          {item}
+                        </span>
+                      )
+                    })}
                   </div>
                 </div>
               ))}
@@ -161,13 +185,13 @@ export default function CV() {
           </div>
 
           {/* ── Langues ── */}
-          <div ref={refs.lang} id="lang" style={styles.block}>
-            <h2 style={styles.blockTitle}>Langues</h2>
-            <div style={styles.langRow}>
+          <div ref={refs.lang} id="lang" className="cv-block">
+            <h2 className="cv-block-title">Langues</h2>
+            <div className="cv-lang-row">
               {resume.langues.map(l => (
-                <div key={l.langue} style={styles.langItem}>
-                  <p style={styles.langName}>{l.langue}</p>
-                  <p style={styles.langLevel}>{l.niveau}</p>
+                <div key={l.langue} className="cv-lang-item">
+                  <p className="cv-lang-name">{l.langue}</p>
+                  <p className="cv-lang-level">{l.niveau}</p>
                 </div>
               ))}
             </div>
@@ -177,279 +201,4 @@ export default function CV() {
       </div>
     </div>
   )
-}
-
-const styles = {
-  page: {
-    minHeight: '100vh',
-  },
-  layout: {
-    display: 'grid',
-    gridTemplateColumns: '220px 1fr',
-    gap: '4rem',
-    alignItems: 'start',
-    paddingTop: '2rem',
-    paddingBottom: '6rem',
-  },
-  sidebar: {
-    position: 'sticky',
-    top: '6rem',
-  },
-  sidebarSticky: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '1.5rem',
-  },
-  sidebarTitle: {
-    fontFamily: 'var(--font-display)',
-    fontSize: '0.6rem',
-    fontWeight: 600,
-    letterSpacing: '0.15em',
-    textTransform: 'uppercase',
-    color: 'var(--text-dim)',
-  },
-  nav: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '0.25rem',
-  },
-  navItem: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '0.75rem',
-    padding: '0.4rem 0',
-    fontFamily: 'var(--font-body)',
-    fontSize: '0.85rem',
-    color: 'var(--text-muted)',
-    background: 'none',
-    border: 'none',
-    cursor: 'pointer',
-    textAlign: 'left',
-    transition: 'color var(--t-fast)',
-  },
-  navItemActive: {
-    color: 'var(--gold-light)',
-  },
-  navDot: {
-    width: 5,
-    height: 5,
-    borderRadius: '50%',
-    background: 'var(--text-dim)',
-    flexShrink: 0,
-    transition: 'background var(--t-fast)',
-  },
-  navDotActive: {
-    background: 'var(--gold-light)',
-    boxShadow: '0 0 6px var(--gold-light)',
-  },
-  quickInfo: {
-    marginTop: '1rem',
-    padding: '1rem',
-    background: 'rgba(251,195,115,0.04)',
-    border: '1px solid rgba(251,195,115,0.08)',
-    borderRadius: '8px',
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '0.25rem',
-  },
-  quickName: {
-    fontFamily: 'var(--font-display)',
-    fontSize: '0.8rem',
-    fontWeight: 700,
-    color: 'var(--text)',
-  },
-  quickTitle: {
-    fontFamily: 'var(--font-body)',
-    fontSize: '0.65rem',
-    color: 'var(--text-muted)',
-    lineHeight: 1.5,
-  },
-  quickLoc: {
-    fontFamily: 'var(--font-body)',
-    fontSize: '0.65rem',
-    color: 'var(--text-dim)',
-  },
-  content: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '4rem',
-  },
-  pageHeader: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '0.5rem',
-    paddingBottom: '2rem',
-    borderBottom: '1px solid rgba(251,195,115,0.08)',
-  },
-  pageTitle: {
-    fontSize: 'clamp(1.8rem, 3vw, 2.8rem)',
-    color: 'var(--text)',
-    letterSpacing: '-0.03em',
-  },
-  pageSubtitle: {
-    fontFamily: 'var(--font-body)',
-    fontSize: '0.95rem',
-    color: 'var(--text-muted)',
-    fontWeight: 300,
-  },
-  block: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '2rem',
-    scrollMarginTop: '7rem',
-  },
-  blockTitle: {
-    fontFamily: 'var(--font-display)',
-    fontSize: '1.2rem',
-    fontWeight: 700,
-    color: 'var(--text)',
-    letterSpacing: '-0.02em',
-  },
-  timeline: {
-    display: 'flex',
-    flexDirection: 'column',
-  },
-  timelineItem: {
-    display: 'flex',
-    gap: '1.25rem',
-  },
-  timelineLine: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    flexShrink: 0,
-    width: 12,
-  },
-  timelineDot: {
-    width: 8,
-    height: 8,
-    borderRadius: '50%',
-    background: 'var(--amber)',
-    flexShrink: 0,
-    marginTop: '0.45rem',
-    boxShadow: '0 0 8px rgba(212,138,57,0.4)',
-  },
-  timelineBar: {
-    flex: 1,
-    width: 1,
-    background: 'rgba(251,195,115,0.1)',
-    margin: '0.4rem 0',
-    minHeight: 24,
-  },
-  timelineContent: {
-    flex: 1,
-    paddingBottom: '1.75rem',
-  },
-  expHeader: {
-    display: 'flex',
-    alignItems: 'flex-start',
-    justifyContent: 'space-between',
-    width: '100%',
-    gap: '1rem',
-    background: 'none',
-    border: 'none',
-    cursor: 'pointer',
-    textAlign: 'left',
-    padding: 0,
-  },
-  expTitle: {
-    fontFamily: 'var(--font-body)',
-    fontSize: '0.95rem',
-    fontWeight: 500,
-    color: 'var(--text)',
-    lineHeight: 1.4,
-  },
-  expMeta: {
-    fontFamily: 'var(--font-body)',
-    fontSize: '0.75rem',
-    color: 'var(--text-dim)',
-    marginTop: '0.2rem',
-  },
-  expandIcon: {
-    fontFamily: 'var(--font-display)',
-    fontSize: '1.1rem',
-    color: 'var(--amber)',
-    flexShrink: 0,
-    transition: 'transform 200ms ease',
-    lineHeight: 1,
-    marginTop: '0.1rem',
-  },
-  expPoints: {
-    marginTop: '0.75rem',
-    paddingLeft: '1rem',
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '0.4rem',
-    listStyle: 'none',
-  },
-  expPoint: {
-    fontFamily: 'var(--font-body)',
-    fontSize: '0.82rem',
-    color: 'var(--text-muted)',
-    lineHeight: 1.6,
-    fontWeight: 300,
-    paddingLeft: '0.75rem',
-    borderLeft: '1px solid rgba(251,195,115,0.15)',
-  },
-  formDesc: {
-    fontFamily: 'var(--font-body)',
-    fontSize: '0.8rem',
-    color: 'var(--text-muted)',
-    lineHeight: 1.6,
-    fontWeight: 300,
-    marginTop: '0.4rem',
-    fontStyle: 'italic',
-  },
-  compGrid: {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(2, 1fr)',
-    gap: '1.5rem',
-  },
-  compCat: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '0.75rem',
-  },
-  compCatTitle: {
-    fontFamily: 'var(--font-display)',
-    fontSize: '0.72rem',
-    fontWeight: 600,
-    letterSpacing: '0.1em',
-    textTransform: 'uppercase',
-    color: 'var(--amber)',
-  },
-  compTags: {
-    display: 'flex',
-    flexWrap: 'wrap',
-    gap: '0.4rem',
-  },
-  compTag: {
-    fontFamily: 'var(--font-body)',
-    fontSize: '0.75rem',
-    color: 'var(--text-muted)',
-    background: 'rgba(251,195,115,0.05)',
-    border: '1px solid rgba(251,195,115,0.1)',
-    padding: '0.25rem 0.6rem',
-    borderRadius: '4px',
-  },
-  langRow: {
-    display: 'flex',
-    gap: '2rem',
-  },
-  langItem: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '0.25rem',
-  },
-  langName: {
-    fontFamily: 'var(--font-display)',
-    fontSize: '1rem',
-    fontWeight: 700,
-    color: 'var(--text)',
-  },
-  langLevel: {
-    fontFamily: 'var(--font-body)',
-    fontSize: '0.8rem',
-    color: 'var(--text-muted)',
-  },
 }
