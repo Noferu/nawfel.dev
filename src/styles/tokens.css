@@ -1,0 +1,52 @@
+:root {
+  /* ── Palette ── */
+  --red-deep:    #4E0201;
+  --black:       #0E0301;
+  --copper:      #A15C21;
+  --gold-warm:   #EDA959;
+  --gold-light:  #FBC373;
+  --amber:       #D48A39;
+
+  /* ── Sémantique ── */
+  --bg:          var(--black);
+  --surface:     rgba(78, 2, 1, 0.06);
+  --surface-2:   rgba(251, 195, 115, 0.04);
+  --border:      rgba(251, 195, 115, 0.1);
+  --border-2:    rgba(251, 195, 115, 0.18);
+  --text:        #F5ECD7;
+  --text-muted:  rgba(245, 236, 215, 0.45);
+  --text-dim:    rgba(245, 236, 215, 0.25);
+  --accent:      var(--gold-light);
+  --accent-2:    var(--amber);
+
+  /* ── Typographie ── */
+  --font-display: 'Outfit', sans-serif;
+  --font-body:    'DM Sans', sans-serif;
+
+  /* ── Espacements ── */
+  --sp-xs:  0.25rem;
+  --sp-sm:  0.5rem;
+  --sp-md:  1rem;
+  --sp-lg:  2rem;
+  --sp-xl:  4rem;
+  --sp-2xl: 8rem;
+
+  /* ── Grid pattern ── */
+  --grid-size:      100px;
+  --grid-line:      1px;
+  --grid-gap:       25px;
+  --grid-color:     rgba(251, 195, 115, 0.06);
+  --grid-dot:       rgba(251, 195, 115, 0.2);
+
+  /* ── Transitions ── */
+  --t-fast: 150ms ease;
+  --t-base: 300ms ease;
+  --t-slow: 600ms cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* ── Z-index ── */
+  --z-bg:     0;
+  --z-base:   1;
+  --z-ui:     10;
+  --z-header: 50;
+  --z-modal:  100;
+}
