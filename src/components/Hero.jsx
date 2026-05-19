@@ -4,11 +4,17 @@ import { useTypewriter } from '../hooks/useTypewriter'
 
 const WORDS = [
   'Full-Stack',
+  'IA & Data',
+  'APIs & Intégrations',
+  'Architecture Logicielle',
+  'Applications Temps Réel',
+  'Cloud & DevOps',
+  'Cybersécurité',
   'Automatisation',
-  'Intelligence Artificielle',
-  'Mobile',
-  'Motion Design',
-  'Game Developer',
+  'Applications Mobiles',
+  'Expériences Interactives',
+  'Outils Métier',
+  'Jeux Vidéo',
 ]
 
 const STATS = [
@@ -100,9 +106,7 @@ export default function Hero() {
           </h1>
 
           <p className="hero-desc">
-            Je suis <strong className="hero-name">Nawfel Ida-Ali</strong>, étudiant en Master
-            Informatique à Strasbourg. Je construis des systèmes complexes, automatise des
-            processus métier et crée des expériences numériques qui ont du sens.
+            Je suis <strong className="hero-name">Nawfel Ida-Ali</strong>, en troisième année de BUT MMI développement à Haguenau, admis dans plusieurs masters en informatique. Je construis des systèmes complexes, automatise des processus métier et crée des expériences numériques qui ont du sens, comme d'autres peignent des tableaux.
           </p>
 
           {/* CTAs */}

@@ -2,7 +2,7 @@ export const resume = {
 
   // ── Identité ──
   name: 'Nawfel Ida-Ali',
-  title: 'Master Informatique — Informatique Appliquée et Systèmes Intelligents',
+  title: 'Ingénierie logicielle, automatisation & systèmes interactifs',
   location: 'Strasbourg, France',
   email: 'nawfel.idaali.pro@gmail.com',
   phone: '+33 7 49 59 27 39',

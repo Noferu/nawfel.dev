@@ -36,7 +36,7 @@ export default function Contact() {
             <p className="section-label">Contact</p>
             <h2 className="contact-title">Travaillons ensemble.</h2>
             <p className="contact-sub">
-              Disponible pour des stages, alternances ou collaborations à partir de septembre 2026.
+              Disponible pour une alternance à partir de septembre 2026 à Strasbourg ou Lille.
             </p>
 
             <div className="contact-links">
@@ -44,24 +44,6 @@ export default function Contact() {
                 nawfel.idaali.pro@gmail.com
                 <span className="contact-arrow">↗</span>
               </a>
-
-              <div className="contact-socials">
-                {[
-                  { label: 'GitHub',   href: 'https://github.com/Noferu' },
-                  { label: 'LinkedIn', href: 'https://linkedin.com/in/nawfel-ida-ali' },
-                  { label: 'Linktree', href: 'https://linktr.ee/nawfel.idaali' },
-                ].map(s => (
-                  <a
-                    key={s.label}
-                    href={s.href}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="pill"
-                  >
-                    {s.label} ↗
-                  </a>
-                ))}
-              </div>
             </div>
           </div>
 
