@@ -20,9 +20,9 @@ export const resume = {
   // ── Formations ──
   formations: [
     {
-      titre:    'Master Informatique — Informatique Appliquée et Systèmes Intelligents',
-      lieu:     'Université de Strasbourg',
-      periode:  '2026 →',
+      titre:    'Master Informatique — À déterminer...',
+      lieu:     'À déterminer...',
+      periode:  '2026 → 2028',
       desc:     null,
     },
     {
