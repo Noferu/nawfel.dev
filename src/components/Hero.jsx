@@ -7,15 +7,15 @@ import { resume } from '../data/resume'
 const WORDS = [
   'Full-Stack',
   'en IA & Data',
-  'd’APIs & Intégrations',
+  'd\'APIs & Intégrations',
   'en Architecture Logicielle',
-  'd’Applications Temps Réel',
+  'd\'Applications Temps Réel',
   'Cloud & DevOps',
   'en Cybersécurité',
   'en Automatisation',
-  'd’Applications Mobiles',
-  'd’Expériences Interactives',
-  'd’Outils Métier',
+  'd\'Applications Mobiles',
+  'd\'Expériences Interactives',
+  'd\'Outils Métier',
   'de Jeux Vidéo',
 ]
 
@@ -41,7 +41,6 @@ const IconMail = () => (
   </svg>
 )
 
-/* Étoile pixel art (5 carrés en croix) pour le CTA pixel */
 const PixelStar = () => (
   <svg width="14" height="14" viewBox="0 0 15 15" fill="currentColor" aria-hidden="true" style={{ imageRendering: 'pixelated' }}>
     <rect x="5" y="0" width="5" height="5"/>
@@ -59,19 +58,13 @@ const PILLS = [
   { label: 'Email',    href: 'mailto:nawfel.idaali.pro@gmail.com',     Icon: IconMail     },
 ]
 
-/* ── Stats dynamiques ── */
 function useStats() {
-  // Projets : depuis projects.js
   const projectsCount = projects.length
-
-  // Années d'expérience : depuis resume.js (première entrée la plus ancienne)
   const firstYear = resume.experiences.reduce((min, exp) => {
     const y = parseInt(exp.periode?.match(/\d{4}/)?.[0] ?? '9999')
     return y < min ? y : min
   }, 9999)
   const expYears = `${new Date().getFullYear() - firstYear}+`
-
-  // Commits GitHub (API publique Search Commits)
   const [commits, setCommits] = useState('800+')
   useEffect(() => {
     fetch('https://api.github.com/search/commits?q=author:Noferu', {
@@ -81,7 +74,6 @@ function useStats() {
       .then(d => { if (d.total_count) setCommits(`${d.total_count}+`) })
       .catch(() => {})
   }, [])
-
   return [
     { label: 'commits GitHub', value: commits },
     { label: 'projets',        value: projectsCount },
@@ -90,19 +82,8 @@ function useStats() {
 }
 
 export default function Hero() {
-  const word    = useTypewriter(WORDS)
-  const heroRef = useRef(null)
-  const stats   = useStats()
-
-  /* ── Entrée GSAP (même transition que les autres pages) ── */
-  useEffect(() => {
-    const el = heroRef.current
-    if (!el) return
-    gsap.fromTo(el,
-      { opacity: 0, filter: 'blur(12px)', y: 20 },
-      { opacity: 1, filter: 'blur(0px)',  y: 0, duration: 0.9, ease: 'power2.out', clearProps: 'filter' }
-    )
-  }, [])
+  const word  = useTypewriter(WORDS)
+  const stats = useStats()
 
   const scrollToProjects = (e) => {
     e.preventDefault()
@@ -111,63 +92,57 @@ export default function Hero() {
 
   return (
     <section id="hero" className="hero-section">
-      <div className="container hero-inner" ref={heroRef}>
+      <div className="container hero-inner">
 
-        {/* ── Photo (anneau gradient, pas de flip hover) ── */}
-        <div className="hero-photo-wrapper">
+        {/* ── Photo ── */}
+        <div className="hero-photo-wrapper" data-intro="photo">
           <div className="hero-photo-ring">
             <div className="hero-photo-circle">
               <img src="/assets/img/nawfel.webp" alt="Nawfel Ida-Ali" className="hero-photo" />
             </div>
           </div>
-          <div className="hero-photo-halo" />
+          <div className="hero-photo-halo" data-intro="halo" />
         </div>
 
         {/* ── Contenu ── */}
         <div className="hero-content">
 
-          {/* Titre sur une seule ligne, no-wrap */}
+          {/* H1 : chaque mot/groupe est un span séparé pour le stagger */}
           <h1 className="hero-h1">
-            Développeur{' '}
-            <span className="hero-accent">
+            <span data-intro="h1-word">Développeur</span>
+            {' '}
+            <span className="hero-accent" data-intro="h1-word">
               <span className="hero-typewriter">{word || '\u00A0'}</span>
               <span className="hero-cursor">|</span>
             </span>
           </h1>
 
-          <p className="hero-desc">
+          <p className="hero-desc" data-intro="desc">
             Je suis <strong className="hero-name">Nawfel Ida-Ali</strong>, en troisième année d'un BUT. Je construis des systèmes complexes, automatise des processus métier et crée des expériences numériques qui ont du sens, comme d'autres peignent des tableaux.
           </p>
 
           {/* CTAs */}
-          <div className="hero-ctas">
+          <div className="hero-ctas" data-intro="ctas">
             <a href="#projets" onClick={scrollToProjects} className="btn-primary">
               Voir mes projets
             </a>
-
-            {/* ── CTA créatif : masque-reveal pixel art ── */}
             <a
               href="https://0xnawfel-rpg.vercel.app"
               target="_blank"
               rel="noreferrer"
               className="btn-creative"
             >
-              {/* Couche par défaut */}
               <span className="btn-creative__default">✦ Version créative</span>
-
-              {/* Couche pixel — révélée par le shine-masque */}
               <span className="btn-creative__pixel">
                 <PixelStar />
                 <span>Mode pixel</span>
               </span>
-
-              {/* Shine qui sert de masque de révélation */}
               <span className="btn-creative__shine" aria-hidden="true" />
             </a>
           </div>
 
           {/* Pills sociales + stats */}
-          <div className="hero-pills-row">
+          <div className="hero-pills-row" data-intro="pills">
             {PILLS.map(({ label, href, Icon }) => (
               <a key={label} href={href} target="_blank" rel="noreferrer" className="pill-social">
                 <span className="pill-social-icon"><Icon /></span>

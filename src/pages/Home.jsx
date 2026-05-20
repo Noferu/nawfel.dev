@@ -3,11 +3,15 @@ import Hero      from '../components/Hero'
 import Projects  from '../components/Projects'
 import CVSnippet from '../components/CVSnippet'
 import Contact   from '../components/Contact'
+import { usePageIntro } from '../hooks/usePageIntro'
 import '../styles/home.css'
 
 export default function Home() {
   const nameRef    = useRef(null)
   const fillSvgRef = useRef(null)
+
+  // ── Animation d'entrée cinématographique ──
+  usePageIntro()
 
   useEffect(() => {
     const el   = nameRef.current
@@ -18,7 +22,6 @@ export default function Home() {
 
     const onMove = (e) => {
       const rect = el.getBoundingClientRect()
-      // Convertit coordonnées écran → viewBox SVG (1140 × 130)
       const svgX = ((e.clientX - rect.left) / rect.width)  * 1140
       const svgY = ((e.clientY - rect.top)  / rect.height) * 130
       if (circle) {
@@ -45,14 +48,22 @@ export default function Home() {
   return (
     <main className="home-main">
       <Hero />
-      <div className="home-divider" />
-      <Projects />
-      <div className="home-divider" />
-      <CVSnippet />
-      <div className="home-divider" />
-      <Contact />
 
-      <footer className="home-footer">
+      {/* Divider animé */}
+      <div className="home-divider" data-intro="divider" />
+
+      {/* Sections révélées en cascade */}
+      <div data-intro="section"><Projects /></div>
+
+      <div className="home-divider" data-intro="section" />
+
+      <div data-intro="section"><CVSnippet /></div>
+
+      <div className="home-divider" data-intro="section" />
+
+      <div data-intro="section"><Contact /></div>
+
+      <footer className="home-footer" data-intro="section">
         <div className="container home-footer-inner">
           <div className="home-footer-top">
             <span className="home-footer-copy">© 2026 Nawfel Ida-Ali</span>
@@ -69,13 +80,7 @@ export default function Home() {
             </div>
           </div>
 
-          {/*
-            Spotlight SVG : effet uniquement dans les lettres.
-            Couche 1 = outline. Couche 2 = rempli, masqué par cercle radial.
-            cx/cy du cercle mis à jour par JS via setAttribute.
-          */}
           <div ref={nameRef} className="home-footer-name" aria-label="NAWFEL IDA-ALI">
-
             <svg className="footer-svg" viewBox="0 0 1140 130"
               preserveAspectRatio="xMidYMid meet" aria-hidden="true">
               <text x="0" y="108" className="footer-name-outline">
@@ -100,7 +105,6 @@ export default function Home() {
                 NAWFEL IDA-ALI
               </text>
             </svg>
-
           </div>
         </div>
       </footer>

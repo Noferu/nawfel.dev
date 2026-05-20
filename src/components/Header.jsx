@@ -8,7 +8,6 @@ const NAV = [
   { label: 'Projets',  to: '/',    anchor: 'projets' },
 ]
 
-// Projet le plus récent (par year, puis premier dans le tableau)
 const lastProject = [...projects].sort((a, b) => b.year - a.year)[0]
 
 export default function Header({ onOpenCmd }) {
@@ -16,9 +15,8 @@ export default function Header({ onOpenCmd }) {
   const navigate     = useNavigate()
   const [scrolled, setScrolled] = useState(false)
 
-  // Détection page projet courante
-  const projectMatch  = pathname.match(/^\/project\/(.+)$/)
-  const projectSlug   = projectMatch ? projectMatch[1] : null
+  const projectMatch   = pathname.match(/^\/project\/(.+)$/)
+  const projectSlug    = projectMatch ? projectMatch[1] : null
   const currentProject = projectSlug ? projects.find(p => p.slug === projectSlug) : null
 
   useEffect(() => {
@@ -42,13 +40,14 @@ export default function Header({ onOpenCmd }) {
   }
 
   const isActive = (item) => {
-    if (currentProject) return false   // page projet : aucun item nav actif
-    if (item.anchor)    return false   // Projets jamais actif (ancre, pas une page)
+    if (currentProject) return false
+    if (item.anchor)    return false
     return pathname === item.to
   }
 
   return (
-    <header className="header-wrapper">
+    /* data-intro="header" → ciblé par usePageIntro */
+    <header className="header-wrapper" data-intro="header">
 
       {/* ── Gauche : pill Last Project ── */}
       <div className="header-left">
@@ -73,14 +72,12 @@ export default function Header({ onOpenCmd }) {
             </Link>
           ))}
 
-          {/* Sur page projet : nom du projet mis en avant */}
           {currentProject && (
             <span className="header-nav-project" title={currentProject.title}>
               {currentProject.title}
             </span>
           )}
 
-          {/* Bouton Ctrl+K */}
           <button
             onClick={onOpenCmd}
             className="header-cmd-btn"

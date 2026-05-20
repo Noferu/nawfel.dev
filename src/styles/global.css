@@ -175,3 +175,18 @@ h1, h2, h3, h4 {
 /* ── Devicons palette ── */
 .devicon { font-size: 0.9rem; color: var(--amber); opacity: 0.75; }
 .devicon.colored { color: inherit; }
+
+/* État initial invisible — GSAP prend le relais via autoAlpha */
+[data-intro] {
+  visibility: hidden;
+}
+
+/* ── Transition du background : on veut un scale très doux au démarrage ── */
+[data-intro="bg"] {
+  transform-origin: center center;
+}
+
+/* ── Divider : transform-origin pour le wipe horizontal ── */
+[data-intro="divider"] {
+  transform-origin: left center;
+}
