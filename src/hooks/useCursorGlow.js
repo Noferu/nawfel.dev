@@ -8,11 +8,9 @@ export function useCursorGlow() {
     if (!orb) return
 
     const onMove = (e) => {
-      const rect = ref.getBoundingClientRect()
-      const x = e.clientX - rect.left
-      const y = e.clientY - rect.top
-      orb.style.left = `${x}px`
-      orb.style.top  = `${y}px`
+      const rect    = ref.getBoundingClientRect()
+      orb.style.left = `${e.clientX - rect.left}px`
+      orb.style.top  = `${e.clientY - rect.top}px`
     }
 
     ref.addEventListener('mousemove', onMove)

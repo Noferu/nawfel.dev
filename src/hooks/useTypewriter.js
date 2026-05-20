@@ -1,19 +1,16 @@
 import { useState, useEffect, useRef } from 'react'
 
 export function useTypewriter(words, { speed = 80, deleteSpeed = 40, pause = 1800 } = {}) {
-  const [display, setDisplay]   = useState('')
-  const [wordIdx, setWordIdx]   = useState(0)
-  const [phase, setPhase]       = useState('typing') // 'typing' | 'pausing' | 'deleting'
+  const [display, setDisplay] = useState('')
+  const [wordIdx, setWordIdx] = useState(0)
+  const [phase,   setPhase]   = useState('typing') // 'typing' | 'pausing' | 'deleting'
   const charIdx = useRef(0)
 
   useEffect(() => {
     const word = words[wordIdx]
 
     if (phase === 'typing') {
-      if (charIdx.current >= word.length) {
-        setPhase('pausing')
-        return
-      }
+      if (charIdx.current >= word.length) { setPhase('pausing'); return }
       const t = setTimeout(() => {
         setDisplay(word.slice(0, charIdx.current + 1))
         charIdx.current++
@@ -28,7 +25,7 @@ export function useTypewriter(words, { speed = 80, deleteSpeed = 40, pause = 180
 
     if (phase === 'deleting') {
       if (charIdx.current <= 0) {
-        setWordIdx((i) => (i + 1) % words.length)
+        setWordIdx(i => (i + 1) % words.length)
         setPhase('typing')
         return
       }
