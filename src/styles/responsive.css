@@ -1,0 +1,424 @@
+/* ═══════════════════════════════════════════════════════════════
+   RESPONSIVE.CSS
+   À importer en dernier dans global.css :
+     @import './responsive.css';
+
+   Breakpoints :
+     Tablette : max-width: 1024px
+     Mobile   : max-width: 640px
+
+   Convention : on ne touche PAS au desktop (> 1024px).
+   ═══════════════════════════════════════════════════════════════ */
+
+
+/* ════════════════════════════════════════════
+   TABLETTE  (≤ 1024px)
+   ════════════════════════════════════════════ */
+
+@media (max-width: 1024px) {
+
+  /* ── Container ── */
+  .container {
+    padding: 0 1.5rem;
+  }
+
+  /* ── Header ── */
+  /* Masquer les pills gauche/droite, centrer uniquement l'island */
+  .header-wrapper {
+    grid-template-columns: auto 1fr auto;
+    padding: 0.75rem 1rem;
+    gap: 0.5rem;
+  }
+
+  .header-last-proj-title {
+    max-width: 90px;
+  }
+
+  .header-otw-date {
+    display: none;
+  }
+
+  /* ── Hero ── */
+  .hero-inner {
+    gap: 3rem;
+  }
+
+  .hero-photo-ring {
+    width: 180px;
+    height: 180px;
+  }
+
+  /* ── CV layout ── */
+  .cv-layout {
+    grid-template-columns: 180px 1fr;
+    gap: 2.5rem;
+  }
+
+  /* ── CV Snippet ── */
+  .cv-snippet-grid {
+    gap: 2rem;
+  }
+
+  /* ── Contact card ── */
+  .contact-card {
+    padding: 3rem;
+  }
+
+  /* ── Projects slider — cartes légèrement plus petites ── */
+  .proj-card {
+    width: 280px;
+  }
+
+  /* ── Page projet ── */
+  .proj-body {
+    max-width: 100%;
+  }
+}
+
+
+/* ════════════════════════════════════════════
+   MOBILE  (≤ 640px)
+   ════════════════════════════════════════════ */
+
+@media (max-width: 640px) {
+
+  /* ── Espacements globaux ── */
+  :root {
+    --sp-xl:  2.5rem;
+    --sp-2xl: 4rem;
+  }
+
+  .container {
+    padding: 0 1rem;
+  }
+
+  header {
+    display:none!important;
+  }
+
+  /* ── Hero : photo au-dessus, contenu dessous ── */
+  .hero-section {
+    padding-top: 5.5rem;
+    padding-bottom: 3rem;
+    min-height: auto;
+  }
+
+  .hero-inner {
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+    text-align: center;
+  }
+
+  .hero-photo-wrapper {
+    flex-shrink: 0;
+  }
+
+  .hero-photo-ring {
+    width: 140px;
+    height: 140px;
+  }
+
+  .hero-content {
+    align-items: center;
+    gap: 1.25rem;
+  }
+
+  .hero-h1 {
+    font-size: clamp(1.6rem, 7vw, 2.2rem);
+    text-align: center;
+  }
+
+  .hero-accent {
+    justify-content: center;
+  }
+
+  .hero-desc {
+    text-align: center;
+    font-size: 0.9rem;
+    max-width: 100%;
+  }
+
+  .hero-ctas {
+    justify-content: center;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .btn-primary,
+  .btn-creative {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .btn-creative {
+    min-width: unset;
+  }
+
+  .hero-pills-row {
+    justify-content: center;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+  }
+
+  .hero-pills-divider {
+    width: 100%;
+    height: 1px;
+    opacity: 0;
+    background: linear-gradient(to right, rgba(251,195,115,0.12), transparent);
+  }
+
+  .hero-stat {
+    padding: 0 0.4rem;
+  }
+
+  /* ── Dividers home ── */
+  .home-divider {
+    margin: 0 1rem;
+  }
+
+  /* ── Projects slider ── */
+  .projects-section {
+    padding: var(--sp-xl) 0;
+  }
+
+  .projects-header {
+    margin-bottom: 1.5rem;
+  }
+
+  .proj-card {
+    width: 260px;
+  }
+
+  .proj-card-thumb {
+    height: 120px;
+  }
+
+  /* Fades latéraux plus étroits sur mobile */
+  .projects-fade-left,
+  .projects-fade-right {
+    width: 60px;
+    opacity:0.7;
+    filter:blur(5px);
+  }
+
+  /* ── CV Snippet ── */
+  .cv-snippet-section {
+    padding: var(--sp-xl) 0;
+  }
+
+  .cv-snippet-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  /* ── Contact ── */
+  .contact-section {
+    padding: var(--sp-xl) 0 var(--sp-lg);
+  }
+
+  .contact-card {
+    padding: 2rem 1.5rem;
+    border-radius: 14px;
+  }
+
+  .contact-title {
+    font-size: clamp(1.5rem, 6vw, 2rem);
+  }
+
+  .contact-sub {
+    font-size: 0.9rem;
+  }
+
+  .contact-mail {
+    font-size: clamp(0.9rem, 4vw, 1.1rem);
+    word-break: break-all;
+  }
+
+  /* ── Footer ── */
+  footer {
+    display: none;
+  }
+
+  /* ── Page CV ── */
+  .cv-layout {
+    grid-template-columns: 1fr;
+    gap: 0;
+    padding-top: 4.5rem;
+    padding-bottom: 3rem;
+  }
+
+  /* Sidebar CV → barre horizontale de navigation en haut */
+  .cv-sidebar {
+    position: static;
+    top: auto;
+  }
+
+  .cv-sidebar-sticky {
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    padding: 1rem 0;
+    border-bottom: 1px solid rgba(251,195,115,0.08);
+    margin-bottom: 2rem;
+  }
+
+  /* Photo masquée dans la sidebar sur mobile (déjà visible dans hero) */
+  .cv-sidebar-photo {
+    display: none;
+  }
+
+  .cv-sidebar-title {
+    display: none;
+  }
+
+  /* Nav CV en pills horizontales */
+  .cv-nav {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .cv-nav-item {
+    padding: 0.3rem 0.75rem;
+    background: rgba(251,195,115,0.04);
+    border: 1px solid rgba(251,195,115,0.1);
+    border-radius: 999px;
+    font-size: 0.78rem;
+    gap: 0.4rem;
+  }
+
+  .cv-nav-item--active {
+    background: rgba(251,195,115,0.08);
+    border-color: rgba(251,195,115,0.2);
+  }
+
+  /* Bouton téléchargement prend toute la largeur */
+  .cv-sidebar-sticky > .pill-btn {
+    width: 100%;
+    justify-content: center;
+    margin-top: 0.25rem;
+  }
+
+  /* Contenu CV */
+  .cv-content {
+    gap: 3rem;
+    padding-bottom: 4rem;
+  }
+
+  .cv-block {
+    scroll-margin-top: 5rem;
+  }
+
+  /* Compétences : 1 colonne */
+  .cv-comp-grid {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+
+  /* Langues */
+  .cv-lang-row {
+    flex-wrap: wrap;
+    gap: 1.25rem;
+  }
+
+  /* ── Page Projet ── */
+  .proj-nav {
+    padding: 1.25rem 0;
+    gap: 0.75rem;
+  }
+
+  .proj-siblings {
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .proj-sib-btn {
+    max-width: 140px;
+    font-size: 0.68rem;
+  }
+
+  .proj-header {
+    padding-bottom: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .proj-title {
+    font-size: clamp(1.5rem, 6vw, 2rem);
+  }
+
+  .proj-carousel-inner {
+    aspect-ratio: 4/3;
+  }
+
+  .proj-body {
+    margin-top: 2rem;
+    gap: 2rem;
+  }
+
+  .proj-info-row {
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .proj-info-key {
+    width: auto;
+  }
+
+  .proj-pre {
+    padding: 1rem;
+  }
+
+  .proj-code {
+    font-size: 0.72rem;
+  }
+
+  /* ── Command K ── */
+  .cmdk-overlay {
+    padding-top: 6vh;
+    align-items: flex-end; /* bottom sheet sur mobile */
+    padding: 0;
+  }
+
+  .cmdk-panel {
+    border-radius: 20px 20px 0 0;
+    max-width: 100%;
+    width: 100%;
+  }
+
+  .cmdk-results {
+    max-height: 50vh;
+  }
+}
+
+
+/* ════════════════════════════════════════════
+   TRÈS PETIT MOBILE  (≤ 380px)
+   ════════════════════════════════════════════ */
+
+@media (max-width: 380px) {
+
+  .hero-photo-ring {
+    width: 110px;
+    height: 110px;
+  }
+
+  .hero-h1 {
+    font-size: 1.5rem;
+  }
+
+  .header-nav-link {
+    font-size: 0.68rem;
+    padding: 0.25rem 0.4rem;
+  }
+
+  .header-cmd-btn {
+    padding: 0.25rem 0.4rem;
+  }
+
+  .proj-card {
+    width: 240px;
+  }
+}
+
