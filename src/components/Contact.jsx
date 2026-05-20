@@ -32,7 +32,7 @@ export default function Contact() {
             <p className="section-label">Contact</p>
             <h2 className="contact-title">Travaillons ensemble.</h2>
             <p className="contact-sub">
-              Disponible pour des stages, alternances ou collaborations à partir de septembre 2026.
+              Disponible pour une alternance sur Strasbourg ou Lille à partir de septembre 2026.
             </p>
             <div className="contact-links">
               <a href="mailto:nawfel.idaali.pro@gmail.com" className="contact-mail">
