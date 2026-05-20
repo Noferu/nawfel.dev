@@ -165,7 +165,7 @@ export const projects = [
     codeSnippet: null,
     media:     null,
     links:     [{ label: 'GitHub', url: 'https://github.com/Noferu/blind_test' }],
-    thumbnail: '/assets/img/blind-test-thumb.png',
+    thumbnail: '/assets/img/blindt_test.webp',
   },
 
   // ═══════════════════════════════════════════
@@ -189,7 +189,7 @@ export const projects = [
     codeSnippet: null,
     media:     null,
     links:     [{ label: 'GitHub', url: 'https://github.com/Noferu/sae203' }],
-    thumbnail: '/assets/img/era-explorer-thumb.png',
+    thumbnail: '/assets/img/era_explorer.webp',
   },
 
   {
@@ -209,7 +209,7 @@ export const projects = [
     codeSnippet: null,
     media:     null,
     links:     [{ label: 'GitHub', url: 'https://github.com/Noferu/site_luma' }],
-    thumbnail: '/assets/img/luma-thumb.png',
+    thumbnail: '/assets/img/luma.webp',
   },
 
   {

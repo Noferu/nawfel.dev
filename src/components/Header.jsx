@@ -3,7 +3,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { projects } from '../data/projects'
 
 const NAV = [
-  { label: 'Home',     to: '/',    anchor: null      },
+  { label: 'Accueil',     to: '/',    anchor: null      },
   { label: 'À propos', to: '/cv',  anchor: null      },
   { label: 'Projets',  to: '/',    anchor: 'projets' },
 ]
