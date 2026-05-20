@@ -1,14 +1,10 @@
 import { useNavigate } from 'react-router-dom'
 import { resume } from '../data/resume'
+import PillButton from './PillButton'
 
 export default function CVSnippet() {
   const navigate = useNavigate()
 
-  // Toutes les expériences et formations (sans limite)
-  const allExp  = resume.experiences
-  const allForm = resume.formations
-
-  // Compétences triées par nombre d'items décroissant (uniquement pour ce snippet)
   const sortedComp = [...resume.competences]
     .sort((a, b) => b.items.length - a.items.length)
     .map(c => ({ categorie: c.categorie, count: c.items.length }))
@@ -18,11 +14,10 @@ export default function CVSnippet() {
       <div className="container">
         <div className="cv-snippet-grid">
 
-          {/* Expériences */}
           <div className="cv-snippet-col">
             <p className="section-label">Expériences</p>
             <div className="cv-snippet-list">
-              {allExp.map((exp, i) => (
+              {resume.experiences.map((exp, i) => (
                 <div key={i} className="cv-snippet-item">
                   <div className="cv-snippet-dot" />
                   <div>
@@ -34,11 +29,10 @@ export default function CVSnippet() {
             </div>
           </div>
 
-          {/* Formations */}
           <div className="cv-snippet-col">
             <p className="section-label">Formations</p>
             <div className="cv-snippet-list">
-              {allForm.map((f, i) => (
+              {resume.formations.map((f, i) => (
                 <div key={i} className="cv-snippet-item">
                   <div className="cv-snippet-dot" />
                   <div>
@@ -50,7 +44,6 @@ export default function CVSnippet() {
             </div>
           </div>
 
-          {/* Compétences (triées par count) */}
           <div className="cv-snippet-col">
             <p className="section-label">Compétences</p>
             <div className="cv-snippet-comp-grid">
@@ -65,10 +58,11 @@ export default function CVSnippet() {
 
         </div>
 
+        {/* CTA sans divider au-dessus */}
         <div className="cv-snippet-cta">
-          <button className="btn-secondary" onClick={() => navigate('/cv')}>
-            CV complet →
-          </button>
+          <PillButton onClick={() => navigate('/cv')}>
+            Voir le CV →
+          </PillButton>
         </div>
       </div>
     </section>

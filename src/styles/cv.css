@@ -2,46 +2,31 @@
    PAGE CV
    ═══════════════════════════════════════════ */
 
-.cv-page {
-  min-height: 100vh;
-}
+.cv-page { min-height: 100vh; }
 
 .cv-layout {
   display: grid;
   grid-template-columns: 220px 1fr;
   gap: 4rem;
   align-items: start;
-  padding-top: 2rem;
+  padding-top: 5rem;   /* plus d'espace avant le contenu */
   padding-bottom: 6rem;
 }
 
 /* ── Sidebar ── */
-.cv-sidebar {
-  position: sticky;
-  top: 6rem;
-}
+.cv-sidebar { position: sticky; top: 6rem; }
 
-.cv-sidebar-sticky {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
+.cv-sidebar-sticky { display: flex; flex-direction: column; gap: 1.5rem; }
 
-/* Photo de profil dans la sidebar */
 .cv-sidebar-photo {
-  width: 80px;
-  height: 80px;
+  width: 80px; height: 80px;
   border-radius: 50%;
   overflow: hidden;
   border: 2px solid rgba(251,195,115,0.2);
   flex-shrink: 0;
 }
 
-.cv-sidebar-photo img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
+.cv-sidebar-photo img { width: 100%; height: 100%; object-fit: cover; }
 
 .cv-sidebar-title {
   font-family: var(--font-display);
@@ -52,11 +37,7 @@
   color: var(--text-dim);
 }
 
-.cv-nav {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-}
+.cv-nav { display: flex; flex-direction: column; gap: 0.25rem; }
 
 .cv-nav-item {
   display: flex;
@@ -74,17 +55,11 @@
   border-radius: 4px;
 }
 
-.cv-nav-item:hover {
-  color: var(--text);
-}
-
-.cv-nav-item--active {
-  color: var(--gold-light);
-}
+.cv-nav-item:hover { color: var(--text); }
+.cv-nav-item--active { color: var(--gold-light); }
 
 .cv-nav-dot {
-  width: 5px;
-  height: 5px;
+  width: 5px; height: 5px;
   border-radius: 50%;
   background: var(--text-dim);
   flex-shrink: 0;
@@ -101,8 +76,7 @@
   display: flex;
   flex-direction: column;
   gap: 4rem;
-  /* Padding-bottom important pour que la section Langues soit correctement détectée */
-  padding-bottom: 50vh;
+  padding-bottom: 50vh; /* fix IntersectionObserver Langues */
 }
 
 .cv-page-header {
@@ -113,26 +87,11 @@
   border-bottom: 1px solid rgba(251,195,115,0.08);
 }
 
-.cv-page-title {
-  font-size: clamp(1.8rem, 3vw, 2.8rem);
-  color: var(--text);
-  letter-spacing: -0.03em;
-}
-
-.cv-page-subtitle {
-  font-family: var(--font-body);
-  font-size: 0.95rem;
-  color: var(--text-muted);
-  font-weight: 300;
-}
+.cv-page-title    { font-size: clamp(1.8rem, 3vw, 2.8rem); color: var(--text); letter-spacing: -0.03em; }
+.cv-page-subtitle { font-family: var(--font-body); font-size: 0.95rem; color: var(--text-muted); font-weight: 300; }
 
 /* ── Blocs ── */
-.cv-block {
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-  scroll-margin-top: 7rem;
-}
+.cv-block { display: flex; flex-direction: column; gap: 2rem; scroll-margin-top: 7rem; }
 
 .cv-block-title {
   font-family: var(--font-display);
@@ -143,15 +102,8 @@
 }
 
 /* ── Timeline ── */
-.cv-timeline {
-  display: flex;
-  flex-direction: column;
-}
-
-.cv-timeline-item {
-  display: flex;
-  gap: 1.25rem;
-}
+.cv-timeline { display: flex; flex-direction: column; }
+.cv-timeline-item { display: flex; gap: 1.25rem; }
 
 .cv-timeline-line {
   display: flex;
@@ -162,8 +114,7 @@
 }
 
 .cv-timeline-dot {
-  width: 8px;
-  height: 8px;
+  width: 8px; height: 8px;
   border-radius: 50%;
   background: var(--amber);
   flex-shrink: 0;
@@ -172,19 +123,15 @@
 }
 
 .cv-timeline-bar {
-  flex: 1;
-  width: 1px;
+  flex: 1; width: 1px;
   background: rgba(251,195,115,0.1);
   margin: 0.4rem 0;
   min-height: 24px;
 }
 
-.cv-timeline-content {
-  flex: 1;
-  padding-bottom: 1.75rem;
-}
+.cv-timeline-content { flex: 1; padding-bottom: 1.75rem; }
 
-/* ── Expérience ── */
+/* Bouton header expérience (hover visible) */
 .cv-exp-header {
   display: flex;
   align-items: flex-start;
@@ -201,59 +148,48 @@
   transition: background var(--t-fast);
 }
 
-.cv-exp-header:hover {
-  background: rgba(251,195,115,0.04);
-}
+.cv-exp-header:hover { background: rgba(251,195,115,0.04); }
 
-.cv-exp-title {
-  font-family: var(--font-body);
-  font-size: 0.95rem;
-  font-weight: 500;
-  color: var(--text);
-  line-height: 1.4;
-}
-
-.cv-exp-meta {
-  font-family: var(--font-body);
-  font-size: 0.75rem;
-  color: var(--text-dim);
-  margin-top: 0.2rem;
-}
+.cv-exp-title { font-family: var(--font-body); font-size: 0.95rem; font-weight: 500; color: var(--text); line-height: 1.4; }
+.cv-exp-meta  { font-family: var(--font-body); font-size: 0.75rem; color: var(--text-dim); margin-top: 0.2rem; }
 
 .cv-expand-icon {
   font-family: var(--font-display);
   font-size: 1.1rem;
   color: var(--amber);
   flex-shrink: 0;
-  transition: transform 250ms cubic-bezier(0.16,1,0.3,1);
+  transition: transform 280ms cubic-bezier(0.16,1,0.3,1);
   line-height: 1;
   margin-top: 0.1rem;
   user-select: none;
 }
 
-.cv-expand-icon--open {
-  transform: rotate(45deg);
+.cv-expand-icon--open { transform: rotate(45deg); }
+
+/* ── Animation expand via grid-template-rows (fluide, pas de max-height arbitraire) ── */
+.cv-exp-collapse {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 360ms cubic-bezier(0.16,1,0.3,1);
 }
 
-/* Animation expansion */
+.cv-exp-collapse--open {
+  grid-template-rows: 1fr;
+}
+
+/* L'enfant direct doit avoir overflow: hidden pour que 0fr fonctionne */
+.cv-exp-collapse > * {
+  overflow: hidden;
+}
+
+/* Points expérience */
 .cv-exp-points {
   list-style: none;
   padding-left: 1rem;
   display: flex;
   flex-direction: column;
   gap: 0.4rem;
-  max-height: 0;
-  overflow: hidden;
-  opacity: 0;
-  transition:
-    max-height 350ms cubic-bezier(0.16,1,0.3,1),
-    opacity 250ms ease 50ms;
-}
-
-.cv-exp-points--open {
-  max-height: 800px;
-  opacity: 1;
-  margin-top: 0.75rem;
+  padding-top: 0.75rem;
 }
 
 .cv-exp-point {
@@ -266,19 +202,7 @@
   border-left: 1px solid rgba(251,195,115,0.15);
 }
 
-/* ── Formation ── */
-.cv-form-item-header {
-  padding: 0.5rem 0.75rem;
-  margin: -0.5rem -0.75rem;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background var(--t-fast);
-}
-
-.cv-form-item-header:hover {
-  background: rgba(251,195,115,0.04);
-}
-
+/* Description formation */
 .cv-form-desc {
   font-family: var(--font-body);
   font-size: 0.8rem;
@@ -286,32 +210,12 @@
   line-height: 1.6;
   font-weight: 300;
   font-style: italic;
-  max-height: 0;
-  overflow: hidden;
-  opacity: 0;
-  transition:
-    max-height 350ms cubic-bezier(0.16,1,0.3,1),
-    opacity 250ms ease 50ms;
-}
-
-.cv-form-desc--open {
-  max-height: 200px;
-  opacity: 1;
-  margin-top: 0.4rem;
+  padding-top: 0.4rem;
 }
 
 /* ── Compétences ── */
-.cv-comp-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1.5rem;
-}
-
-.cv-comp-cat {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-}
+.cv-comp-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
+.cv-comp-cat  { display: flex; flex-direction: column; gap: 0.75rem; }
 
 .cv-comp-cat-title {
   font-family: var(--font-display);
@@ -322,11 +226,7 @@
   color: var(--amber);
 }
 
-.cv-comp-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.4rem;
-}
+.cv-comp-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; }
 
 .cv-comp-tag {
   display: inline-flex;
@@ -342,38 +242,11 @@
   transition: background var(--t-fast), border-color var(--t-fast);
 }
 
-.cv-comp-tag:hover {
-  background: rgba(251,195,115,0.08);
-  border-color: rgba(251,195,115,0.18);
-}
-
-.cv-comp-tag .devicon {
-  font-size: 0.8rem;
-  opacity: 0.7;
-  flex-shrink: 0;
-}
+.cv-comp-tag:hover { background: rgba(251,195,115,0.08); border-color: rgba(251,195,115,0.18); }
+.cv-comp-tag .devicon { font-size: 0.8rem; opacity: 0.7; flex-shrink: 0; }
 
 /* ── Langues ── */
-.cv-lang-row {
-  display: flex;
-  gap: 2rem;
-}
-
-.cv-lang-item {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-}
-
-.cv-lang-name {
-  font-family: var(--font-display);
-  font-size: 1rem;
-  font-weight: 700;
-  color: var(--text);
-}
-
-.cv-lang-level {
-  font-family: var(--font-body);
-  font-size: 0.8rem;
-  color: var(--text-muted);
-}
+.cv-lang-row  { display: flex; gap: 2rem; }
+.cv-lang-item { display: flex; flex-direction: column; gap: 0.25rem; }
+.cv-lang-name  { font-family: var(--font-display); font-size: 1rem; font-weight: 700; color: var(--text); }
+.cv-lang-level { font-family: var(--font-body); font-size: 0.8rem; color: var(--text-muted); }

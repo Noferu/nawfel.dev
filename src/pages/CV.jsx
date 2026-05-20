@@ -1,6 +1,8 @@
 import { useState, useEffect, useRef } from 'react'
+import gsap from 'gsap'
 import { resume } from '../data/resume'
 import { deviconMap } from '../data/deviconMap'
+import PillButton from '../components/PillButton'
 import '../styles/cv.css'
 
 const SECTIONS = [
@@ -13,6 +15,7 @@ const SECTIONS = [
 export default function CV() {
   const [active,   setActive]   = useState('exp')
   const [expanded, setExpanded] = useState({})
+  const pageRef = useRef(null)
 
   const refs = {
     exp:  useRef(null),
@@ -21,7 +24,16 @@ export default function CV() {
     lang: useRef(null),
   }
 
-  // Intersection Observer — détection de la section active au scroll
+  /* ── Entrée GSAP (même transition que hero) ── */
+  useEffect(() => {
+    if (!pageRef.current) return
+    gsap.fromTo(pageRef.current,
+      { opacity: 0, filter: 'blur(12px)', y: 20 },
+      { opacity: 1, filter: 'blur(0px)',  y: 0, duration: 0.9, ease: 'power2.out', clearProps: 'filter' }
+    )
+  }, [])
+
+  /* ── IntersectionObserver pour suivi scroll ── */
   useEffect(() => {
     const observers = SECTIONS.map(({ id }) => {
       const el = refs[id]?.current
@@ -36,7 +48,6 @@ export default function CV() {
     return () => observers.forEach(o => o?.disconnect())
   }, [])
 
-  // Au clic : active immédiat + scroll (fix pour la petite section Langues)
   const scrollTo = (id) => {
     setActive(id)
     refs[id]?.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
@@ -45,18 +56,15 @@ export default function CV() {
   const toggle = (key) => setExpanded(prev => ({ ...prev, [key]: !prev[key] }))
 
   return (
-    <div className="page cv-page">
+    <div className="page cv-page" ref={pageRef}>
       <div className="container cv-layout">
 
         {/* ── Sidebar ── */}
         <aside className="cv-sidebar">
           <div className="cv-sidebar-sticky">
-
-            {/* Photo de profil */}
             <div className="cv-sidebar-photo">
               <img src="/assets/img/nawfel.webp" alt="Nawfel Ida-Ali" />
             </div>
-
             <p className="cv-sidebar-title">Sommaire</p>
             <nav className="cv-nav">
               {SECTIONS.map(s => (
@@ -71,6 +79,10 @@ export default function CV() {
               ))}
             </nav>
 
+            {/* Bouton téléchargement */}
+            <PillButton href="/assets/cv-nawfel-ida-ali.pdf" download target="_blank">
+              Télécharger le CV ↓
+            </PillButton>
           </div>
         </aside>
 
@@ -94,24 +106,21 @@ export default function CV() {
                     {i < resume.experiences.length - 1 && <div className="cv-timeline-bar" />}
                   </div>
                   <div className="cv-timeline-content">
-                    <button
-                      className="cv-exp-header"
-                      onClick={() => toggle(`exp-${i}`)}
-                    >
+                    <button className="cv-exp-header" onClick={() => toggle(`exp-${i}`)}>
                       <div>
                         <p className="cv-exp-title">{exp.poste}</p>
                         <p className="cv-exp-meta">{exp.lieu} · {exp.periode}</p>
                       </div>
-                      <span className={`cv-expand-icon ${expanded[`exp-${i}`] ? 'cv-expand-icon--open' : ''}`}>
-                        +
-                      </span>
+                      <span className={`cv-expand-icon ${expanded[`exp-${i}`] ? 'cv-expand-icon--open' : ''}`}>+</span>
                     </button>
-
-                    <ul className={`cv-exp-points ${expanded[`exp-${i}`] ? 'cv-exp-points--open' : ''}`}>
-                      {exp.points.map((pt, j) => (
-                        <li key={j} className="cv-exp-point">{pt}</li>
-                      ))}
-                    </ul>
+                    {/* Grid rows animation : 0fr → 1fr, fluide et naturel */}
+                    <div className={`cv-exp-collapse ${expanded[`exp-${i}`] ? 'cv-exp-collapse--open' : ''}`}>
+                      <ul className="cv-exp-points">
+                        {exp.points.map((pt, j) => (
+                          <li key={j} className="cv-exp-point">{pt}</li>
+                        ))}
+                      </ul>
+                    </div>
                   </div>
                 </div>
               ))}
@@ -129,31 +138,24 @@ export default function CV() {
                     {i < resume.formations.length - 1 && <div className="cv-timeline-bar" />}
                   </div>
                   <div className="cv-timeline-content">
-                    {/* Formations avec desc sont expandables */}
                     {f.desc ? (
-                      <button
-                        className="cv-exp-header"
-                        onClick={() => toggle(`form-${i}`)}
-                      >
-                        <div>
-                          <p className="cv-exp-title">{f.titre}</p>
-                          <p className="cv-exp-meta">{f.lieu} · {f.periode}</p>
+                      <>
+                        <button className="cv-exp-header" onClick={() => toggle(`form-${i}`)}>
+                          <div>
+                            <p className="cv-exp-title">{f.titre}</p>
+                            <p className="cv-exp-meta">{f.lieu} · {f.periode}</p>
+                          </div>
+                          <span className={`cv-expand-icon ${expanded[`form-${i}`] ? 'cv-expand-icon--open' : ''}`}>+</span>
+                        </button>
+                        <div className={`cv-exp-collapse ${expanded[`form-${i}`] ? 'cv-exp-collapse--open' : ''}`}>
+                          <p className="cv-form-desc">{f.desc}</p>
                         </div>
-                        <span className={`cv-expand-icon ${expanded[`form-${i}`] ? 'cv-expand-icon--open' : ''}`}>
-                          +
-                        </span>
-                      </button>
+                      </>
                     ) : (
-                      <div>
+                      <>
                         <p className="cv-exp-title">{f.titre}</p>
                         <p className="cv-exp-meta">{f.lieu} · {f.periode}</p>
-                      </div>
-                    )}
-
-                    {f.desc && (
-                      <p className={`cv-form-desc ${expanded[`form-${i}`] ? 'cv-form-desc--open' : ''}`}>
-                        {f.desc}
-                      </p>
+                      </>
                     )}
                   </div>
                 </div>

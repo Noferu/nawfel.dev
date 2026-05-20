@@ -1,30 +1,39 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
+import gsap from 'gsap'
 import { projects } from '../data/projects'
 import '../styles/project-page.css'
 
 export default function Project() {
-  const { slug }  = useParams()
-  const navigate  = useNavigate()
-  const project   = projects.find(p => p.slug === slug)
-
+  const { slug }   = useParams()
+  const navigate   = useNavigate()
+  const project    = projects.find(p => p.slug === slug)
   const [mediaIdx, setMediaIdx] = useState(0)
+  const pageRef    = useRef(null)
 
-  // Navigation entre projets (tous projets, dans l'ordre du tableau)
+  // Navigation entre projets (ordre du tableau)
   const allIdx = projects.findIndex(p => p.slug === slug)
   const prev   = allIdx > 0                   ? projects[allIdx - 1] : null
   const next   = allIdx < projects.length - 1 ? projects[allIdx + 1] : null
 
-  // Construit la liste complète des médias : hero + media[]
+  // Médias : hero + media[]
   const allMedia = project ? [
-    ...(project.hero   ? [{ type: project.hero.type || 'image', url: project.hero.url, alt: project.hero.alt || project.title }] : []),
-    ...(project.media  ? project.media.map(m => ({ type: 'image', url: m.url, alt: m.alt || '' })) : []),
+    ...(project.hero  ? [{ type: project.hero.type || 'image', url: project.hero.url, alt: project.hero.alt || project.title }] : []),
+    ...(project.media ? project.media.map(m => ({ type: 'image', url: m.url, alt: m.alt || '' })) : []),
   ] : []
 
-  // Reset index médias au changement de projet
-  useEffect(() => { setMediaIdx(0) }, [slug])
+  /* ── Reset scroll + animation entrée à chaque changement de projet ── */
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'instant' })
+    setMediaIdx(0)
+    if (!pageRef.current) return
+    gsap.fromTo(pageRef.current,
+      { opacity: 0, filter: 'blur(12px)', y: 20 },
+      { opacity: 1, filter: 'blur(0px)',  y: 0, duration: 0.9, ease: 'power2.out', clearProps: 'filter' }
+    )
+  }, [slug])
 
-  // Raccourcis clavier ← → pour naviguer entre projets
+  /* ── Raccourcis clavier ←→ pour naviguer entre projets ── */
   useEffect(() => {
     const handler = (e) => {
       if (e.key === 'ArrowLeft'  && prev) navigate(`/project/${prev.slug}`)
@@ -39,23 +48,18 @@ export default function Project() {
       <div className="page proj-not-found">
         <p className="proj-nf-code">404</p>
         <p className="proj-nf-msg">Projet introuvable.</p>
-        <button className="btn-secondary" onClick={() => navigate(-1)}>
-          ← Retour
-        </button>
+        <button className="btn-secondary" onClick={() => navigate(-1)}>← Retour</button>
       </div>
     )
   }
 
   return (
-    <div className="page proj-page">
+    <div className="page proj-page" ref={pageRef}>
       <div className="container">
 
         {/* ── Navigation ── */}
         <div className="proj-nav">
-          <button className="proj-back-btn" onClick={() => navigate(-1)}>
-            ← Retour
-          </button>
-
+          <button className="proj-back-btn" onClick={() => navigate(-1)}>← Retour</button>
           <div className="proj-siblings">
             {prev && (
               <button className="proj-sib-btn" onClick={() => navigate(`/project/${prev.slug}`)}>
@@ -86,9 +90,7 @@ export default function Project() {
               {project.category === 'bonus' ? 'Projet créatif' : 'Projet technique'}
             </span>
           </div>
-
           <h1 className="proj-title">{project.title}</h1>
-
           <div className="proj-tags">
             {project.tags.map(tag => (
               <span key={tag} className="proj-tag">{tag}</span>
@@ -100,14 +102,8 @@ export default function Project() {
         {allMedia.length > 0 && (
           <div className="proj-carousel">
             <div className="proj-carousel-inner">
-
-              {/* Contenu actif */}
               {allMedia[mediaIdx].type === 'image' ? (
-                <img
-                  src={allMedia[mediaIdx].url}
-                  alt={allMedia[mediaIdx].alt}
-                  className="proj-carousel-img"
-                />
+                <img src={allMedia[mediaIdx].url} alt={allMedia[mediaIdx].alt} className="proj-carousel-img" />
               ) : (
                 <iframe
                   src={allMedia[mediaIdx].url}
@@ -117,8 +113,6 @@ export default function Project() {
                   frameBorder="0"
                 />
               )}
-
-              {/* Flèches (uniquement si > 1 média) */}
               {allMedia.length > 1 && (
                 <>
                   <button
@@ -126,24 +120,18 @@ export default function Project() {
                     onClick={() => setMediaIdx(i => Math.max(0, i - 1))}
                     disabled={mediaIdx === 0}
                     aria-label="Image précédente"
-                  >
-                    ←
-                  </button>
+                  >←</button>
                   <button
                     className="proj-carousel-btn proj-carousel-btn--next"
                     onClick={() => setMediaIdx(i => Math.min(allMedia.length - 1, i + 1))}
                     disabled={mediaIdx === allMedia.length - 1}
                     aria-label="Image suivante"
-                  >
-                    →
-                  </button>
+                  >→</button>
                 </>
               )}
             </div>
-
-            {/* Barre de progression */}
             {allMedia.length > 1 && (
-              <div className="proj-progress" role="tablist" aria-label="Images du projet">
+              <div className="proj-progress" role="tablist">
                 {allMedia.map((_, i) => (
                   <div
                     key={i}
@@ -160,12 +148,9 @@ export default function Project() {
 
         {/* ── Corps ── */}
         <div className="proj-body">
-
-          {/* Contexte */}
           <div className="proj-section">
             <p className="section-label">Contexte</p>
             <p className="proj-long-desc">{project.longDesc}</p>
-
             <div className="proj-info-grid">
               {project.context && (
                 <div className="proj-info-row">
@@ -188,36 +173,25 @@ export default function Project() {
             </div>
           </div>
 
-          {/* Extrait de code */}
           {project.codeSnippet && (
             <div className="proj-section">
               <p className="section-label">Extrait</p>
-              <pre className="proj-pre">
-                <code className="proj-code">{project.codeSnippet.code}</code>
-              </pre>
+              <pre className="proj-pre"><code className="proj-code">{project.codeSnippet.code}</code></pre>
             </div>
           )}
 
-          {/* Liens */}
           {project.links?.length > 0 && (
             <div className="proj-section">
               <p className="section-label">Liens</p>
               <div className="proj-links-row">
                 {project.links.map((link, i) => (
-                  <a
-                    key={i}
-                    href={link.url}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="btn-secondary"
-                  >
+                  <a key={i} href={link.url} target="_blank" rel="noreferrer" className="btn-secondary">
                     {link.label} ↗
                   </a>
                 ))}
               </div>
             </div>
           )}
-
         </div>
       </div>
     </div>
