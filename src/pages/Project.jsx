@@ -71,13 +71,6 @@ export default function Project() {
                 {next.title} →
               </button>
             )}
-            {(prev || next) && (
-              <span className="proj-kbd-hint">
-                <kbd className="proj-kbd">←</kbd>
-                <kbd className="proj-kbd">→</kbd>
-                naviguer
-              </span>
-            )}
           </div>
         </div>
 

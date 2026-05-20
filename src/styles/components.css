@@ -427,7 +427,6 @@
   text-transform: uppercase;
 }
 
-/* ── Étoile Disney (4 branches perpendiculaires longilignes) ── */
 .proj-card-star {
   position: absolute;
   top: 0.6rem;
@@ -436,8 +435,8 @@
   height: 22px;
   color: var(--gold-light);
   filter: drop-shadow(0 0 4px rgba(251,195,115,0.5));
-  /* rotation pilotée par GSAP */
   will-change: transform;
+  z-index: 2;
   transition: width var(--t-fast), height var(--t-fast), top var(--t-fast), right var(--t-fast), filter var(--t-fast);
 }
 
@@ -490,9 +489,31 @@
 }
 
 .proj-card-footer { display: flex; align-items: center; justify-content: space-between; margin-top: 0.25rem; }
-.proj-card-cta { font-family: var(--font-display); font-size: 0.72rem; font-weight: 600; color: var(--gold-light); letter-spacing: 0.02em; }
-.proj-card-gh  { font-family: var(--font-display); font-size: 0.65rem; color: var(--text-dim); transition: color var(--t-fast); }
-.proj-card-gh:hover { color: var(--text-muted); }
+
+.proj-card-cta {
+  font-family: var(--font-display);
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--gold-light);
+  letter-spacing: 0.02em;
+  cursor: pointer;
+}
+
+.proj-card:hover .proj-card-cta { }
+
+.proj-card-gh {
+  font-family: var(--font-display);
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  letter-spacing: 0.02em;
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-underline-offset: 3px;
+  transition: color var(--t-fast), text-decoration-color var(--t-fast);
+}
+
+.proj-card-gh:hover { color: var(--text); text-decoration-color: var(--text); }
 
 
 /* ═══════════════════════════════════════════

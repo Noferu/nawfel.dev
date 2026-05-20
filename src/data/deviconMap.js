@@ -1,44 +1,46 @@
-/**
- * Mapping des noms de compétences vers les classes Devicon.
- * Utilisé dans CV.jsx pour afficher des icônes aux côtés des tags.
- * https://devicon.dev
- */
 export const deviconMap = {
   // Langages
-  'HTML5':        'devicon-html5-original',
-  'CSS3':         'devicon-css3-original',
-  'JavaScript':   'devicon-javascript-original',
-  'PHP':          'devicon-php-original',
-  'Python':       'devicon-python-original',
-  'C#':           'devicon-csharp-original',
-  'Kotlin':       'devicon-kotlin-original',
-  'Dart':         'devicon-dart-original',
+  'HTML5':        'devicon-html5-plain',
+  'CSS3':         'devicon-css3-plain',
+  'JavaScript':   'devicon-javascript-plain',
+  'PHP':          'devicon-php-plain',
+  'Python':       'devicon-python-plain',
+  'C#':           'devicon-csharp-plain',
+  'Kotlin':       'devicon-kotlin-plain',
+  'Dart':         'devicon-dart-plain',
+  'REST':         'devicon-fastapi-plain',
+  'SQL':          'devicon-azuresqldatabase-plain',
 
-  // Frameworks & Libs
-  'React':        'devicon-react-original',
+  // Frameworks & Bibliothèques
+  'React':        'devicon-react-plain',
   'Laravel':      'devicon-laravel-plain',
-  'Symfony':      'devicon-symfony-original',
-  'Flutter':      'devicon-flutter-original',
+  'Symfony':      'devicon-symfony-plain',
+  'Flutter':      'devicon-flutter-plain',
   'Firebase':     'devicon-firebase-plain',
-  'Node.js':      'devicon-nodejs-original',
-  'Tailwind':     'devicon-tailwindcss-plain',
+  'Node.js':      'devicon-nodejs-plain',
+  'Tailwind':     'devicon-tailwindcss-original',
   'WordPress':    'devicon-wordpress-plain',
   'Drupal':       'devicon-drupal-plain',
-  'Alpine.js':    'devicon-alpinejs-original',
+  'Alpine.js':    'devicon-alpinejs-plain',
+  'Twig':         'devicon-symfony-plain',
+  'WebSocket':    'devicon-socketio-original',
 
   // Bases de données
-  'MySQL':        'devicon-mysql-original',
+  'MySQL':        'devicon-mysql-plain',
 
-  // DevOps & Outils
-  'GitLab':       'devicon-gitlab-original',
-  'GitHub':       'devicon-github-original',
-  'VSCode':       'devicon-vscode-original',
-  'PhpStorm':     'devicon-phpstorm-original',
-  'Docker':       'devicon-docker-original',
-  'Apache':       'devicon-apache-original',
+  // DevOps & Automatisation
+  'GitLab':       'devicon-gitlab-plain',
+  'GitHub':       'devicon-github-plain',
+  'VSCode':       'devicon-vscode-plain',
+  'PhpStorm':     'devicon-phpstorm-plain',
+  'Docker':       'devicon-docker-plain',
+  'Apache':       'devicon-apache-plain',
+  'Vite':         'devicon-vitejs-plain',
+  'CI/CD':        'devicon-git-plain',
 
   // UI/UX
-  'Figma':        'devicon-figma-original',
+  'Figma':        'devicon-figma-plain',
   'Blender':      'devicon-blender-original',
   'Adobe':        'devicon-xd-plain',
+  'Chart.js':     'devicon-chartjs-plain',
 }

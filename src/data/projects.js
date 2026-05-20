@@ -47,7 +47,7 @@ export const projects = [
   {
     slug:      'di5-festival',
     title:     'DI5 Festival',
-    year:      2024,
+    year:      2026,
     featured:  true,
     category:  'info',
     tags:      ['Flutter', 'Firebase', 'Mobile', 'Dart'],
@@ -111,7 +111,7 @@ export const projects = [
   {
     slug:      'mutualmap',
     title:     'MutualMap',
-    year:      2024,
+    year:      2025,
     featured:  false,
     category:  'info',
     tags:      ['Python', 'JavaScript', 'API', 'Visualisation'],
@@ -131,7 +131,7 @@ export const projects = [
   {
     slug:      'discord-riot-bot',
     title:     'Discord Riot Bot',
-    year:      2024,
+    year:      2026,
     featured:  false,
     category:  'info',
     tags:      ['Python', 'API', 'IA', 'Automatisation'],
@@ -151,7 +151,7 @@ export const projects = [
   {
     slug:      'blind-test',
     title:     'Blind Test Multijoueur',
-    year:      2024,
+    year:      2025,
     featured:  false,
     category:  'info',
     tags:      ['Node.js', 'WebSocket', 'PHP', 'MySQL', 'JavaScript'],
@@ -195,7 +195,7 @@ export const projects = [
   {
     slug:      'luma',
     title:     'LUMA',
-    year:      2024,
+    year:      2025,
     featured:  false,
     category:  'info',
     tags:      ['JavaScript', 'Chart.js', 'CSS', 'HTML5', 'Data viz'],
@@ -215,7 +215,7 @@ export const projects = [
   {
     slug:      'generosus',
     title:     'Generosus',
-    year:      2023,
+    year:      2025,
     featured:  false,
     category:  'bonus',
     tags:      ['JavaScript', 'Canvas API', 'Pixel Art', 'Game Dev', 'Aseprite'],
@@ -235,7 +235,7 @@ export const projects = [
   {
     slug:      'sae401',
     title:     'SAE401 — Symfony',
-    year:      2024,
+    year:      2025,
     featured:  false,
     category:  'info',
     tags:      ['Symfony', 'PHP', 'MySQL', 'Twig', 'MVC'],
@@ -255,7 +255,7 @@ export const projects = [
   {
     slug:      'mastermind-flutter',
     title:     'Mastermind Flutter',
-    year:      2024,
+    year:      2025,
     featured:  false,
     category:  'info',
     tags:      ['Flutter', 'Dart', 'Mobile'],

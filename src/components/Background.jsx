@@ -32,7 +32,6 @@ const DOT_R    = 1.5  // rayon du point visible
 export default function Background() {
   const canvasRef   = useRef(null)
   const offsetRef   = useRef(0)     // offset horizontal (scroll infini)
-  const scrollYRef  = useRef(0)     // scroll courant (parallaxe)
   const tickerRef   = useRef(null)
   const lightsRef   = useRef([])
 
@@ -51,13 +50,10 @@ export default function Background() {
     const draw = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height)
 
-      // Parallaxe grille : très lente (facteur 0.12)
-      const parallaxY = scrollYRef.current * 0.12
-
       ctx.save()
-      ctx.translate(canvas.width / 2, canvas.height / 2 + parallaxY)
+      ctx.translate(canvas.width / 2, canvas.height / 2)
       ctx.rotate(ANGLE)
-      ctx.translate(-canvas.width / 2, -(canvas.height / 2 + parallaxY))
+      ctx.translate(-canvas.width / 2, -canvas.height / 2)
 
       const off    = offsetRef.current % GRID
       const ext    = Math.max(canvas.width, canvas.height) * 1.4
@@ -121,29 +117,31 @@ export default function Background() {
     }
   }, [])
 
-  /* ── Scroll Y (pour parallaxe) ── */
-  useEffect(() => {
-    const onScroll = () => { scrollYRef.current = window.scrollY }
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
-  }, [])
-
   /* ── Parallaxe soft lights via GSAP ScrollTrigger ── */
   useEffect(() => {
     const ctx = gsap.context(() => {
+      // Facteurs de parallaxe différents par light pour un effet de profondeur naturel.
+      // On anime un translateY RELATIF (pas absolu) : chaque light bouge de ±AMPLITUDE px
+      // sur toute la hauteur scrollable. Valeurs faibles → subtil, pas mal à la tête.
+      const FACTORS = [0.08, 0.12, 0.06, 0.10, 0.09]
+
       lightsRef.current.forEach((wrapper, i) => {
         if (!wrapper) return
-        // facteur intermédiaire entre grille (0.12) et page (1.0) → 0.35
-        gsap.to(wrapper, {
-          y: () => ScrollTrigger.maxScroll(window) * 0.35,
-          ease: 'none',
-          scrollTrigger: {
-            trigger: document.body,
-            start:   'top top',
-            end:     'bottom bottom',
-            scrub:   0.8,
-          },
-        })
+        const amplitude = window.innerHeight * FACTORS[i]
+        gsap.fromTo(
+          wrapper,
+          { y: -amplitude / 2 },
+          {
+            y: amplitude / 2,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: document.body,
+              start:   'top top',
+              end:     'bottom bottom',
+              scrub:   1.2,
+            },
+          }
+        )
       })
     })
     return () => ctx.revert()

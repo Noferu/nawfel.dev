@@ -43,10 +43,9 @@ export default function ProjectCard({ project, compact = false }) {
   useEffect(() => {
     if (!project.featured || !starRef.current) return
 
-    // Rotation continue lente
     tweenRef.current = gsap.to(starRef.current, {
       rotation:        360,
-      duration:        5,
+      duration:        6,
       repeat:          -1,
       ease:            'none',
       transformOrigin: '50% 50%',
@@ -56,13 +55,11 @@ export default function ProjectCard({ project, compact = false }) {
   }, [project.featured])
 
   const handleEnter = () => {
-    if (!tweenRef.current) return
-    gsap.to(tweenRef.current, { timeScale: 6, duration: 0.35, ease: 'power2.in' })
+    tweenRef.current?.timeScale(12)
   }
 
   const handleLeave = () => {
-    if (!tweenRef.current) return
-    gsap.to(tweenRef.current, { timeScale: 1, duration: 1.8, ease: 'power3.out' })
+    tweenRef.current?.timeScale(1)
   }
 
   return (
@@ -75,6 +72,13 @@ export default function ProjectCard({ project, compact = false }) {
     >
       <div ref={orbRef} className="glow-orb" />
 
+      {/* Étoile Disney — coin supérieur droit de toute la card */}
+      {project.featured && (
+        <div ref={starRef} className="proj-card-star" aria-hidden="true">
+          <DisneyStarSvg />
+        </div>
+      )}
+
       {/* Thumbnail (hauteur réduite ~135px) */}
       <div className="proj-card-thumb">
         {project.thumbnail ? (
@@ -82,13 +86,6 @@ export default function ProjectCard({ project, compact = false }) {
         ) : (
           <div className="proj-card-thumb-placeholder">
             <span className="proj-card-thumb-label">{project.tags[0]}</span>
-          </div>
-        )}
-
-        {/* Étoile Disney en coin — visible uniquement sur les projets featured */}
-        {project.featured && (
-          <div ref={starRef} className="proj-card-star" aria-hidden="true">
-            <DisneyStarSvg />
           </div>
         )}
       </div>

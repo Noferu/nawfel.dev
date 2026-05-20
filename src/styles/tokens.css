@@ -14,8 +14,8 @@
   --border:      rgba(251, 195, 115, 0.1);
   --border-2:    rgba(251, 195, 115, 0.18);
   --text:        #F5ECD7;
-  --text-muted:  rgba(245, 236, 215, 0.45);
-  --text-dim:    rgba(245, 236, 215, 0.25);
+  --text-muted:  rgba(245, 236, 215, 0.70);
+  --text-dim:    rgba(245, 236, 215, 0.50);
   --accent:      var(--gold-light);
   --accent-2:    var(--amber);
 
