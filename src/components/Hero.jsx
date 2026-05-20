@@ -6,11 +6,17 @@ import { resume } from '../data/resume'
 
 const WORDS = [
   'Full-Stack',
-  'Automatisation',
-  'Intelligence Artificielle',
-  'Mobile',
-  'Motion Design',
-  'Game Developer',
+  'en IA & Data',
+  'd’APIs & Intégrations',
+  'en Architecture Logicielle',
+  'd’Applications Temps Réel',
+  'Cloud & DevOps',
+  'en Cybersécurité',
+  'en Automatisation',
+  'd’Applications Mobiles',
+  'd’Expériences Interactives',
+  'd’Outils Métier',
+  'de Jeux Vidéo',
 ]
 
 /* ── Icônes sociales SVG inline ── */
@@ -130,9 +136,7 @@ export default function Hero() {
           </h1>
 
           <p className="hero-desc">
-            Je suis <strong className="hero-name">Nawfel Ida-Ali</strong>, étudiant en Master
-            Informatique à Strasbourg. Je construis des systèmes complexes, automatise des
-            processus métier et crée des expériences numériques qui ont du sens.
+            Je suis <strong className="hero-name">Nawfel Ida-Ali</strong>, en troisième année d'un BUT. Je construis des systèmes complexes, automatise des processus métier et crée des expériences numériques qui ont du sens, comme d'autres peignent des tableaux.
           </p>
 
           {/* CTAs */}
