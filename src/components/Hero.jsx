@@ -127,7 +127,7 @@ export default function Hero() {
               Voir mes projets
             </a>
             <a
-              href="https://0xnawfel-rpg.vercel.app"
+              href="https://0xnawfel.vercel.app/"
               target="_blank"
               rel="noreferrer"
               className="btn-creative"
