@@ -16,12 +16,12 @@ export const projects = [
     context:   'Projet académique individuel — SAE 501, BUT MMI 3',
     role:      'Développement full-stack complet',
     stack:     ['Laravel 12', 'React 18', 'Inertia.js', 'Tailwind CSS v4', 'MySQL', 'PHPUnit', 'Socket.io', 'Node.js', 'Express', 'GitLab CI', 'Vite', 'PHP 8.2'],
-    hero:      { type: 'image', url: '/assets/img/usine-chocolat-hero.png', alt: 'Dashboard Usine Chocolat', poster: null },
+    hero:      { type: 'image', url: '/assets/img/projects/usine-chocolat-hero.png', alt: 'Dashboard Usine Chocolat', poster: null },
     demo:      null,
     codeSnippet: null,
     media:     null,
     links:     [{ label: 'GitHub', url: 'https://github.com/Noferu/sae-501-2-usine-chocolat' }],
-    thumbnail: '/assets/img/usine-chocolat-thumb.png',
+    thumbnail: '/assets/img/projects/usine-chocolat-thumb.png',
   },
 
   {
@@ -36,12 +36,12 @@ export const projects = [
     context:   'Projet académique individuel — SAE 501, BUT MMI 3',
     role:      'Développement full-stack complet',
     stack:     ['Laravel 12', 'PHP 8.3', 'Blade', 'Tailwind CSS', 'JavaScript ES Modules', 'Chart.js', 'HTML5 Drag & Drop API', 'Vite', 'MySQL'],
-    hero:      { type: 'image', url: '/assets/img/yasuragi-hero.png', alt: 'Interface Yasuragi', poster: null },
+    hero:      { type: 'image', url: '/assets/img/projects/yasuragi-hero.png', alt: 'Interface Yasuragi', poster: null },
     demo:      null,
     codeSnippet: null,
     media:     null,
     links:     [{ label: 'GitHub', url: 'https://github.com/Noferu/sae-501-yasuragi' }],
-    thumbnail: '/assets/img/yasuragi-thumb.png',
+    thumbnail: '/assets/img/projects/yasuragi-thumb.png',
   },
 
   {
@@ -56,12 +56,12 @@ export const projects = [
     context:   'Projet académique — groupe de 3, BUT MMI S5',
     role:      'Développement mobile, intégration Firebase et Mapbox',
     stack:     ['Flutter 3', 'Dart', 'Firebase Auth', 'Cloud Firestore', 'Firebase Cloud Messaging', 'Mapbox Maps SDK', 'mobile_scanner', 'Google Sign-In'],
-    hero:      { type: 'image', url: '/assets/img/di5-hero.png', alt: 'Application DI5 Festival', poster: null },
+    hero:      { type: 'image', url: '/assets/img/projects/di5-hero.png', alt: 'Application DI5 Festival', poster: null },
     demo:      null,
     codeSnippet: null,
     media:     null,
     links:     [{ label: 'GitHub', url: 'https://github.com/Teyncz/DI5_ROTH_BERGMANN_IDA-ALI' }],
-    thumbnail: '/assets/img/di5-thumb.png',
+    thumbnail: '/assets/img/projects/di5-thumb.png',
   },
 
   {
@@ -76,12 +76,12 @@ export const projects = [
     context:   'Stage — Cabinet Comptable Doucy Consilium, Sélestat',
     role:      'Conception et développement complet',
     stack:     ['n8n', 'MyUnisoft API', 'Pennylane API', 'Microsoft Outlook API', 'Google Gemini API', 'JavaScript', 'Airtable'],
-    hero:      { type: 'image', url: '/assets/img/pipeline-hero.png', alt: 'Pipeline Synthèse Comptable', poster: null },
+    hero:      { type: 'image', url: '/assets/img/projects/pipeline-hero.png', alt: 'Pipeline Synthèse Comptable', poster: null },
     demo:      null,
     codeSnippet: null,
     media:     null,
     links:     [{ label: 'GitHub', url: 'https://github.com/Noferu' }],
-    thumbnail: '/assets/img/pipeline-thumb.png',
+    thumbnail: '/assets/img/projects/pipeline-thumb.png',
   },
 
   {
@@ -96,12 +96,12 @@ export const projects = [
     context:   'Stage — Cabinet Comptable Doucy Consilium, Sélestat',
     role:      'Conception et développement complet',
     stack:     ['n8n', 'Airtable API', 'Gotenberg', 'Microsoft Outlook API', 'Google Gemini API', 'Silae API', 'Pennylane API', 'MJML', 'JavaScript'],
-    hero:      { type: 'image', url: '/assets/img/onboarding-hero.png', alt: 'Plateforme Onboarding', poster: null },
+    hero:      { type: 'image', url: '/assets/img/projects/onboarding-hero.png', alt: 'Plateforme Onboarding', poster: null },
     demo:      null,
     codeSnippet: null,
     media:     null,
     links:     [{ label: 'GitHub', url: 'https://github.com/Noferu' }],
-    thumbnail: '/assets/img/onboarding-thumb.png',
+    thumbnail: '/assets/img/projects/onboarding-thumb.png',
   },
 
   // ═══════════════════════════════════════════
@@ -120,12 +120,12 @@ export const projects = [
     context:   'Projet personnel',
     role:      'Conception et développement complet',
     stack:     ['Python 3', 'PyVis', 'Vis.js', 'JavaScript', 'HTML', 'CSS', 'Discord API'],
-    hero:      { type: 'image', url: '/assets/img/mutualmap-hero.png', alt: 'Graphe MutualMap', poster: null },
+    hero:      { type: 'image', url: '/assets/img/projects/mutualmap-hero.png', alt: 'Graphe MutualMap', poster: null },
     demo:      null,
     codeSnippet: null,
     media:     null,
     links:     [{ label: 'GitHub', url: 'https://github.com/Noferu/mutualmap' }],
-    thumbnail: '/assets/img/mutualmap-thumb.png',
+    thumbnail: '/assets/img/projects/mutualmap-thumb.png',
   },
 
   {
@@ -140,12 +140,12 @@ export const projects = [
     context:   'Projet personnel',
     role:      'Conception et développement complet',
     stack:     ['Python 3', 'discord.py', 'Riot Games API', 'Google Gemini API', 'asyncio'],
-    hero:      { type: 'image', url: '/assets/img/riot-bot-hero.png', alt: 'Discord Riot Bot', poster: null },
+    hero:      { type: 'image', url: '/assets/img/projects/riot-bot-hero.png', alt: 'Discord Riot Bot', poster: null },
     demo:      null,
     codeSnippet: null,
     media:     null,
     links:     [{ label: 'GitHub', url: 'https://github.com/Noferu/discord-riot-bot' }],
-    thumbnail: '/assets/img/riot-bot-thumb.png',
+    thumbnail: '/assets/img/projects/riot-bot-thumb.png',
   },
 
   {
@@ -160,12 +160,12 @@ export const projects = [
     context:   'Projet personnel',
     role:      'Conception et développement complet',
     stack:     ['Node.js', 'Express', 'Socket.IO', 'PHP', 'MySQL', 'JavaScript', 'YouTube Embed API'],
-    hero:      { type: 'image', url: '/assets/img/blind-test-hero.png', alt: 'Blind Test Multijoueur', poster: null },
+    hero:      { type: 'image', url: '/assets/img/projects/blind-test-hero.png', alt: 'Blind Test Multijoueur', poster: null },
     demo:      null,
     codeSnippet: null,
     media:     null,
     links:     [{ label: 'GitHub', url: 'https://github.com/Noferu/blind_test' }],
-    thumbnail: '/assets/img/blindt_test.webp',
+    thumbnail: '/assets/img/projects/blindt_test.webp',
   },
 
   // ═══════════════════════════════════════════
@@ -184,12 +184,12 @@ export const projects = [
     context:   'Projet académique individuel — SAE 203, BUT MMI S2',
     role:      'Développement full-stack complet',
     stack:     ['PHP', 'Twig', 'MySQL', 'JavaScript', 'AJAX', 'HTML5', 'CSS3', 'Composer', 'PDO'],
-    hero:      { type: 'image', url: '/assets/img/era-explorer-hero.png', alt: 'Era Explorer', poster: null },
+    hero:      { type: 'image', url: '/assets/img/projects/era-explorer-hero.png', alt: 'Era Explorer', poster: null },
     demo:      null,
     codeSnippet: null,
     media:     null,
     links:     [{ label: 'GitHub', url: 'https://github.com/Noferu/sae203' }],
-    thumbnail: '/assets/img/era_explorer.webp',
+    thumbnail: '/assets/img/projects/era_explorer.webp',
   },
 
   {
@@ -204,12 +204,12 @@ export const projects = [
     context:   'Projet académique — groupe de 5, SAE 303',
     role:      'Développement frontend et data visualisation',
     stack:     ['HTML5', 'CSS3', 'JavaScript', 'Chart.js', 'Web Animations API'],
-    hero:      { type: 'image', url: '/assets/img/luma-hero.png', alt: 'LUMA', poster: null },
+    hero:      { type: 'image', url: '/assets/img/projects/luma-hero.png', alt: 'LUMA', poster: null },
     demo:      null,
     codeSnippet: null,
     media:     null,
     links:     [{ label: 'GitHub', url: 'https://github.com/Noferu/site_luma' }],
-    thumbnail: '/assets/img/luma.webp',
+    thumbnail: '/assets/img/projects/luma.webp',
   },
 
   {
@@ -224,12 +224,12 @@ export const projects = [
     context:   'Projet personnel',
     role:      'Développement complet, direction artistique, game design, narration',
     stack:     ['JavaScript vanilla', 'Canvas API', 'HTML5', 'CSS3', 'JSON', 'Aseprite'],
-    hero:      { type: 'image', url: '/assets/img/generosus-hero.png', alt: 'Jeu Generosus', poster: null },
+    hero:      { type: 'image', url: '/assets/img/projects/generosus-hero.png', alt: 'Jeu Generosus', poster: null },
     demo:      null,
     codeSnippet: null,
     media:     null,
     links:     [{ label: 'GitHub', url: 'https://github.com/Noferu/generosus' }],
-    thumbnail: '/assets/img/generosus-thumb.png',
+    thumbnail: '/assets/img/projects/generosus-thumb.png',
   },
 
   {
@@ -244,12 +244,12 @@ export const projects = [
     context:   'Projet académique — SAE 401, BUT MMI',
     role:      'Développement backend',
     stack:     ['Symfony', 'PHP', 'Doctrine ORM', 'Twig', 'MySQL', 'Composer'],
-    hero:      { type: 'image', url: '/assets/img/sae401-hero.png', alt: 'SAE401', poster: null },
+    hero:      { type: 'image', url: '/assets/img/projects/sae401-hero.png', alt: 'SAE401', poster: null },
     demo:      null,
     codeSnippet: null,
     media:     null,
     links:     [{ label: 'GitHub', url: 'https://github.com/Noferu/sae401' }],
-    thumbnail: '/assets/img/sae401-thumb.png',
+    thumbnail: '/assets/img/projects/sae401-thumb.png',
   },
 
   {
@@ -264,11 +264,11 @@ export const projects = [
     context:   'Projet académique — BUT MMI',
     role:      'Développement mobile complet',
     stack:     ['Flutter', 'Dart', 'Material Design'],
-    hero:      { type: 'image', url: '/assets/img/mastermind-hero.png', alt: 'Mastermind Flutter', poster: null },
+    hero:      { type: 'image', url: '/assets/img/projects/mastermind-hero.png', alt: 'Mastermind Flutter', poster: null },
     demo:      null,
     codeSnippet: null,
     media:     null,
     links:     [{ label: 'GitHub', url: 'https://github.com/Noferu/mastermind_flutter' }],
-    thumbnail: '/assets/img/mastermind-thumb.png',
+    thumbnail: '/assets/img/projects/mastermind-thumb.png',
   },
 ]
