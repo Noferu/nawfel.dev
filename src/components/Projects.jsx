@@ -23,6 +23,7 @@ function useInfiniteSlider(direction = "left", speed = 0.5) {
   const dragStartX = useRef(0);
   const dragStartPos = useRef(0);
   const resumeTimer = useRef(null);
+  const hasDragged = useRef(false);
 
   // ── animation loop ─────────────────────────────────────────────────────────
 
@@ -80,6 +81,7 @@ function useInfiniteSlider(direction = "left", speed = 0.5) {
       dragging.current = true;
       dragStartX.current = e.clientX;
       dragStartPos.current = posRef.current ?? 0;
+      hasDragged.current = false;
       stopAnimation();
       if (resumeTimer.current) clearTimeout(resumeTimer.current);
       e.preventDefault();
@@ -89,10 +91,19 @@ function useInfiniteSlider(direction = "left", speed = 0.5) {
 
   const onMouseMove = useCallback((e) => {
     if (!dragging.current || !trackRef.current) return;
+
+    const delta = e.clientX - dragStartX.current;
+
+    if (Math.abs(delta) > 5) {
+      hasDragged.current = true;
+    }
+
     const segment = trackRef.current.scrollWidth / 3;
-    let p = dragStartPos.current + (e.clientX - dragStartX.current);
+    let p = dragStartPos.current + delta;
+
     if (p > 0) p -= segment;
     if (p < -segment) p += segment;
+
     posRef.current = p;
     trackRef.current.style.transform = `translateX(${p}px)`;
   }, []);
@@ -107,6 +118,14 @@ function useInfiniteSlider(direction = "left", speed = 0.5) {
     if (dragging.current) onMouseUp();
   }, [onMouseUp]);
 
+  const onClickCapture = useCallback((e) => {
+    if (!hasDragged.current) return;
+
+    e.preventDefault();
+    e.stopPropagation();
+    hasDragged.current = false;
+  }, []);
+
   // ── drag – touch ───────────────────────────────────────────────────────────
 
   const onTouchStart = useCallback(
@@ -114,6 +133,7 @@ function useInfiniteSlider(direction = "left", speed = 0.5) {
       dragging.current = true;
       dragStartX.current = e.touches[0].clientX;
       dragStartPos.current = posRef.current ?? 0;
+      hasDragged.current = false;
       stopAnimation();
       if (resumeTimer.current) clearTimeout(resumeTimer.current);
     },
@@ -122,10 +142,19 @@ function useInfiniteSlider(direction = "left", speed = 0.5) {
 
   const onTouchMove = useCallback((e) => {
     if (!dragging.current || !trackRef.current) return;
+
+    const delta = e.touches[0].clientX - dragStartX.current;
+
+    if (Math.abs(delta) > 5) {
+      hasDragged.current = true;
+    }
+
     const segment = trackRef.current.scrollWidth / 3;
-    let p = dragStartPos.current + (e.touches[0].clientX - dragStartX.current);
+    let p = dragStartPos.current + delta;
+
     if (p > 0) p -= segment;
     if (p < -segment) p += segment;
+
     posRef.current = p;
     trackRef.current.style.transform = `translateX(${p}px)`;
   }, []);
@@ -143,6 +172,7 @@ function useInfiniteSlider(direction = "left", speed = 0.5) {
       onMouseMove,
       onMouseUp,
       onMouseLeave,
+      onClickCapture,
       onTouchStart,
       onTouchMove,
       onTouchEnd,
