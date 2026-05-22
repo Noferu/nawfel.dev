@@ -187,11 +187,15 @@
   }
 
   .proj-card {
-    width: 260px;
+    width: 240px;
   }
 
   .proj-card-thumb {
-    height: 120px;
+    height: 120px !important;
+  }
+
+  .proj-card-meta, .proj-card-footer {
+    display: none !important;;
   }
 
   /* Fades latéraux plus étroits sur mobile */
