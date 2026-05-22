@@ -1,18 +1,22 @@
 import { useState, useEffect } from 'react'
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, useParams } from 'react-router-dom'
 
-import Header    from './components/Header'
+import Header     from './components/Header'
 import Background from './components/Background'
-import CommandK  from './components/CommandK'
+import CommandK   from './components/CommandK'
 
 import Home    from './pages/Home'
 import CV      from './pages/CV'
 import Project from './pages/Project'
 
+function ProjectWrapper() {
+  const { slug } = useParams()
+  return <Project key={slug} />
+}
+
 function App() {
   const [cmdOpen, setCmdOpen] = useState(false)
 
-  // Ctrl+K / Cmd+K
   useEffect(() => {
     const handler = (e) => {
       if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
@@ -31,9 +35,9 @@ function App() {
       <CommandK open={cmdOpen} onClose={() => setCmdOpen(false)} />
 
       <Routes>
-        <Route path="/"              element={<Home />}    />
-        <Route path="/cv"            element={<CV />}      />
-        <Route path="/project/:slug" element={<Project />} />
+        <Route path="/"              element={<Home />}           />
+        <Route path="/cv"            element={<CV />}             />
+        <Route path="/project/:slug" element={<ProjectWrapper />} />
       </Routes>
     </>
   )

@@ -11,21 +11,17 @@ export default function Project() {
   const [mediaIdx, setMediaIdx] = useState(0)
   const pageRef    = useRef(null)
 
-  // Navigation entre projets (ordre du tableau)
   const allIdx = projects.findIndex(p => p.slug === slug)
   const prev   = allIdx > 0                   ? projects[allIdx - 1] : null
   const next   = allIdx < projects.length - 1 ? projects[allIdx + 1] : null
 
-  // Médias : hero + media[]
   const allMedia = project ? [
     ...(project.hero  ? [{ type: project.hero.type || 'image', url: project.hero.url, alt: project.hero.alt || project.title }] : []),
     ...(project.media ? project.media.map(m => ({ type: 'image', url: m.url, alt: m.alt || '' })) : []),
   ] : []
 
-  /* ── Reset scroll + animation entrée à chaque changement de projet ── */
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'instant' })
-    setMediaIdx(0)
     if (!pageRef.current) return
     gsap.fromTo(pageRef.current,
       { opacity: 0, filter: 'blur(12px)', y: 20 },
@@ -33,7 +29,6 @@ export default function Project() {
     )
   }, [slug])
 
-  /* ── Raccourcis clavier ←→ pour naviguer entre projets ── */
   useEffect(() => {
     const handler = (e) => {
       if (e.key === 'ArrowLeft'  && prev) navigate(`/project/${prev.slug}`)
@@ -57,7 +52,6 @@ export default function Project() {
     <div className="page proj-page" ref={pageRef}>
       <div className="container">
 
-        {/* ── Navigation ── */}
         <div className="proj-nav">
           <button className="proj-back-btn" onClick={() => navigate(-1)}>← Retour</button>
           <div className="proj-siblings">
@@ -74,7 +68,6 @@ export default function Project() {
           </div>
         </div>
 
-        {/* ── Header ── */}
         <header className="proj-header">
           <div className="proj-meta">
             <span className="proj-year">{project.year}</span>
@@ -91,7 +84,6 @@ export default function Project() {
           </div>
         </header>
 
-        {/* ── Carousel ── */}
         {allMedia.length > 0 && (
           <div className="proj-carousel">
             <div className="proj-carousel-inner">
@@ -139,7 +131,6 @@ export default function Project() {
           </div>
         )}
 
-        {/* ── Corps ── */}
         <div className="proj-body">
           <div className="proj-section">
             <p className="section-label">Contexte</p>
