@@ -6,61 +6,77 @@ import PillButton from "../components/PillButton";
 import "../styles/cv.css";
 
 const SECTIONS = [
-  { id: "exp", label: "Expériences" },
-  { id: "form", label: "Formations" },
-  { id: "comp", label: "Compétences" },
-  { id: "lang", label: "Langues" },
+  { id: "exp",      label: "Expériences" },
+  { id: "form",     label: "Formations" },
+  { id: "comp",     label: "Compétences" },
+  { id: "lang",     label: "Langues" },
+  { id: "qual",     label: "Qualités" },
+  { id: "interests",label: "Intérêts" },
 ];
 
-export default function CV() {
-  const [active, setActive] = useState("exp");
-  const [expanded, setExpanded] = useState({});
-  const pageRef = useRef(null);
-  const sectionRefs = useRef({});
+/* ── Formatage de date : "MM/DD/YYYY" → "Mois YYYY" ── */
+const MONTHS_FR = [
+  "Jan.", "Fév.", "Mar.", "Avr.", "Mai", "Juin",
+  "Juil.", "Août", "Sep.", "Oct.", "Nov.", "Déc.",
+];
 
-  /* ── Entrée GSAP (même transition que hero) ── */
+function parseDate(str) {
+  // Accepte "DD/MM/YYYY"
+  const parts = str.split("/");
+  if (parts.length === 3) {
+    return { month: parseInt(parts[1], 10), year: parseInt(parts[2], 10) };
+  }
+  return null;
+}
+
+function formatPeriod(period) {
+  if (!period || period.length < 2) return "";
+  const start = parseDate(period[0]);
+  const end   = parseDate(period[1]);
+  if (!start || !end) return period.join(" – ");
+
+  const startStr = `${MONTHS_FR[start.month - 1]} ${start.year}`;
+  const endStr   = start.year === end.year
+    ? MONTHS_FR[end.month - 1]          // même année → seulement le mois
+    : `${MONTHS_FR[end.month - 1]} ${end.year}`;
+
+  return `${startStr} – ${endStr}`;
+}
+
+export default function CV() {
+  const [active,   setActive]   = useState("exp");
+  const [expanded, setExpanded] = useState({});
+  const pageRef      = useRef(null);
+  const sectionRefs  = useRef({});
+
+  /* ── Entrée GSAP ── */
   useEffect(() => {
     if (!pageRef.current) return;
     gsap.fromTo(
       pageRef.current,
       { opacity: 0, filter: "blur(12px)", y: 20 },
-      {
-        opacity: 1,
-        filter: "blur(0px)",
-        y: 0,
-        duration: 0.9,
-        ease: "power2.out",
-        clearProps: "filter",
-      },
+      { opacity: 1, filter: "blur(0px)", y: 0, duration: 0.9, ease: "power2.out", clearProps: "filter" },
     );
   }, []);
 
-  /* ── IntersectionObserver pour suivi scroll ── */
+  /* ── IntersectionObserver ── */
   useEffect(() => {
     const observers = SECTIONS.map(({ id }) => {
       const el = sectionRefs.current[id];
       if (!el) return null;
-
       const obs = new IntersectionObserver(
-        ([entry]) => {
-          if (entry.isIntersecting) setActive(id);
-        },
+        ([entry]) => { if (entry.isIntersecting) setActive(id); },
         { rootMargin: "-25% 0px -65% 0px" },
       );
-
       obs.observe(el);
       return obs;
     });
-
     return () => observers.forEach((o) => o?.disconnect());
   }, []);
 
   const scrollTo = (id) => {
     setActive(id);
-    sectionRefs.current[id]?.scrollIntoView({
-      behavior: "smooth",
-      block: "start",
-    });
+    sectionRefs.current[id]?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
   const toggle = (key) =>
@@ -69,6 +85,7 @@ export default function CV() {
   return (
     <div className="page cv-page" ref={pageRef}>
       <div className="container cv-layout">
+
         {/* ── Sidebar ── */}
         <aside className="cv-sidebar">
           <div className="cv-sidebar-sticky">
@@ -83,21 +100,13 @@ export default function CV() {
                   onClick={() => scrollTo(s.id)}
                   className={`cv-nav-item ${active === s.id ? "cv-nav-item--active" : ""}`}
                 >
-                  <span
-                    className={`cv-nav-dot ${active === s.id ? "cv-nav-dot--active" : ""}`}
-                  />
+                  <span className={`cv-nav-dot ${active === s.id ? "cv-nav-dot--active" : ""}`} />
                   {s.label}
                 </button>
               ))}
             </nav>
-
-            {/* Bouton téléchargement */}
-            <PillButton
-              href="/assets/cv-nawfel-ida-ali.pdf"
-              download
-              target="_blank"
-            >
-              Télécharger le CV ↓
+            <PillButton href="/assets/cv-nawfel-ida-ali.pdf" download target="_blank">
+              Télécharger le CV en PDF ↓
             </PillButton>
           </div>
         </aside>
@@ -111,139 +120,123 @@ export default function CV() {
           </div>
 
           {/* ── Expériences ── */}
-          <div
-            ref={(el) => {
-              sectionRefs.current.exp = el;
-            }}
-            id="exp"
-            className="cv-block"
-          >
+          <div ref={(el) => { sectionRefs.current.exp = el; }} id="exp" className="cv-block">
             <h2 className="cv-block-title">Expériences</h2>
             <div className="cv-timeline">
-              {resume.experiences.map((exp, i) => (
-                <div key={i} className="cv-timeline-item">
-                  <div className="cv-timeline-line">
-                    <div className="cv-timeline-dot" />
-                    {i < resume.experiences.length - 1 && (
-                      <div className="cv-timeline-bar" />
-                    )}
-                  </div>
-                  <div className="cv-timeline-content">
-                    <button
-                      className="cv-exp-header"
-                      onClick={() => toggle(`exp-${i}`)}
-                    >
-                      <div>
-                        <p className="cv-exp-title">{exp.poste}</p>
-                        <p className="cv-exp-meta">
-                          {exp.lieu} · {exp.periode}
-                        </p>
+              {resume.experiences.map((exp, i) => {
+                const key = `exp-${i}`;
+                const isOpen = !!expanded[key];
+                return (
+                  <div key={i} className="cv-timeline-item">
+                    <div className="cv-timeline-line">
+                      <div className="cv-timeline-dot" />
+                      {i < resume.experiences.length - 1 && <div className="cv-timeline-bar" />}
+                    </div>
+                    <div className="cv-timeline-content">
+                      <button className="cv-exp-header" onClick={() => toggle(key)}>
+                        <div>
+                          <p className="cv-exp-title">{exp.position}</p>
+                          <p className="cv-exp-company">
+                            {exp.company && <span>{exp.company}</span>}
+                            {exp.employmentType && <span className="cv-exp-type">{exp.employmentType}</span>}
+                          </p>
+                          <p className="cv-exp-meta">
+                            {exp.location} · {formatPeriod(exp.period)}
+                          </p>
+                        </div>
+                        <span className={`cv-expand-icon ${isOpen ? "cv-expand-icon--open" : ""}`}>+</span>
+                      </button>
+
+                      {/* Tags toujours visibles */}
+                      {exp.tags && exp.tags.length > 0 && (
+                        <div className="cv-comp-tags cv-entry-tags">
+                          {exp.tags.map((tag) => (
+                            <span key={tag} className="cv-comp-tag">{tag}</span>
+                          ))}
+                        </div>
+                      )}
+
+                      {/* Points (collapse) */}
+                      <div className={`cv-exp-collapse ${isOpen ? "cv-exp-collapse--open" : ""}`}>
+                        <ul className="cv-exp-points">
+                          {exp.points.map((pt, j) => (
+                            <li key={j} className="cv-exp-point">{pt}</li>
+                          ))}
+                        </ul>
                       </div>
-                      <span
-                        className={`cv-expand-icon ${expanded[`exp-${i}`] ? "cv-expand-icon--open" : ""}`}
-                      >
-                        +
-                      </span>
-                    </button>
-                    {/* Grid rows animation : 0fr → 1fr, fluide et naturel */}
-                    <div
-                      className={`cv-exp-collapse ${expanded[`exp-${i}`] ? "cv-exp-collapse--open" : ""}`}
-                    >
-                      <ul className="cv-exp-points">
-                        {exp.points.map((pt, j) => (
-                          <li key={j} className="cv-exp-point">
-                            {pt}
-                          </li>
-                        ))}
-                      </ul>
                     </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
 
           {/* ── Formations ── */}
-          <div
-            ref={(el) => {
-              sectionRefs.current.form = el;
-            }}
-            id="form"
-            className="cv-block"
-          >
+          <div ref={(el) => { sectionRefs.current.form = el; }} id="form" className="cv-block">
             <h2 className="cv-block-title">Formations</h2>
             <div className="cv-timeline">
-              {resume.formations.map((f, i) => (
-                <div key={i} className="cv-timeline-item">
-                  <div className="cv-timeline-line">
-                    <div className="cv-timeline-dot" />
-                    {i < resume.formations.length - 1 && (
-                      <div className="cv-timeline-bar" />
-                    )}
-                  </div>
-                  <div className="cv-timeline-content">
-                    {f.desc ? (
-                      <>
-                        <button
-                          className="cv-exp-header"
-                          onClick={() => toggle(`form-${i}`)}
-                        >
-                          <div>
-                            <p className="cv-exp-title">{f.titre}</p>
-                            <p className="cv-exp-meta">
-                              {f.lieu} · {f.periode}
-                            </p>
-                          </div>
-                          <span
-                            className={`cv-expand-icon ${expanded[`form-${i}`] ? "cv-expand-icon--open" : ""}`}
-                          >
-                            +
-                          </span>
-                        </button>
-                        <div
-                          className={`cv-exp-collapse ${expanded[`form-${i}`] ? "cv-exp-collapse--open" : ""}`}
-                        >
-                          <p className="cv-form-desc">{f.desc}</p>
+              {resume.formations.map((f, i) => {
+                const key = `form-${i}`;
+                const isOpen = !!expanded[key];
+                return (
+                  <div key={i} className="cv-timeline-item">
+                    <div className="cv-timeline-line">
+                      <div className="cv-timeline-dot" />
+                      {i < resume.formations.length - 1 && <div className="cv-timeline-bar" />}
+                    </div>
+                    <div className="cv-timeline-content">
+                      <button className="cv-exp-header" onClick={() => toggle(key)}>
+                        <div>
+                          <p className="cv-exp-title">{f.title}</p>
+                          {f.specialization && (
+                            <p className="cv-exp-company">{f.specialization}</p>
+                          )}
+                          <p className="cv-exp-meta">
+                            {f.institution} · {formatPeriod(f.period)}
+                          </p>
                         </div>
-                      </>
-                    ) : (
-                      <>
-                        <p className="cv-exp-title">{f.titre}</p>
-                        <p className="cv-exp-meta">
-                          {f.lieu} · {f.periode}
-                        </p>
-                      </>
-                    )}
+                        <span className={`cv-expand-icon ${isOpen ? "cv-expand-icon--open" : ""}`}>+</span>
+                      </button>
+
+                      {/* Tags toujours visibles */}
+                      {f.tags && f.tags.length > 0 && (
+                        <div className="cv-comp-tags cv-entry-tags">
+                          {f.tags.map((tag) => (
+                            <span key={tag} className="cv-comp-tag">{tag}</span>
+                          ))}
+                        </div>
+                      )}
+
+                      {/* Points (collapse) */}
+                      {f.points && f.points.length > 0 && (
+                        <div className={`cv-exp-collapse ${isOpen ? "cv-exp-collapse--open" : ""}`}>
+                          <ul className="cv-exp-points">
+                            {f.points.map((pt, j) => (
+                              <li key={j} className="cv-exp-point">{pt}</li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+                    </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
 
           {/* ── Compétences ── */}
-          <div
-            ref={(el) => {
-              sectionRefs.current.comp = el;
-            }}
-            id="comp"
-            className="cv-block"
-          >
+          <div ref={(el) => { sectionRefs.current.comp = el; }} id="comp" className="cv-block">
             <h2 className="cv-block-title">Compétences</h2>
             <div className="cv-comp-grid">
               {resume.competences.map((cat) => (
-                <div key={cat.categorie} className="cv-comp-cat">
-                  <p className="cv-comp-cat-title">{cat.categorie}</p>
+                <div key={cat.category} className="cv-comp-cat">
+                  <p className="cv-comp-cat-title">{cat.category}</p>
                   <div className="cv-comp-tags">
                     {cat.items.map((item) => {
                       const iconClass = deviconMap[item];
                       return (
                         <span key={item} className="cv-comp-tag">
-                          {iconClass && (
-                            <i
-                              className={`devicon ${iconClass}`}
-                              aria-hidden="true"
-                            />
-                          )}
+                          {iconClass && <i className={`devicon ${iconClass}`} aria-hidden="true" />}
                           {item}
                         </span>
                       );
@@ -255,13 +248,7 @@ export default function CV() {
           </div>
 
           {/* ── Langues ── */}
-          <div
-            ref={(el) => {
-              sectionRefs.current.lang = el;
-            }}
-            id="lang"
-            className="cv-block"
-          >
+          <div ref={(el) => { sectionRefs.current.lang = el; }} id="lang" className="cv-block">
             <h2 className="cv-block-title">Langues</h2>
             <div className="cv-lang-row">
               {resume.langues.map((l) => (
@@ -272,6 +259,30 @@ export default function CV() {
               ))}
             </div>
           </div>
+
+          {/* ── Qualités ── */}
+          <div ref={(el) => { sectionRefs.current.qual = el; }} id="qual" className="cv-block">
+            <h2 className="cv-block-title">Qualités</h2>
+            <ul className="cv-qual-list">
+              {resume.qualities.map((q, i) => (
+                <li key={i} className="cv-qual-item">
+                  <span className="cv-qual-dot" aria-hidden="true" />
+                  {q}
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* ── Centres d'intérêt ── */}
+          <div ref={(el) => { sectionRefs.current.interests = el; }} id="interests" className="cv-block">
+            <h2 className="cv-block-title">Centres d'intérêt</h2>
+            <div className="cv-comp-tags cv-interests-tags">
+              {resume.interests.map((interest, i) => (
+                <span key={i} className="cv-comp-tag cv-interest-tag">{interest}</span>
+              ))}
+            </div>
+          </div>
+
         </main>
       </div>
     </div>

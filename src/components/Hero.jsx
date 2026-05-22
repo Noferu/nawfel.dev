@@ -57,13 +57,28 @@ const PILLS = [
   { label: 'Email',    href: 'mailto:nawfel.idaali.pro@gmail.com',     Icon: IconMail     },
 ]
 
+/* ── Extrait l'année depuis "DD/MM/YYYY" ── */
+function yearFromDateStr(str) {
+  if (!str) return 9999;
+  const parts = str.split('/');
+  if (parts.length === 3) return parseInt(parts[2], 10);
+  // Fallback : cherche 4 chiffres
+  const match = str.match(/\d{4}/);
+  return match ? parseInt(match[0], 10) : 9999;
+}
+
 function useStats() {
   const projectsCount = projects.length
+
+  // Cherche la plus ancienne date de début parmi les expériences
   const firstYear = resume.experiences.reduce((min, exp) => {
-    const y = parseInt(exp.periode?.match(/\d{4}/)?.[0] ?? '9999')
+    const y = yearFromDateStr(exp.period?.[0])
     return y < min ? y : min
   }, 9999)
-  const expYears = `${new Date().getFullYear() - firstYear}+`
+  const expYears = firstYear < 9999
+    ? `${new Date().getFullYear() - firstYear}+`
+    : '—'
+
   const [commits, setCommits] = useState('800+')
   useEffect(() => {
     fetch('https://api.github.com/search/commits?q=author:Noferu', {
@@ -73,6 +88,7 @@ function useStats() {
       .then(d => { if (d.total_count) setCommits(`${d.total_count}+`) })
       .catch(() => {})
   }, [])
+
   return [
     { label: 'commits GitHub', value: commits },
     { label: 'projets',        value: projectsCount },
@@ -106,7 +122,6 @@ export default function Hero() {
         {/* ── Contenu ── */}
         <div className="hero-content">
 
-          {/* H1 : chaque mot/groupe est un span séparé pour le stagger */}
           <h1 className="hero-h1">
             <span data-intro="h1-word">Développeur</span>
             {' '}

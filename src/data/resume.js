@@ -1,88 +1,221 @@
 export const resume = {
-
   // ── Identité ──
-  name: 'Nawfel Ida-Ali',
-  title: 'Ingénierie logicielle, automatisation & systèmes interactifs',
-  location: 'Strasbourg, France',
-  email: 'nawfel.idaali.pro@gmail.com',
-  phone: '+33 7 49 59 27 39',
+  name: "Nawfel Ida-Ali",
+  title: "Ingénierie logicielle, automatisation & systèmes interactifs",
+  location: "Strasbourg, France",
+  email: "nawfel.idaali.pro@gmail.com",
+  phone: "+33 7 49 59 27 39",
   links: {
-    linktree: 'https://linktr.ee/nawfel.idaali',
-    github:   'https://github.com/Noferu',
+    linktree: "https://linktr.ee/nawfel.idaali",
+    github: "https://github.com/Noferu",
   },
 
   // ── Langues ──
   langues: [
-    { langue: 'Français', niveau: 'Maternelle' },
-    { langue: 'Anglais',  niveau: 'B2+/C1'    },
+    { langue: "Français", niveau: "Maternelle" },
+    { langue: "Anglais", niveau: "B2+/C1" },
   ],
 
   // ── Formations ──
   formations: [
     {
-      titre:    'Master Informatique — À déterminer...',
-      lieu:     'À déterminer...',
-      periode:  '2026 → 2028',
-      desc:     null,
+      title: "Master Informatique",
+      specialization: "À déterminer...",
+      institution: "Hauts-de-France / Bretagne",
+      location: "France",
+      period: ["07/09/2026", "07/07/2028"],
+
+      points: [
+        "Formation spécialisée en informatique orientée conception, développement et ingénierie de systèmes logiciels avancés.",
+        "Approfondissement de problématiques liées à l’architecture logicielle, aux données, aux systèmes intelligents, à l’automatisation et aux infrastructures numériques.",
+        "Formation réalisée en alternance dans un environnement professionnel avec mise en pratique sur des projets techniques concrets.",
+      ],
+
+      tags: [
+        "Informatique",
+        "Ingénierie logicielle",
+        "Architecture",
+        "Systèmes intelligents",
+        "Alternance",
+      ],
     },
     {
-      titre:    'BUT MMI — Développement Web & Dispositifs Interactifs',
-      lieu:     'IUT de Haguenau — Université de Strasbourg',
-      periode:  '2023 – 2026',
-      desc:     'Approfondissement du développement full-stack, de l\'UX et des méthodes Agile.',
+      title: "BUT MMI",
+      specialization: "Développement Web & Dispositifs Interactifs",
+      institution: "IUT de Haguenau — Université de Strasbourg",
+      location: "Haguenau, France",
+      period: ["09/09/2023", "01/07/2026"],
+
+      points: [
+        "Formation pluridisciplinaire centrée sur le développement web, les interfaces interactives et la communication numérique.",
+        "Réalisation de projets mêlant développement front-end et back-end, intégration web, audiovisuel, UX/UI et dispositifs interactifs.",
+        "Travail sur des problématiques de conception, d’architecture web, d’intégration responsive, d’hébergement et de gestion de projet.",
+        "Approche orientée pratique avec production régulière de projets individuels et collaboratifs.",
+      ],
+
+      tags: [
+        "Développement web",
+        "Full-stack",
+        "UI/UX",
+        "Intégration web",
+        "Dispositifs interactifs",
+        "Audiovisuel",
+      ],
     },
     {
-      titre:    'Baccalauréat Général — Spécialité NSI & PHY-CHI',
-      lieu:     'Lycée Jean Rostand — Strasbourg',
-      periode:  '2023',
-      desc:     'Initiation à la programmation, à l\'algorithmique et à la logique informatique.',
-    },
-    {
-      titre:    'Immersion en Projets Informatiques',
-      lieu:     'Capgemini — Schiltigheim',
-      periode:  'Novembre 2019',
-      desc:     'Découverte du cycle d\'un projet IT et des méthodes Agile.',
+      title: "Baccalauréat Général",
+      specialization: "Spécialités NSI & Physique-Chimie",
+      institution: "Lycée Jean Rostand",
+      location: "Strasbourg, France",
+      period: ["04/09/2020", "07/07/2023"],
+
+      points: [
+        "Parcours général (cordées de la réussite) avec spécialités Numérique et Sciences Informatiques et Physique-Chimie.",
+        "Première approche structurée de la programmation, de l’algorithmique et de la logique informatique.",
+        "Grand Oral réalisé autour des réseaux neuronaux et des intelligences artificielles avec une note de 18/20.",
+        "Obtention du baccalauréat avec mention Assez Bien et note de 16/20 en NSI à l’épreuve terminale.",
+      ],
+
+      tags: ["NSI", "Programmation", "Algorithmique", "Physique-Chimie"],
     },
   ],
 
   // ── Expériences ──
   experiences: [
     {
-      poste:   'Stage — Cabinet Comptable Doucy Consilium',
-      lieu:    'Sélestat, France',
-      periode: 'Février – Mai 2026',
-      points:  [
-        'Audit, conception, développement et structuration de workflows d\'automatisation interconnectés aux APIs comptables partenaires.',
-        'Sécurisation et fiabilisation des processus (sanitisation, accès, logs).',
-        'Conception d\'une plateforme d\'onboarding client et d\'agents IA.',
-        'Documentation technique, validation des données et optimisation durable.',
+      position:
+        "Conception de services numériques, automatisation & architecture applicative",
+      company: "Cabinet comptable Doucy Consilium",
+      employmentType: "Stage",
+      location: "Sélestat, Grand Est, France",
+      workMode: "Sur site",
+      period: ["09/02/2026", "15/05/2026"],
+      points: [
+        "Conception et maintenance d’une infrastructure complète d’automatisation métier interconnectée à plusieurs APIs comptables et outils cloud dans un environnement de production réel.",
+        "Développement de workflows avancés sous n8n couvrant différents besoins métiers : onboarding client, reporting financier automatisé, synchronisation de données, génération de documents PDF, systèmes de mailing, publication automatisée de contenus, alertes d’échéances et orchestration de processus internes.",
+        "Conception de pipelines de traitement de données impliquant plusieurs services et APIs (Pennylane, MyUnisoft, Silae, Microsoft Graph, Airtable, Outlook, WordPress…), avec gestion de la fiabilité, de l’idempotence, des erreurs, des limitations d’API et des exécutions concurrentes.",
+        "Mise en place d’une architecture technique orientée maintenabilité et robustesse : découpage en sous-workflows spécialisés, systèmes de routage, webhooks centralisés, validation et normalisation de données, monitoring, gestion des logs et sécurisation des accès.",
+        "Administration et optimisation d’un environnement self-hosted sous Docker : déploiement et maintenance de services comme n8n, Gotenberg, sécurisation du VPS, optimisation des ressources serveur et gestion de l’infrastructure applicative.",
+        "Développement de solutions assistées par IA : génération automatisée de contenus, workflows d’analyse et automatisation de traitements complexes.",
+        "Conception d’une architecture Airtable relationnelle destinée à remplacer des processus internes fragmentés, avec réflexion sur la modélisation des données, les automatisations inter-tables et l’expérience utilisateur des collaborateurs.",
+        "Création d’outils internes complémentaires : extensions Chrome, interfaces de supervision, formulaires dynamiques et systèmes de documentation automatisée.",
+      ],
+
+      tags: [
+        "Automatisation",
+        "Architecture applicative",
+        "APIs",
+        "Docker",
+        "IA",
+        "Self-hosted",
+        "Infrastructure",
+        "n8n",
+        "Pipelines de données",
+        "Airtable",
+        "Workflows",
       ],
     },
     {
-      poste:   'Chauffeur-Livreur — Amazon',
-      lieu:    'Strasbourg, France',
-      periode: 'Juillet – Août 2025',
-      points:  [
-        'Gestion autonome de tournées à haute cadence et respect des délais.',
-        'Utilisation d\'outils numériques internes pour le suivi et la navigation.',
+      position: "Chauffeur-Livreur",
+      company: "Amazon Logistics (AGEX)",
+      employmentType: "Emploi saisonnier",
+      location: "Strasbourg, France",
+      workMode: "Sur site",
+      period: ["12/07/2025", "20/08/2025"],
+
+      points: [
+        "Gestion autonome de tournées de livraison en zones urbaines et périurbaines avec adaptation aux imprévus (adresses, accès, clients absents, anomalies).",
+        "Utilisation quotidienne de l’application Amazon Logistics pour la navigation, le suivi des colis, le scan, le reporting et la gestion opérationnelle des livraisons.",
+        "Organisation et optimisation des trajets afin de respecter des objectifs de performance et des délais dans un environnement à haute cadence.",
+        "Résolution rapide de problèmes terrain et maintien d’une continuité de livraison malgré les contraintes logistiques.",
+        "Conduite de véhicules utilitaires et manipulation de colis dans le respect des consignes de sécurité.",
+        "Interaction avec les clients lors des remises en main propre et maintien d’une attitude professionnelle en situation opérationnelle.",
+      ],
+
+      tags: [
+        "Logistique",
+        "Livraison",
+        "Organisation",
+        "Autonomie",
+        "Outils numériques",
+        "Gestion du stress",
+        "Résolution de problèmes",
+        "Service client",
+        "Optimisation",
+        "Transport",
       ],
     },
     {
-      poste:   'Stage — Société de Nettoyage Kartal Propreté',
-      lieu:    'Strasbourg, France',
-      periode: 'Mai – Juin 2025',
-      points:  [
-        'Création de visuels promotionnels et de vidéos institutionnelles.',
-        'Contribution et apport de solutions à la communication digitale de l\'entreprise.',
+      position: "Création de contenus visuels & audiovisuels",
+      company: "Kartal Propreté",
+      employmentType: "Stage",
+      location: "Strasbourg, Grand Est, France",
+      workMode: "Hybride",
+      period: ["07/04/2025", "12/06/2025"],
+
+      points: [
+        "Création de supports de communication print et web : affiches, flyers, kakemonos, pictogrammes, formulaires et contenus institutionnels.",
+        "Conception de contenus promotionnels autour du lancement d’une prestation de nettoyage par drone.",
+        "Production de vidéos promotionnelles, teasers, motion design et montages événementiels sous Premiere Pro et After Effects.",
+        "Création et déclinaison d’éléments graphiques dans le respect de la charte visuelle de l’company.",
+        "Participation à des démonstrations drone sur le terrain avec captation photo et vidéo.",
+        "Réalisation de supports destinés à des partenaires institutionnels et événements publics.",
+        "Travail en autonomie avec échanges réguliers, validations progressives et nombreuses itérations de production.",
+        "Préparation de contenus destinés aux réseaux sociaux, au site web et à la communication événementielle.",
+      ],
+
+      tags: [
+        "Communication visuelle",
+        "Audiovisuel",
+        "Motion design",
+        "Montage vidéo",
+        "Premiere Pro",
+        "After Effects",
+        "Photoshop",
+        "Illustrator",
+        "Canva",
+        "Drone",
+        "Événementiel",
+        "Direction artistique",
       ],
     },
     {
-      poste:   'Freelance & Autodidaxie — Création et Projets',
-      lieu:    'Strasbourg, France',
-      periode: '2019 – 2024',
-      points:  [
-        'Conception de contenus et d\'interfaces numériques.',
-        'Gestion client, respect des deadlines et sens du détail visuel.',
+      position: "Immersion en projets informatiques",
+      company: "Capgemini",
+      employmentType: "Stage d'observation",
+      location: "Schiltigheim, France",
+      workMode: "Sur site",
+      period: ["01/11/2019", "08/11/2019"],
+
+      points: [
+        "Découverte du fonctionnement de projets informatiques en entreprise.",
+        "Observation du cycle de développement et des méthodes de travail utilisées dans un environnement IT.",
+      ],
+
+      tags: ["Observation", "Informatique", "Agile"],
+    },
+    {
+      position: "Freelance & Autodidaxie — Création et Projets",
+      company: "Micro-entreprise",
+      employmentType: "Indépendant",
+      location: "Strasbourg, France",
+      workMode: "À distance",
+      period: ["01/01/2019", "31/12/2024"],
+
+      points: [
+        "Réalisation de projets personnels et expérimentations autour du développement web, du design et de la création numérique.",
+        "Création de contenus visuels, montages vidéo et interfaces web.",
+        "Apprentissage autodidacte de technologies et outils numériques à travers la pratique et les projets personnels.",
+        "Travail ponctuel sur des demandes de création et supports numériques.",
+      ],
+
+      tags: [
+        "Autodidacte",
+        "Projets personnels",
+        "Développement web",
+        "Création numérique",
+        "Design",
+        "Montage vidéo",
       ],
     },
   ],
@@ -90,47 +223,115 @@ export const resume = {
   // ── Compétences ──
   competences: [
     {
-      categorie: 'Langages',
-      items: ['HTML5', 'CSS3', 'JavaScript', 'PHP', 'SQL', 'REST', 'Python', 'C#', 'Kotlin'],
+      category: "Langages",
+      items: [
+        "HTML5",
+        "CSS3",
+        "JavaScript",
+        "PHP",
+        "SQL",
+        "REST",
+        "Python",
+        "C#",
+        "Kotlin",
+      ],
     },
     {
-      categorie: 'Frameworks & Bibliothèques',
-      items: ['Symfony', 'Laravel', 'React', 'Flutter', 'Firebase', 'Node.js', 'Tailwind', 'Twig', 'WordPress', 'Drupal', 'n8n', 'WebSocket', 'LangChain'],
+      category: "Frameworks & Bibliothèques",
+      items: [
+        "Symfony",
+        "Laravel",
+        "React",
+        "Flutter",
+        "Firebase",
+        "Node.js",
+        "Tailwind",
+        "Twig",
+        "WordPress",
+        "Drupal",
+        "n8n",
+        "WebSocket",
+        "LangChain",
+      ],
     },
     {
-      categorie: 'Bases de données',
-      items: ['MySQL', 'Conception relationnelle', 'ORM', 'Requêtes SQL', 'Vector DB', 'Seeding'],
+      category: "Bases de données",
+      items: [
+        "MySQL",
+        "Conception relationnelle",
+        "ORM",
+        "Requêtes SQL",
+        "Vector DB",
+        "Seeding",
+      ],
     },
     {
-      categorie: 'DevOps & Automatisation',
-      items: ['GitLab', 'GitHub', 'CI/CD', 'PhpStorm', 'VSCode', 'XAMPP', 'Plesk', 'Vite', 'RAG'],
+      category: "DevOps & Automatisation",
+      items: [
+        "GitLab",
+        "GitHub",
+        "CI/CD",
+        "PhpStorm",
+        "VSCode",
+        "XAMPP",
+        "Plesk",
+        "Vite",
+        "RAG",
+      ],
     },
     {
-      categorie: 'UI / UX & Intégration',
-      items: ['Figma', 'Responsive', 'Opquast', 'Chart.js', 'Alpine.js', 'Adobe', 'Blender'],
+      category: "UI / UX & Intégration",
+      items: [
+        "Figma",
+        "Responsive",
+        "Opquast",
+        "Chart.js",
+        "Alpine.js",
+        "Adobe",
+        "Blender",
+      ],
     },
     {
-      categorie: 'Sécurité & Hébergement',
-      items: ['OWASP Top 10', 'XSS', 'SQLi', 'CSRF', 'HTTPS/SSL', 'Apache', 'Auth.'],
+      category: "Sécurité & Hébergement",
+      items: [
+        "OWASP Top 10",
+        "XSS",
+        "SQLi",
+        "CSRF",
+        "HTTPS/SSL",
+        "Apache",
+        "Auth.",
+      ],
     },
     {
-      categorie: 'Algorithmique',
-      items: ['Structures de données', 'Complexité', 'Optimisation', 'Automatisation'],
+      category: "Algorithmique",
+      items: [
+        "Structures de données",
+        "Complexité",
+        "Optimisation",
+        "Automatisation",
+      ],
     },
   ],
 
   // ── Qualités ──
-  qualites: [
-    'Autonomie, veille techno et rigueur',
-    'Créativité et sens du détail',
-    'Persévérance et capacité d\'adaptation',
-    'Curiosité et esprit d\'analyse',
-    'Travail structuré et orienté qualité',
+  qualities: [
+    "Autonomie et apprentissage autodidacte",
+    "Esprit d’analyse et réflexion systémique",
+    "Curiosité technique et veille continue",
+    "Capacité d’adaptation",
+    "Rigueur et sens de la maintenabilité",
+    "Résolution de problèmes complexes",
+    "Créativité et sens du détail",
+    "Communication technique et vulgarisation",
   ],
 
   // ── Centres d'intérêt ──
-  interets: [
-    'Cinéma, lecture, narration, montage',
-    'Jeux vidéo (stratégie & compétitif)',
+  interests: [
+    "Cinéma et narration",
+    "Jeux vidéo",
+    "Worldbuilding et écriture",
+    "Montage vidéo",
+    "Technologies et culture numérique",
   ],
-}
+};
