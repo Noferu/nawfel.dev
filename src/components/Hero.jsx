@@ -79,7 +79,7 @@ function useStats() {
     ? `${new Date().getFullYear() - firstYear}+`
     : '—'
 
-  const [commits, setCommits] = useState('800+')
+  const [commits, setCommits] = useState('500+')
   useEffect(() => {
     fetch('https://api.github.com/search/commits?q=author:Noferu', {
       headers: { Accept: 'application/vnd.github.cloak-preview+json' },
