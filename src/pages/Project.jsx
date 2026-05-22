@@ -43,7 +43,7 @@ export default function Project() {
       <div className="page proj-not-found">
         <p className="proj-nf-code">404</p>
         <p className="proj-nf-msg">Projet introuvable.</p>
-        <button className="btn-secondary" onClick={() => navigate(-1)}>← Retour</button>
+        <button className="btn-secondary" onClick={() => navigate('/')}>← Retour</button>
       </div>
     )
   }
@@ -53,7 +53,7 @@ export default function Project() {
       <div className="container">
 
         <div className="proj-nav">
-          <button className="proj-back-btn" onClick={() => navigate(-1)}>← Retour</button>
+          <button className="proj-back-btn" onClick={() => navigate('/')}>← Retour</button>
           <div className="proj-siblings">
             {prev && (
               <button className="proj-sib-btn" onClick={() => navigate(`/project/${prev.slug}`)}>
