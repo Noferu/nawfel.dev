@@ -1,5 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
-import gsap from 'gsap'
+import { useEffect, useState } from 'react'
 import { useTypewriter } from '../hooks/useTypewriter'
 import { projects } from '../data/projects'
 import { resume } from '../data/resume'
