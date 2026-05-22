@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>nawfel.dev</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --black:#0E0301;
+  --red-deep:#4E0201;
+  --copper:#A15C21;
+  --gold-warm:#EDA959;
+  --gold-light:#FBC373;
+  --amber:#D48A39;
+  --text:#F5ECD7;
+  --text-muted:rgba(245,236,215,0.70);
+  --text-dim:rgba(245,236,215,0.42);
+  --border:rgba(251,195,115,0.10);
+  --border-2:rgba(251,195,115,0.18);
+  --font-display:'Outfit',sans-serif;
+  --font-body:'DM Sans',sans-serif;
+}
+html,body{width:100%;height:100%;overflow:hidden}
+body{
+  background:var(--black);
+  color:var(--text);
+  font-family:var(--font-body);
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ── Canvas background ── */
+#bg-canvas{
+  position:fixed;
+  inset:0;
+  width:100%;
+  height:100%;
+  pointer-events:none;
+  z-index:0;
+}
+
+/* ── Soft lights ── */
+.soft-lights{
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:0;
+  overflow:hidden;
+}
+.sl{
+  position:absolute;
+  border-radius:50%;
+  filter:blur(48px);
+  animation:slFloat linear infinite;
+}
+@keyframes slFloat{
+  0%  {transform:translate(-50%,-50%) scale(1)}
+  25% {transform:translate(calc(-50% + 40px),calc(-50% - 35px)) scale(1.06)}
+  50% {transform:translate(calc(-50% + 15px),calc(-50% + 28px)) scale(0.97)}
+  75% {transform:translate(calc(-50% - 38px),calc(-50% - 15px)) scale(1.03)}
+  100%{transform:translate(-50%,-50%) scale(1)}
+}
+
+/* ── Main layout ── */
+#scene{
+  position:relative;
+  z-index:1;
+  width:100%;
+  height:100vh;
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  justify-content:center;
+  padding:0 clamp(2rem, 8vw, 8rem);
+}
+
+/* ── Title ── */
+.title{
+  font-family:var(--font-display);
+  font-size:clamp(3.8rem, 10vw, 8.5rem);
+  font-weight:800;
+  letter-spacing:-0.04em;
+  line-height:1;
+  color:var(--text);
+  opacity:0;
+  transform:translateY(30px);
+  animation:fadeUp 0.9s cubic-bezier(0.16,1,0.3,1) 0.2s forwards;
+  position:relative;
+}
+.title-dot{
+  color:var(--gold-light);
+}
+
+/* ── Subtitle ── */
+.subtitle{
+  margin-top:clamp(0.8rem, 2vh, 1.4rem);
+  font-family:var(--font-body);
+  font-size:clamp(0.85rem, 1.6vw, 1.05rem);
+  font-weight:300;
+  color:var(--text-dim);
+  letter-spacing:0.01em;
+  line-height:1.6;
+  opacity:0;
+  transform:translateY(20px);
+  animation:fadeUp 0.9s cubic-bezier(0.16,1,0.3,1) 0.45s forwards;
+}
+.subtitle strong{
+  font-weight:500;
+  color:var(--text-muted);
+}
+
+/* ── Divider line ── */
+.divider{
+  margin-top:clamp(1.4rem, 3vh, 2.2rem);
+  width:0;
+  height:1px;
+  background:linear-gradient(to right, var(--amber), rgba(251,195,115,0.08));
+  animation:wipeIn 1s cubic-bezier(0.16,1,0.3,1) 0.7s forwards;
+}
+@keyframes wipeIn{
+  from{width:0}
+  to{width:clamp(140px, 22vw, 260px)}
+}
+
+/* ── Portfolio link ── */
+.portfolio-link{
+  margin-top:clamp(1rem, 2.5vh, 1.6rem);
+  display:inline-flex;
+  align-items:center;
+  gap:0.55rem;
+  font-family:var(--font-display);
+  font-size:clamp(0.78rem, 1.3vw, 0.9rem);
+  font-weight:500;
+  color:var(--text-dim);
+  letter-spacing:0.02em;
+  text-decoration:none;
+  opacity:0;
+  animation:fadeIn 0.7s ease 1s forwards;
+  transition:color 150ms ease;
+}
+.portfolio-link:hover{color:var(--gold-light)}
+.portfolio-link:hover .link-arrow{transform:translate(3px,-3px)}
+.link-arrow{
+  font-size:0.75rem;
+  opacity:0.6;
+  transition:transform 150ms ease;
+  display:inline-block;
+}
+
+/* ── Corner tag ── */
+.corner-tag{
+  position:fixed;
+  bottom:clamp(1.2rem, 3vh, 2rem);
+  right:clamp(1.5rem, 4vw, 3rem);
+  display:flex;
+  align-items:center;
+  gap:0.5rem;
+  font-family:var(--font-display);
+  font-size:0.65rem;
+  font-weight:500;
+  color:var(--text-dim);
+  letter-spacing:0.12em;
+  text-transform:uppercase;
+  opacity:0;
+  animation:fadeIn 0.6s ease 1.4s forwards;
+  z-index:2;
+}
+.corner-dot{
+  width:5px;
+  height:5px;
+  border-radius:50%;
+  background:#4ade80;
+  box-shadow:0 0 6px #4ade80;
+  animation:pulse 2s ease-in-out infinite;
+}
+@keyframes pulse{
+  0%,100%{opacity:0.6}
+  50%{opacity:1}
+}
+
+/* ── Animations ── */
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(30px)}
+  to{opacity:1;transform:translateY(0)}
+}
+@keyframes fadeIn{
+  from{opacity:0}
+  to{opacity:1}
+}
+
+/* ── Mouse glow ── */
+#mouse-glow{
+  position:fixed;
+  width:500px;
+  height:500px;
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(251,195,115,0.055) 0%,transparent 65%);
+  pointer-events:none;
+  transform:translate(-50%,-50%);
+  transition:opacity 0.4s ease;
+  opacity:0;
+  z-index:1;
+}
+</style>
+</head>
+<body>
+
+<!-- Animated grid canvas -->
+<canvas id="bg-canvas"></canvas>
+
+<!-- Soft ambient lights -->
+<div class="soft-lights">
+  <div class="sl" style="left:10%;top:15%;width:620px;height:620px;background:radial-gradient(circle,rgba(78,2,1,0.48) 0%,transparent 68%);animation-duration:20s;animation-delay:0s"></div>
+  <div class="sl" style="left:80%;top:65%;width:520px;height:520px;background:radial-gradient(circle,rgba(161,92,33,0.32) 0%,transparent 68%);animation-duration:26s;animation-delay:-7s"></div>
+  <div class="sl" style="left:50%;top:90%;width:460px;height:460px;background:radial-gradient(circle,rgba(212,138,57,0.24) 0%,transparent 68%);animation-duration:22s;animation-delay:-12s"></div>
+  <div class="sl" style="left:88%;top:12%;width:540px;height:540px;background:radial-gradient(circle,rgba(78,2,1,0.40) 0%,transparent 68%);animation-duration:30s;animation-delay:-4s"></div>
+</div>
+
+<!-- Mouse glow -->
+<div id="mouse-glow"></div>
+
+<!-- Main content -->
+<section id="scene">
+  <h1 class="title">nawfel<span class="title-dot">.</span>dev</h1>
+  <p class="subtitle"><strong>Développeur Full-Stack</strong> — systèmes complexes, IA &amp; données.</p>
+  <div class="divider"></div>
+  <a class="portfolio-link" href="https://nawfel-dev.vercel.app/" target="_blank" rel="noreferrer">
+    nawfel-dev.vercel.app
+    <span class="link-arrow">↗</span>
+  </a>
+</section>
+
+<!-- Corner status -->
+<div class="corner-tag">
+  <span class="corner-dot"></span>
+  Open to work
+</div>
+
+<script>
+(function(){
+  const canvas = document.getElementById('bg-canvas');
+  const ctx = canvas.getContext('2d');
+  const GRID = 120;
+  const ANGLE = (10 * Math.PI) / 180;
+  const MASK_R = 16;
+  const DOT_R = 1.5;
+  let offset = 0;
+
+  function resize(){
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  function draw(){
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.save();
+    ctx.translate(canvas.width/2, canvas.height/2);
+    ctx.rotate(ANGLE);
+    ctx.translate(-canvas.width/2, -canvas.height/2);
+    const off = offset % GRID;
+    const ext = Math.max(canvas.width, canvas.height) * 1.4;
+    const sx = -ext + off, sy = -ext;
+    ctx.strokeStyle = 'rgba(251,195,115,0.05)';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    for(let x=sx;x<canvas.width+ext;x+=GRID){ctx.moveTo(x,sy);ctx.lineTo(x,canvas.height+ext)}
+    ctx.stroke();
+    ctx.beginPath();
+    for(let y=sy;y<canvas.height+ext;y+=GRID){ctx.moveTo(sx,y);ctx.lineTo(canvas.width+ext,y)}
+    ctx.stroke();
+    ctx.globalCompositeOperation='destination-out';
+    ctx.fillStyle='rgba(0,0,0,1)';
+    ctx.beginPath();
+    for(let x=sx;x<canvas.width+ext;x+=GRID)
+      for(let y=sy;y<canvas.height+ext;y+=GRID){ctx.moveTo(x+MASK_R,y);ctx.arc(x,y,MASK_R,0,Math.PI*2)}
+    ctx.fill();
+    ctx.globalCompositeOperation='source-over';
+    ctx.fillStyle='rgba(251,195,115,0.18)';
+    ctx.beginPath();
+    for(let x=sx;x<canvas.width+ext;x+=GRID)
+      for(let y=sy;y<canvas.height+ext;y+=GRID){ctx.moveTo(x+DOT_R,y);ctx.arc(x,y,DOT_R,0,Math.PI*2)}
+    ctx.fill();
+    ctx.restore();
+    offset -= 0.22;
+    requestAnimationFrame(draw);
+  }
+  draw();
+
+  // Mouse glow
+  const glow = document.getElementById('mouse-glow');
+  document.addEventListener('mousemove', e => {
+    glow.style.left = e.clientX + 'px';
+    glow.style.top = e.clientY + 'px';
+    glow.style.opacity = '1';
+  });
+  document.addEventListener('mouseleave', () => { glow.style.opacity = '0'; });
+})();
+</script>
+</body>
+</html>
