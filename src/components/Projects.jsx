@@ -9,21 +9,33 @@ const secondary = projects
   .filter((p) => !p.featured)
   .sort((a, b) => b.year - a.year);
 
-// Triplé : garantit qu'on ne voit jamais le bord, même avec peu de projets
-const tripledFeatured = [...featured, ...featured, ...featured];
+const tripledFeatured  = [...featured,  ...featured,  ...featured];
 const tripledSecondary = [...secondary, ...secondary, ...secondary];
 
 // ─── Hook ────────────────────────────────────────────────────────────────────
 
 function useInfiniteSlider(direction = "left", speed = 0.5) {
-  const trackRef = useRef(null);
-  const posRef = useRef(null); // null = pas encore initialisé
-  const rafRef = useRef(null);
-  const dragging = useRef(false);
-  const dragStartX = useRef(0);
-  const dragStartPos = useRef(0);
-  const resumeTimer = useRef(null);
-  const hasDragged = useRef(false);
+  const trackRef      = useRef(null);
+  const posRef        = useRef(null);
+  const rafRef        = useRef(null);
+  const dragging      = useRef(false);
+  const dragStartX    = useRef(0);
+  const dragStartPos  = useRef(0);
+  const resumeTimer   = useRef(null);
+  const hasDragged    = useRef(false);
+
+  // Pour le calcul de vélocité
+  const lastX         = useRef(0);
+  const lastT         = useRef(0);
+  const velocityRef   = useRef(0);
+
+  // ── helpers ────────────────────────────────────────────────────────────────
+
+  const clampPos = useCallback((p, segment) => {
+    if (p > 0)        p -= segment;
+    if (p < -segment) p += segment;
+    return p;
+  }, []);
 
   // ── animation loop ─────────────────────────────────────────────────────────
 
@@ -39,18 +51,17 @@ function useInfiniteSlider(direction = "left", speed = 0.5) {
       }
 
       const segment = el.scrollWidth / 3;
-
-      posRef.current += direction === "left" ? -speed : speed;
-
-      if (posRef.current <= -segment) posRef.current += segment;
-      if (posRef.current >= 0) posRef.current -= segment;
+      posRef.current = clampPos(
+        posRef.current + (direction === "left" ? -speed : speed),
+        segment,
+      );
 
       el.style.transform = `translateX(${posRef.current}px)`;
       rafRef.current = requestAnimationFrame(tick);
     };
 
     rafRef.current = requestAnimationFrame(tick);
-  }, [direction, speed]);
+  }, [direction, speed, clampPos]);
 
   const stopAnimation = useCallback(() => {
     if (rafRef.current) {
@@ -63,6 +74,35 @@ function useInfiniteSlider(direction = "left", speed = 0.5) {
     if (resumeTimer.current) clearTimeout(resumeTimer.current);
     resumeTimer.current = setTimeout(startAnimation, 5000);
   }, [startAnimation]);
+
+  // ── inertie ────────────────────────────────────────────────────────────────
+
+  const FRICTION   = 0.88;  // décélération par frame (0–1, plus bas = frein plus fort)
+  const MIN_VEL    = 0.3;   // en dessous : on arrête l'inertie
+
+  const runInertia = useCallback(() => {
+    if (rafRef.current) cancelAnimationFrame(rafRef.current);
+
+    const tick = () => {
+      const el = trackRef.current;
+      if (!el) return;
+
+      velocityRef.current *= FRICTION;
+
+      if (Math.abs(velocityRef.current) < MIN_VEL) {
+        velocityRef.current = 0;
+        scheduleResume();
+        return;
+      }
+
+      const segment = el.scrollWidth / 3;
+      posRef.current = clampPos(posRef.current + velocityRef.current, segment);
+      el.style.transform = `translateX(${posRef.current}px)`;
+      rafRef.current = requestAnimationFrame(tick);
+    };
+
+    rafRef.current = requestAnimationFrame(tick);
+  }, [clampPos, scheduleResume]);
 
   // ── lifecycle ──────────────────────────────────────────────────────────────
 
@@ -78,10 +118,13 @@ function useInfiniteSlider(direction = "left", speed = 0.5) {
 
   const onMouseDown = useCallback(
     (e) => {
-      dragging.current = true;
-      dragStartX.current = e.clientX;
+      dragging.current    = true;
+      dragStartX.current  = e.clientX;
       dragStartPos.current = posRef.current ?? 0;
-      hasDragged.current = false;
+      hasDragged.current  = false;
+      lastX.current       = e.clientX;
+      lastT.current       = performance.now();
+      velocityRef.current = 0;
       stopAnimation();
       if (resumeTimer.current) clearTimeout(resumeTimer.current);
       e.preventDefault();
@@ -93,26 +136,30 @@ function useInfiniteSlider(direction = "left", speed = 0.5) {
     if (!dragging.current || !trackRef.current) return;
 
     const delta = e.clientX - dragStartX.current;
+    if (Math.abs(delta) > 5) hasDragged.current = true;
 
-    if (Math.abs(delta) > 5) {
-      hasDragged.current = true;
-    }
+    // Vélocité instantanée (px/frame ≈ px/ms * 16)
+    const now = performance.now();
+    const dt  = now - lastT.current;
+    if (dt > 0) velocityRef.current = ((e.clientX - lastX.current) / dt) * 16;
+    lastX.current = e.clientX;
+    lastT.current = now;
 
     const segment = trackRef.current.scrollWidth / 3;
-    let p = dragStartPos.current + delta;
-
-    if (p > 0) p -= segment;
-    if (p < -segment) p += segment;
-
-    posRef.current = p;
-    trackRef.current.style.transform = `translateX(${p}px)`;
-  }, []);
+    posRef.current = clampPos(dragStartPos.current + delta, segment);
+    trackRef.current.style.transform = `translateX(${posRef.current}px)`;
+  }, [clampPos]);
 
   const onMouseUp = useCallback(() => {
     if (!dragging.current) return;
     dragging.current = false;
-    scheduleResume();
-  }, [scheduleResume]);
+    // Lance l'inertie seulement si on avait une vélocité significative
+    if (Math.abs(velocityRef.current) > MIN_VEL) {
+      runInertia();
+    } else {
+      scheduleResume();
+    }
+  }, [runInertia, scheduleResume]);
 
   const onMouseLeave = useCallback(() => {
     if (dragging.current) onMouseUp();
@@ -120,7 +167,6 @@ function useInfiniteSlider(direction = "left", speed = 0.5) {
 
   const onClickCapture = useCallback((e) => {
     if (!hasDragged.current) return;
-
     e.preventDefault();
     e.stopPropagation();
     hasDragged.current = false;
@@ -130,10 +176,13 @@ function useInfiniteSlider(direction = "left", speed = 0.5) {
 
   const onTouchStart = useCallback(
     (e) => {
-      dragging.current = true;
-      dragStartX.current = e.touches[0].clientX;
+      dragging.current     = true;
+      dragStartX.current   = e.touches[0].clientX;
       dragStartPos.current = posRef.current ?? 0;
-      hasDragged.current = false;
+      hasDragged.current   = false;
+      lastX.current        = e.touches[0].clientX;
+      lastT.current        = performance.now();
+      velocityRef.current  = 0;
       stopAnimation();
       if (resumeTimer.current) clearTimeout(resumeTimer.current);
     },
@@ -143,27 +192,30 @@ function useInfiniteSlider(direction = "left", speed = 0.5) {
   const onTouchMove = useCallback((e) => {
     if (!dragging.current || !trackRef.current) return;
 
-    const delta = e.touches[0].clientX - dragStartX.current;
+    const clientX = e.touches[0].clientX;
+    const delta   = clientX - dragStartX.current;
+    if (Math.abs(delta) > 5) hasDragged.current = true;
 
-    if (Math.abs(delta) > 5) {
-      hasDragged.current = true;
-    }
+    const now = performance.now();
+    const dt  = now - lastT.current;
+    if (dt > 0) velocityRef.current = ((clientX - lastX.current) / dt) * 16;
+    lastX.current = clientX;
+    lastT.current = now;
 
     const segment = trackRef.current.scrollWidth / 3;
-    let p = dragStartPos.current + delta;
-
-    if (p > 0) p -= segment;
-    if (p < -segment) p += segment;
-
-    posRef.current = p;
-    trackRef.current.style.transform = `translateX(${p}px)`;
-  }, []);
+    posRef.current = clampPos(dragStartPos.current + delta, segment);
+    trackRef.current.style.transform = `translateX(${posRef.current}px)`;
+  }, [clampPos]);
 
   const onTouchEnd = useCallback(() => {
     if (!dragging.current) return;
     dragging.current = false;
-    scheduleResume();
-  }, [scheduleResume]);
+    if (Math.abs(velocityRef.current) > MIN_VEL) {
+      runInertia();
+    } else {
+      scheduleResume();
+    }
+  }, [runInertia, scheduleResume]);
 
   return {
     trackRef,
@@ -183,11 +235,8 @@ function useInfiniteSlider(direction = "left", speed = 0.5) {
 // ─── Component ────────────────────────────────────────────────────────────────
 
 export default function Projects() {
-  const { trackRef: topTrackRef, wrapperHandlers: topHandlers } =
-    useInfiniteSlider("left", 0.5);
-
-  const { trackRef: bottomTrackRef, wrapperHandlers: bottomHandlers } =
-    useInfiniteSlider("right", 0.5);
+  const { trackRef: topTrackRef,    wrapperHandlers: topHandlers }    = useInfiniteSlider("left",  0.5);
+  const { trackRef: bottomTrackRef, wrapperHandlers: bottomHandlers } = useInfiniteSlider("right", 0.5);
 
   return (
     <section id="projets" className="projects-section">
