@@ -180,22 +180,7 @@ export const resume = {
       ],
     },
     {
-      position: "Immersion en projets informatiques",
-      company: "Capgemini",
-      employmentType: "Stage d'observation",
-      location: "Schiltigheim, France",
-      workMode: "Sur site",
-      period: ["01/11/2019", "08/11/2019"],
-
-      points: [
-        "Découverte du fonctionnement de projets informatiques en entreprise.",
-        "Observation du cycle de développement et des méthodes de travail utilisées dans un environnement IT.",
-      ],
-
-      tags: ["Observation", "Informatique", "Agile"],
-    },
-    {
-      position: "Freelance & Autodidaxie — Création et Projets",
+      position: "Freelance & Autodidaxie (Création et Projets)",
       company: "Micro-entreprise",
       employmentType: "Indépendant",
       location: "Strasbourg, France",
@@ -217,6 +202,21 @@ export const resume = {
         "Design",
         "Montage vidéo",
       ],
+    },
+    {
+      position: "Immersion en projets informatiques",
+      company: "Capgemini",
+      employmentType: "Stage d'observation",
+      location: "Schiltigheim, France",
+      workMode: "Sur site",
+      period: ["01/11/2019", "08/11/2019"],
+
+      points: [
+        "Découverte du fonctionnement de projets informatiques en entreprise.",
+        "Observation du cycle de développement et des méthodes de travail utilisées dans un environnement IT.",
+      ],
+
+      tags: ["Observation", "Informatique", "Agile"],
     },
   ],
 

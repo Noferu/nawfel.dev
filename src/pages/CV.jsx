@@ -14,14 +14,13 @@ const SECTIONS = [
   { id: "interests",label: "Intérêts" },
 ];
 
-/* ── Formatage de date : "MM/DD/YYYY" → "Mois YYYY" ── */
+/* ── Formatage de date : "DD/MM/YYYY" → "Mois YYYY" ── */
 const MONTHS_FR = [
   "Jan.", "Fév.", "Mar.", "Avr.", "Mai", "Juin",
   "Juil.", "Août", "Sep.", "Oct.", "Nov.", "Déc.",
 ];
 
 function parseDate(str) {
-  // Accepte "DD/MM/YYYY"
   const parts = str.split("/");
   if (parts.length === 3) {
     return { month: parseInt(parts[1], 10), year: parseInt(parts[2], 10) };
@@ -37,7 +36,7 @@ function formatPeriod(period) {
 
   const startStr = `${MONTHS_FR[start.month - 1]} ${start.year}`;
   const endStr   = start.year === end.year
-    ? MONTHS_FR[end.month - 1]          // même année → seulement le mois
+    ? MONTHS_FR[end.month - 1]
     : `${MONTHS_FR[end.month - 1]} ${end.year}`;
 
   return `${startStr} – ${endStr}`;
@@ -66,7 +65,7 @@ export default function CV() {
       if (!el) return null;
       const obs = new IntersectionObserver(
         ([entry]) => { if (entry.isIntersecting) setActive(id); },
-        { rootMargin: "-25% 0px -65% 0px" },
+        { rootMargin: "-10% 0px -80% 0px" },
       );
       obs.observe(el);
       return obs;
@@ -147,7 +146,6 @@ export default function CV() {
                         <span className={`cv-expand-icon ${isOpen ? "cv-expand-icon--open" : ""}`}>+</span>
                       </button>
 
-                      {/* Tags toujours visibles */}
                       {exp.tags && exp.tags.length > 0 && (
                         <div className="cv-comp-tags cv-entry-tags">
                           {exp.tags.map((tag) => (
@@ -156,7 +154,6 @@ export default function CV() {
                         </div>
                       )}
 
-                      {/* Points (collapse) */}
                       <div className={`cv-exp-collapse ${isOpen ? "cv-exp-collapse--open" : ""}`}>
                         <ul className="cv-exp-points">
                           {exp.points.map((pt, j) => (
@@ -198,7 +195,6 @@ export default function CV() {
                         <span className={`cv-expand-icon ${isOpen ? "cv-expand-icon--open" : ""}`}>+</span>
                       </button>
 
-                      {/* Tags toujours visibles */}
                       {f.tags && f.tags.length > 0 && (
                         <div className="cv-comp-tags cv-entry-tags">
                           {f.tags.map((tag) => (
@@ -207,7 +203,6 @@ export default function CV() {
                         </div>
                       )}
 
-                      {/* Points (collapse) */}
                       {f.points && f.points.length > 0 && (
                         <div className={`cv-exp-collapse ${isOpen ? "cv-exp-collapse--open" : ""}`}>
                           <ul className="cv-exp-points">
@@ -276,11 +271,14 @@ export default function CV() {
           {/* ── Centres d'intérêt ── */}
           <div ref={(el) => { sectionRefs.current.interests = el; }} id="interests" className="cv-block">
             <h2 className="cv-block-title">Centres d'intérêt</h2>
-            <div className="cv-comp-tags cv-interests-tags">
+            <ul className="cv-qual-list">
               {resume.interests.map((interest, i) => (
-                <span key={i} className="cv-comp-tag cv-interest-tag">{interest}</span>
+                <li key={i} className="cv-qual-item">
+                  <span className="cv-qual-dot" aria-hidden="true" />
+                  {interest}
+                </li>
               ))}
-            </div>
+            </ul>
           </div>
 
         </main>
