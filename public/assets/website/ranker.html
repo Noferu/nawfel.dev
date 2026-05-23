@@ -1,0 +1,1083 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ranker — Classez tout</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap');
+
+  :root {
+    --bg: #0e0f11;
+    --surface: #16181c;
+    --surface2: #1e2026;
+    --border: #2a2d35;
+    --border-light: #353841;
+    --text: #f0f1f3;
+    --text-muted: #7a7f8e;
+    --text-dim: #4a4f5c;
+    --accent: #e8d5a3;
+    --accent2: #c9a96e;
+    --left: #4a9eff;
+    --right: #ff6b6b;
+    --tie: #8b8fa8;
+    --glow-left: rgba(74, 158, 255, 0.15);
+    --glow-right: rgba(255, 107, 107, 0.15);
+    --radius: 16px;
+    --radius-sm: 10px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    height: 100%;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 40% at 20% 10%, rgba(74,158,255,0.05) 0%, transparent 70%),
+      radial-gradient(ellipse 50% 50% at 80% 90%, rgba(232,213,163,0.04) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  #app {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ── HEADER ── */
+  .app-header {
+    text-align: center;
+    margin-bottom: 48px;
+  }
+
+  .app-header h1 {
+    font-family: 'Instrument Serif', serif;
+    font-size: clamp(2.2rem, 5vw, 3.2rem);
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    line-height: 1;
+  }
+
+  .app-header h1 span {
+    color: var(--accent);
+    font-style: italic;
+  }
+
+  .app-header p {
+    color: var(--text-muted);
+    font-size: 0.92rem;
+    margin-top: 10px;
+    font-weight: 300;
+    letter-spacing: 0.01em;
+  }
+
+  /* ── SCREENS ── */
+  .screen {
+    width: 100%;
+    max-width: 680px;
+    display: none;
+    animation: fadeIn 0.4s ease;
+  }
+
+  .screen.active { display: flex; flex-direction: column; gap: 20px; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── INPUT SCREEN ── */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px;
+  }
+
+  .card-label {
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 14px;
+  }
+
+  textarea {
+    width: 100%;
+    min-height: 240px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.93rem;
+    font-weight: 300;
+    line-height: 1.8;
+    padding: 16px 18px;
+    resize: vertical;
+    outline: none;
+    transition: border-color 0.2s;
+    caret-color: var(--accent);
+  }
+
+  textarea::placeholder { color: var(--text-dim); }
+  textarea:focus { border-color: var(--border-light); }
+
+  .input-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 12px;
+    font-size: 0.82rem;
+    color: var(--text-dim);
+  }
+
+  .item-count {
+    font-variant-numeric: tabular-nums;
+  }
+
+  .item-count.has-items { color: var(--accent2); }
+
+  /* ── BUTTONS ── */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 24px;
+    border-radius: var(--radius-sm);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+    transition: all 0.18s ease;
+    letter-spacing: 0.01em;
+    white-space: nowrap;
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    color: #1a1509;
+    width: 100%;
+    padding: 14px;
+    font-size: 0.95rem;
+  }
+
+  .btn-primary:hover { background: #f0dcb0; transform: translateY(-1px); box-shadow: 0 8px 24px rgba(232,213,163,0.2); }
+  .btn-primary:active { transform: translateY(0); }
+  .btn-primary:disabled { opacity: 0.35; cursor: not-allowed; transform: none; box-shadow: none; }
+
+  .btn-ghost {
+    background: transparent;
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+  }
+  .btn-ghost:hover { border-color: var(--border-light); color: var(--text); background: var(--surface2); }
+
+  .btn-outline {
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--border-light);
+  }
+  .btn-outline:hover { background: var(--surface2); }
+
+  /* ── DUEL SCREEN ── */
+  #screen-duel { max-width: 860px; gap: 24px; }
+
+  .progress-bar-wrap {
+    width: 100%;
+  }
+
+  .progress-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    font-size: 0.82rem;
+    color: var(--text-muted);
+  }
+
+  .progress-info strong {
+    color: var(--text);
+    font-weight: 500;
+  }
+
+  .progress-track {
+    height: 3px;
+    background: var(--surface2);
+    border-radius: 99px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent2), var(--accent));
+    border-radius: 99px;
+    transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* ── DUEL CARDS ── */
+  .duel-arena {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 16px;
+    align-items: stretch;
+  }
+
+  .duel-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 32px 28px;
+    cursor: pointer;
+    transition: all 0.22s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 180px;
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+  }
+
+  .duel-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 0.22s;
+    border-radius: inherit;
+  }
+
+  .duel-card.left::before  { background: var(--glow-left); }
+  .duel-card.right::before { background: var(--glow-right); }
+
+  .duel-card:hover {
+    border-color: var(--border-light);
+    transform: translateY(-2px);
+  }
+
+  .duel-card:hover::before { opacity: 1; }
+
+  .duel-card.left:hover  { border-color: rgba(74,158,255,0.4); box-shadow: 0 12px 40px rgba(74,158,255,0.1); }
+  .duel-card.right:hover { border-color: rgba(255,107,107,0.4); box-shadow: 0 12px 40px rgba(255,107,107,0.1); }
+
+  .duel-card:active { transform: scale(0.985) translateY(0); }
+
+  .card-hint {
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+
+  .duel-card.left  .card-hint { color: rgba(74,158,255,0.6); }
+  .duel-card.right .card-hint { color: rgba(255,107,107,0.6); }
+
+  .card-text {
+    font-family: 'Instrument Serif', serif;
+    font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+    font-weight: 400;
+    line-height: 1.4;
+    color: var(--text);
+    word-break: break-word;
+  }
+
+  .vs-divider {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+  }
+
+  .vs-label {
+    font-family: 'Instrument Serif', serif;
+    font-size: 1.6rem;
+    font-style: italic;
+    color: var(--text-dim);
+    letter-spacing: -0.02em;
+  }
+
+  /* ── DUEL ACTIONS ── */
+  .duel-actions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .btn-tie {
+    background: transparent;
+    color: var(--text-dim);
+    border: 1px solid var(--border);
+    font-size: 0.82rem;
+    padding: 8px 16px;
+    border-radius: 99px;
+  }
+
+  .btn-tie:hover {
+    color: var(--text-muted);
+    border-color: var(--border-light);
+    background: var(--surface2);
+  }
+
+  .btn-back {
+    background: transparent;
+    color: var(--text-dim);
+    border: 1px solid var(--border);
+    font-size: 0.82rem;
+    padding: 8px 14px;
+    border-radius: 99px;
+    gap: 5px;
+  }
+
+  .btn-back:hover { color: var(--text-muted); border-color: var(--border-light); background: var(--surface2); }
+  .btn-back:disabled { opacity: 0.25; cursor: not-allowed; }
+
+  /* ── RESULT SCREEN ── */
+  #screen-result { max-width: 680px; }
+
+  .result-header {
+    text-align: center;
+  }
+
+  .result-header h2 {
+    font-family: 'Instrument Serif', serif;
+    font-size: 2rem;
+    font-weight: 400;
+    font-style: italic;
+    color: var(--accent);
+    margin-bottom: 6px;
+  }
+
+  .result-header p {
+    color: var(--text-muted);
+    font-size: 0.88rem;
+  }
+
+  .result-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .result-item {
+    display: grid;
+    grid-template-columns: 36px 1fr auto;
+    align-items: center;
+    gap: 14px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 14px 18px;
+    animation: slideIn 0.35s ease both;
+    transition: border-color 0.18s;
+  }
+
+  .result-item:hover { border-color: var(--border-light); }
+
+  .result-item:nth-child(1) { border-color: rgba(232,213,163,0.4); }
+  .result-item:nth-child(2) { border-color: rgba(232,213,163,0.2); }
+  .result-item:nth-child(3) { border-color: rgba(232,213,163,0.1); }
+
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateX(-10px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+
+  .result-rank {
+    font-variant-numeric: tabular-nums;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-dim);
+    text-align: center;
+  }
+
+  .result-item:nth-child(1) .result-rank { color: var(--accent2); font-size: 1rem; }
+  .result-item:nth-child(2) .result-rank { color: #b0b0b0; }
+  .result-item:nth-child(3) .result-rank { color: #a0724a; }
+
+  .result-title {
+    font-size: 0.93rem;
+    color: var(--text);
+    word-break: break-word;
+  }
+
+  .result-score {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--text-dim);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 3px 9px;
+    border-radius: 99px;
+  }
+
+  .result-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .btn-reset {
+    color: var(--text-dim);
+    font-size: 0.82rem;
+    padding: 10px;
+  }
+
+  /* ── TOAST ── */
+  .toast {
+    position: fixed;
+    bottom: 32px;
+    left: 50%;
+    transform: translateX(-50%) translateY(16px);
+    background: var(--surface2);
+    border: 1px solid var(--border-light);
+    color: var(--text);
+    padding: 10px 20px;
+    border-radius: 99px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    opacity: 0;
+    transition: all 0.3s ease;
+    pointer-events: none;
+    z-index: 100;
+    white-space: nowrap;
+  }
+
+  .toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  /* ── DUEL TRANSITION ── */
+  .duel-arena.transitioning .duel-card {
+    animation: cardOut 0.2s ease forwards;
+  }
+
+  @keyframes cardOut {
+    to { opacity: 0; transform: scale(0.96) translateY(4px); }
+  }
+
+  .duel-arena.entering .duel-card {
+    animation: cardIn 0.25s ease forwards;
+  }
+
+  @keyframes cardIn {
+    from { opacity: 0; transform: scale(0.96) translateY(4px); }
+    to   { opacity: 1; transform: scale(1) translateY(0); }
+  }
+
+  /* ── MISC ── */
+  .kbd {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    padding: 1px 5px;
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    font-family: monospace;
+  }
+
+  .shortcuts-hint {
+    display: flex;
+    justify-content: center;
+    gap: 14px;
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    flex-wrap: wrap;
+  }
+
+  .shortcut-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .badge {
+    display: inline-block;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 99px;
+    padding: 2px 10px;
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    margin-left: 6px;
+  }
+</style>
+</head>
+<body>
+<div id="app">
+
+  <!-- ── HEADER ── -->
+  <header class="app-header">
+    <h1>rank<span>er</span></h1>
+    <p>Classez n'importe quoi, un duel à la fois</p>
+  </header>
+
+  <!-- ── SCREEN 1 : INPUT ── -->
+  <section class="screen active" id="screen-input">
+    <div class="card">
+      <div class="card-label">Votre liste</div>
+      <textarea id="list-input" placeholder="Collez vos éléments ici, un par ligne…
+
+Exemple :
+Vacances à Lisbonne
+Apprendre le piano
+Lancer un side-project
+Lire 12 livres cette année
+Courir un semi-marathon"></textarea>
+      <div class="input-meta">
+        <span class="item-count" id="item-count">0 élément</span>
+        <span style="font-size:0.78rem;">Un élément par ligne</span>
+      </div>
+    </div>
+    <button class="btn btn-primary" id="btn-start" disabled>Commencer le classement →</button>
+  </section>
+
+  <!-- ── SCREEN 2 : DUEL ── -->
+  <section class="screen" id="screen-duel">
+
+    <div class="progress-bar-wrap">
+      <div class="progress-info">
+        <span>Comparaison <strong id="cmp-current">1</strong> sur ~<strong id="cmp-total">?</strong></span>
+        <span id="cmp-pct" style="color: var(--accent2);">0 %</span>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill" id="progress-fill" style="width:0%"></div>
+      </div>
+    </div>
+
+    <div class="duel-arena" id="duel-arena">
+      <div class="duel-card left" id="card-left" tabindex="0">
+        <div class="card-hint">← Gauche</div>
+        <div class="card-text" id="text-left"></div>
+      </div>
+
+      <div class="vs-divider">
+        <span class="vs-label">vs</span>
+      </div>
+
+      <div class="duel-card right" id="card-right" tabindex="0">
+        <div class="card-hint">Droite →</div>
+        <div class="card-text" id="text-right"></div>
+      </div>
+    </div>
+
+    <div class="duel-actions">
+      <button class="btn btn-back" id="btn-back" disabled>
+        <span>↩</span> Annuler
+        <span class="badge">⌫</span>
+      </button>
+      <button class="btn btn-tie" id="btn-tie">Égalité</button>
+    </div>
+
+    <div class="shortcuts-hint">
+      <span class="shortcut-item"><span class="kbd">←</span> Gauche</span>
+      <span class="shortcut-item"><span class="kbd">→</span> Droite</span>
+      <span class="shortcut-item"><span class="kbd">⌫</span> Annuler</span>
+    </div>
+
+  </section>
+
+  <!-- ── SCREEN 3 : RESULTS ── -->
+  <section class="screen" id="screen-result">
+
+    <div class="result-header">
+      <h2>Classement final</h2>
+      <p id="result-meta"></p>
+    </div>
+
+    <div class="result-list" id="result-list"></div>
+
+    <div class="result-actions">
+      <button class="btn btn-outline" id="btn-copy-md">
+        <span>⎘</span> Copier en Markdown
+      </button>
+      <button class="btn btn-outline" id="btn-dl-json">
+        <span>↓</span> Télécharger JSON
+      </button>
+    </div>
+
+    <button class="btn btn-ghost btn-reset" id="btn-reset">
+      Recommencer avec une nouvelle liste
+    </button>
+
+  </section>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ─── ELO ENGINE ───────────────────────────────────────────────────────────────
+// Variable K: high early on (ratings uninformed), lower later (more stable).
+// This makes early comparisons settle fast and later ones fine-tune.
+const ELO_BASE = 1500;
+
+function eloK(comparisons) {
+  if (comparisons < 3)  return 64;
+  if (comparisons < 6)  return 48;
+  if (comparisons < 10) return 32;
+  return 24;
+}
+
+function eloExpected(a, b) { return 1 / (1 + Math.pow(10, (b - a) / 400)); }
+
+function eloUpdate(rA, rB, outcomeA, cmpA, cmpB) {
+  // outcomeA: 1 = A wins, 0 = B wins, 0.5 = tie
+  const ea  = eloExpected(rA, rB);
+  const kA  = eloK(cmpA);
+  const kB  = eloK(cmpB);
+  const newA = Math.round(rA + kA * (outcomeA       - ea));
+  const newB = Math.round(rB + kB * ((1 - outcomeA) - (1 - ea)));
+  return [newA, newB];
+}
+
+// ─── PAIR SCHEDULE ────────────────────────────────────────────────────────────
+//
+// Strategy: multi-pass round-robin by rating band.
+//
+// Pass 1 — "Swiss round" style: shuffle items into random pairs so every item
+//           gets at least one comparison quickly. For n items → ⌊n/2⌋ pairs.
+//           If n is odd, one item sits out and gets paired in pass 2.
+//
+// Pass 2 — "Sorted neighbours": sort by current rating, then pair consecutive
+//           neighbours (rank 1 vs 2, 3 vs 4 …). This compares items of similar
+//           strength, sharpening local ordering. → ⌊n/2⌋ pairs.
+//
+// Pass 3 — "Cross-band": sort by rating, pair rank 1 vs ⌊n/2⌋+1, 2 vs ⌊n/2⌋+2
+//           etc. (top half vs bottom half). Catches inter-group ordering. → ⌊n/2⌋ pairs.
+//
+// Pass 4 — "Skip-one neighbours": sort, pair rank 1 vs 3, 2 vs 4 … Fills gaps
+//           left by consecutive-pair passes. → ⌊n/2⌋ pairs.
+//
+// For n items total comparisons ≈ 2n (e.g. 18 items → ~36 comparisons).
+// Each item ends up compared ~4 times, giving Elo enough signal.
+// After all passes, the queue is exhausted and results are shown.
+//
+// Undo: we store the exact ratings before each comparison so reversal is exact.
+
+function buildSchedule(n) {
+  // Returns array of [idA, idB] pairs across all passes.
+  // Pass indices are computed lazily from the live ratings at pass start.
+  // We encode passes as lazy "generators" evaluated when each pass begins.
+  const passes = [
+    // Pass 1: random shuffle pairs
+    (ids) => {
+      const a = shuffle([...ids]);
+      const p = [];
+      for (let i = 0; i + 1 < a.length; i += 2) p.push([a[i], a[i+1]]);
+      if (a.length % 2 === 1) p.push([a[a.length-1], a[0]]); // odd item vs first
+      return p;
+    },
+    // Pass 2: sort by rating, consecutive pairs
+    (ids, items) => {
+      const sorted = [...ids].sort((a, b) => items[b].rating - items[a].rating);
+      const p = [];
+      for (let i = 0; i + 1 < sorted.length; i += 2) p.push([sorted[i], sorted[i+1]]);
+      if (sorted.length % 2 === 1) p.push([sorted[sorted.length-1], sorted[0]]);
+      return p;
+    },
+    // Pass 3: cross-band (top vs bottom)
+    (ids, items) => {
+      const sorted = [...ids].sort((a, b) => items[b].rating - items[a].rating);
+      const half = Math.floor(sorted.length / 2);
+      const p = [];
+      for (let i = 0; i < half; i++) p.push([sorted[i], sorted[i + half]]);
+      return p;
+    },
+    // Pass 4: skip-one neighbours
+    (ids, items) => {
+      const sorted = [...ids].sort((a, b) => items[b].rating - items[a].rating);
+      const p = [];
+      for (let i = 0; i + 2 < sorted.length; i += 2) p.push([sorted[i], sorted[i+2]]);
+      return p;
+    },
+  ];
+  return passes;
+}
+
+function shuffle(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+// ─── RANKER ENGINE ────────────────────────────────────────────────────────────
+class RankerEngine {
+  constructor(titles) {
+    this.items = titles.map((title, i) => ({
+      id: i, title,
+      rating: ELO_BASE,
+      wins: 0, losses: 0, ties: 0, comparisons: 0
+    }));
+
+    const n    = this.items.length;
+    const ids  = this.items.map(i => i.id);
+    this._passGenerators = buildSchedule(n);
+    this._passIndex = 0;
+    this.queue  = [];
+    this.history = [];  // { idA, idB, outcome, rA_before, rB_before }
+    this.done    = false;
+
+    // Estimate: 4 passes × ⌊n/2⌋ ≈ 2n comparisons
+    this._ids = ids;
+    this.totalEstimate = this._passGenerators.reduce((acc, gen) => {
+      // Rough: each pass ≈ ⌊n/2⌋
+      return acc + Math.floor(n / 2);
+    }, 0);
+
+    this._loadNextPass();
+  }
+
+  _loadNextPass() {
+    if (this._passIndex >= this._passGenerators.length) {
+      this.done = true;
+      return;
+    }
+    const gen  = this._passGenerators[this._passIndex++];
+    const pairs = gen(this._ids, this.items);
+    // Deduplicate against already-seen pairs
+    const seen = new Set(this.history.map(h => pairKey(h.idA, h.idB)));
+    this.queue = pairs.filter(([a, b]) => !seen.has(pairKey(a, b)));
+  }
+
+  get current() {
+    // If queue empty, load next pass
+    while (this.queue.length === 0) {
+      if (this._passIndex >= this._passGenerators.length) {
+        this.done = true;
+        return null;
+      }
+      this._loadNextPass();
+    }
+    if (this.done) return null;
+    const [idA, idB] = this.queue[0];
+    return { a: this.items[idA], b: this.items[idB] };
+  }
+
+  get progress() {
+    const done = this.history.length;
+    // Remaining = current queue + estimated pairs in future passes
+    const futurePassPairs = (this._passGenerators.length - this._passIndex) * Math.floor(this.items.length / 2);
+    const remaining = this.queue.length + futurePassPairs;
+    const total = done + remaining;
+    const pct = total === 0 ? 100 : Math.min(100, Math.round((done / total) * 100));
+    return { done, total, pct };
+  }
+
+  choose(outcome) { // 'a' | 'b' | 'tie'
+    // Ensure current is fresh
+    if (!this.current) return;
+    const [idA, idB] = this.queue.shift();
+    const a = this.items[idA];
+    const b = this.items[idB];
+
+    const rA_before = a.rating;
+    const rB_before = b.rating;
+
+    const scoreA = outcome === 'a' ? 1 : outcome === 'b' ? 0 : 0.5;
+    const [newRA, newRB] = eloUpdate(a.rating, b.rating, scoreA, a.comparisons, b.comparisons);
+
+    a.rating = newRA; b.rating = newRB;
+    a.comparisons++; b.comparisons++;
+    if (outcome === 'a')   { a.wins++;  b.losses++; }
+    else if (outcome === 'b') { b.wins++;  a.losses++; }
+    else                   { a.ties++;  b.ties++; }
+
+    this.history.push({ idA, idB, outcome, rA_before, rB_before });
+  }
+
+  undo() {
+    if (this.history.length === 0) return false;
+    const last = this.history.pop();
+    const a = this.items[last.idA];
+    const b = this.items[last.idB];
+
+    // Restore exact ratings from snapshot
+    a.rating = last.rA_before;
+    b.rating = last.rB_before;
+    a.comparisons--; b.comparisons--;
+
+    const oc = last.outcome;
+    if (oc === 'a')   { a.wins--;  b.losses--; }
+    else if (oc === 'b') { b.wins--;  a.losses--; }
+    else              { a.ties--;  b.ties--; }
+
+    this.queue.unshift([last.idA, last.idB]);
+    this.done = false;
+    return true;
+  }
+
+  results() {
+    return [...this.items].sort((a, b) => {
+      // Primary: Elo rating
+      if (b.rating !== a.rating) return b.rating - a.rating;
+      // Tiebreaker 1: win count
+      if (b.wins !== a.wins) return b.wins - a.wins;
+      // Tiebreaker 2: win rate (wins / comparisons), avoid /0
+      const wrA = a.comparisons ? a.wins / a.comparisons : 0;
+      const wrB = b.comparisons ? b.wins / b.comparisons : 0;
+      if (wrB !== wrA) return wrB - wrA;
+      // Tiebreaker 3: fewer losses
+      return a.losses - b.losses;
+    });
+  }
+}
+
+function pairKey(a, b) { return a < b ? `${a}-${b}` : `${b}-${a}`; }
+
+// ─── APP STATE ───────────────────────────────────────────────────────────────
+let engine = null;
+let transitioning = false;
+
+// ─── DOM REFS ────────────────────────────────────────────────────────────────
+const screens     = {
+  input:  document.getElementById('screen-input'),
+  duel:   document.getElementById('screen-duel'),
+  result: document.getElementById('screen-result'),
+};
+const listInput   = document.getElementById('list-input');
+const itemCount   = document.getElementById('item-count');
+const btnStart    = document.getElementById('btn-start');
+const cardLeft    = document.getElementById('card-left');
+const cardRight   = document.getElementById('card-right');
+const textLeft    = document.getElementById('text-left');
+const textRight   = document.getElementById('text-right');
+const duelArena   = document.getElementById('duel-arena');
+const progressFill= document.getElementById('progress-fill');
+const cmpCurrent  = document.getElementById('cmp-current');
+const cmpTotal    = document.getElementById('cmp-total');
+const cmpPct      = document.getElementById('cmp-pct');
+const btnBack     = document.getElementById('btn-back');
+const btnTie      = document.getElementById('btn-tie');
+const resultList  = document.getElementById('result-list');
+const resultMeta  = document.getElementById('result-meta');
+const btnCopyMd   = document.getElementById('btn-copy-md');
+const btnDlJson   = document.getElementById('btn-dl-json');
+const btnReset    = document.getElementById('btn-reset');
+const toast       = document.getElementById('toast');
+
+// ─── UTILS ───────────────────────────────────────────────────────────────────
+function parseItems(raw) {
+  return [...new Set(
+    raw.split('\n')
+       .map(l => l.trim())
+       .filter(l => l.length > 0)
+  )];
+}
+
+function showScreen(name) {
+  Object.values(screens).forEach(s => s.classList.remove('active'));
+  screens[name].classList.add('active');
+}
+
+let toastTimer;
+function showToast(msg) {
+  toast.textContent = msg;
+  toast.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toast.classList.remove('show'), 2200);
+}
+
+// ─── INPUT SCREEN ────────────────────────────────────────────────────────────
+listInput.addEventListener('input', () => {
+  const items = parseItems(listInput.value);
+  const n = items.length;
+  itemCount.textContent = n === 0 ? '0 élément' : n === 1 ? '1 élément' : `${n} éléments`;
+  itemCount.classList.toggle('has-items', n >= 2);
+  btnStart.disabled = n < 2;
+});
+
+btnStart.addEventListener('click', () => {
+  const items = parseItems(listInput.value);
+  if (items.length < 2) return;
+  startDuel(items);
+});
+
+// ─── DUEL ────────────────────────────────────────────────────────────────────
+function startDuel(items) {
+  engine = new RankerEngine(items);
+  showScreen('duel');
+  renderDuel(false);
+}
+
+function renderDuel(animate = true) {
+  if (!engine.current) { showResults(); return; }
+
+  const { a, b } = engine.current;
+  const { done, total, pct } = engine.progress;
+
+  cmpCurrent.textContent = done + 1;
+  cmpTotal.textContent   = total;
+  cmpPct.textContent     = pct + ' %';
+  progressFill.style.width = pct + '%';
+  btnBack.disabled = engine.history.length === 0;
+
+  if (!animate) {
+    textLeft.textContent  = a.title;
+    textRight.textContent = b.title;
+    return;
+  }
+
+  // Animate out → update → animate in
+  duelArena.classList.add('transitioning');
+  setTimeout(() => {
+    duelArena.classList.remove('transitioning');
+    textLeft.textContent  = a.title;
+    textRight.textContent = b.title;
+    duelArena.classList.add('entering');
+    setTimeout(() => duelArena.classList.remove('entering'), 250);
+  }, 200);
+}
+
+function choose(outcome) {
+  if (transitioning || !engine || !engine.current) return;
+  transitioning = true;
+  engine.choose(outcome);
+  if (engine.done) { setTimeout(showResults, 220); return; }
+  renderDuel(true);
+  setTimeout(() => transitioning = false, 450);
+}
+
+cardLeft.addEventListener('click',  () => choose('a'));
+cardRight.addEventListener('click', () => choose('b'));
+btnTie.addEventListener('click',    () => choose('tie'));
+
+btnBack.addEventListener('click', () => {
+  if (engine.undo()) {
+    renderDuel(true);
+    showToast('Dernier choix annulé');
+  }
+});
+
+// ─── KEYBOARD ────────────────────────────────────────────────────────────────
+document.addEventListener('keydown', e => {
+  const active = screens.duel.classList.contains('active');
+  if (!active) return;
+  if (e.key === 'ArrowLeft')  { e.preventDefault(); choose('a'); }
+  if (e.key === 'ArrowRight') { e.preventDefault(); choose('b'); }
+  if (e.key === 'Backspace') {
+    e.preventDefault();
+    if (engine && engine.undo()) {
+      renderDuel(true);
+      showToast('Dernier choix annulé');
+    }
+  }
+});
+
+// ─── RESULTS ─────────────────────────────────────────────────────────────────
+function showResults() {
+  transitioning = false;
+  const ranked = engine.results();
+  showScreen('result');
+
+  const n = ranked.length;
+  const c = engine.history.length;
+  resultMeta.textContent = `${n} éléments — ${c} comparaison${c>1?'s':''} effectuée${c>1?'s':''}`;
+
+  resultList.innerHTML = '';
+
+  const medals = ['🥇', '🥈', '🥉'];
+
+  ranked.forEach((item, i) => {
+    const div = document.createElement('div');
+    div.className = 'result-item';
+    div.style.animationDelay = (i * 35) + 'ms';
+    div.innerHTML = `
+      <div class="result-rank">${medals[i] ?? (i + 1)}</div>
+      <div class="result-title">${escHtml(item.title)}</div>
+      <div class="result-score">${item.rating} pts</div>
+    `;
+    resultList.appendChild(div);
+  });
+}
+
+function escHtml(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+// ─── EXPORT ──────────────────────────────────────────────────────────────────
+btnCopyMd.addEventListener('click', () => {
+  const ranked = engine.results();
+  const md = ranked.map((item, i) =>
+    `${i + 1}. ${item.title} — score : ${item.rating}`
+  ).join('\n');
+  navigator.clipboard.writeText(md)
+    .then(() => showToast('Classement copié en Markdown !'))
+    .catch(() => {
+      // Fallback for no clipboard
+      const ta = document.createElement('textarea');
+      ta.value = md;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      document.body.removeChild(ta);
+      showToast('Classement copié en Markdown !');
+    });
+});
+
+btnDlJson.addEventListener('click', () => {
+  const ranked = engine.results();
+  const data = ranked.map((item, i) => ({
+    rank: i + 1,
+    title: item.title,
+    score: item.rating,
+    wins: item.wins,
+    losses: item.losses,
+    ties: item.ties,
+    comparisons: item.comparisons
+  }));
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'classement.json';
+  a.click();
+  URL.revokeObjectURL(a.href);
+  showToast('JSON téléchargé');
+});
+
+// ─── RESET ───────────────────────────────────────────────────────────────────
+btnReset.addEventListener('click', () => {
+  engine = null;
+  listInput.value = '';
+  itemCount.textContent = '0 élément';
+  itemCount.classList.remove('has-items');
+  btnStart.disabled = true;
+  showScreen('input');
+});
+</script>
+</body>
+</html>

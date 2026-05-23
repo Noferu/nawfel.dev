@@ -1,67 +1,100 @@
-import { useState, useEffect, useRef } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
-import gsap from 'gsap'
-import { projects } from '../data/projects'
-import '../styles/project-page.css'
+import { useState, useEffect, useRef } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import gsap from "gsap";
+import { projects } from "../data/projects";
+import "../styles/project-page.css";
 
 export default function Project() {
-  const { slug }   = useParams()
-  const navigate   = useNavigate()
-  const project    = projects.find(p => p.slug === slug)
-  const [mediaIdx, setMediaIdx] = useState(0)
-  const pageRef    = useRef(null)
+  const { slug } = useParams();
+  const navigate = useNavigate();
+  const project = projects.find((p) => p.slug === slug);
+  const [mediaIdx, setMediaIdx] = useState(0);
+  const pageRef = useRef(null);
 
-  const allIdx = projects.findIndex(p => p.slug === slug)
-  const prev   = allIdx > 0                   ? projects[allIdx - 1] : null
-  const next   = allIdx < projects.length - 1 ? projects[allIdx + 1] : null
+  const allIdx = projects.findIndex((p) => p.slug === slug);
+  const prev = allIdx > 0 ? projects[allIdx - 1] : null;
+  const next = allIdx < projects.length - 1 ? projects[allIdx + 1] : null;
 
-  const allMedia = project ? [
-    ...(project.hero  ? [{ type: project.hero.type || 'image', url: project.hero.url, alt: project.hero.alt || project.title }] : []),
-    ...(project.media ? project.media.map(m => ({ type: 'image', url: m.url, alt: m.alt || '' })) : []),
-  ] : []
+  const allMedia = project
+    ? [
+        ...(project.hero
+          ? [
+              {
+                type: project.hero.type || "image",
+                url: project.hero.url,
+                alt: project.hero.alt || project.title,
+              },
+            ]
+          : []),
+        ...(project.media
+          ? project.media.map((m) => ({
+              type: "image",
+              url: m.url,
+              alt: m.alt || "",
+            }))
+          : []),
+      ]
+    : [];
 
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'instant' })
-    if (!pageRef.current) return
-    gsap.fromTo(pageRef.current,
-      { opacity: 0, filter: 'blur(12px)', y: 20 },
-      { opacity: 1, filter: 'blur(0px)',  y: 0, duration: 0.9, ease: 'power2.out', clearProps: 'filter' }
-    )
-  }, [slug])
+    window.scrollTo({ top: 0, behavior: "instant" });
+    if (!pageRef.current) return;
+    gsap.fromTo(
+      pageRef.current,
+      { opacity: 0, filter: "blur(12px)", y: 20 },
+      {
+        opacity: 1,
+        filter: "blur(0px)",
+        y: 0,
+        duration: 0.9,
+        ease: "power2.out",
+        clearProps: "filter",
+      },
+    );
+  }, [slug]);
 
   useEffect(() => {
     const handler = (e) => {
-      if (e.key === 'ArrowLeft'  && prev) navigate(`/project/${prev.slug}`)
-      if (e.key === 'ArrowRight' && next) navigate(`/project/${next.slug}`)
-    }
-    window.addEventListener('keydown', handler)
-    return () => window.removeEventListener('keydown', handler)
-  }, [prev, next, navigate])
+      if (e.key === "ArrowLeft" && prev) navigate(`/project/${prev.slug}`);
+      if (e.key === "ArrowRight" && next) navigate(`/project/${next.slug}`);
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, [prev, next, navigate]);
 
   if (!project) {
     return (
       <div className="page proj-not-found">
         <p className="proj-nf-code">404</p>
         <p className="proj-nf-msg">Projet introuvable.</p>
-        <button className="btn-secondary" onClick={() => navigate('/')}>← Retour</button>
+        <button className="btn-secondary" onClick={() => navigate("/")}>
+          ← Retour
+        </button>
       </div>
-    )
+    );
   }
 
   return (
     <div className="page proj-page" ref={pageRef}>
       <div className="container">
-
         <div className="proj-nav">
-          <button className="proj-back-btn" onClick={() => navigate('/')}>← Retour</button>
+          <button className="proj-back-btn" onClick={() => navigate("/")}>
+            ← Retour
+          </button>
           <div className="proj-siblings">
             {prev && (
-              <button className="proj-sib-btn" onClick={() => navigate(`/project/${prev.slug}`)}>
+              <button
+                className="proj-sib-btn"
+                onClick={() => navigate(`/project/${prev.slug}`)}
+              >
                 ← {prev.title}
               </button>
             )}
             {next && (
-              <button className="proj-sib-btn" onClick={() => navigate(`/project/${next.slug}`)}>
+              <button
+                className="proj-sib-btn"
+                onClick={() => navigate(`/project/${next.slug}`)}
+              >
                 {next.title} →
               </button>
             )}
@@ -71,15 +104,21 @@ export default function Project() {
         <header className="proj-header">
           <div className="proj-meta">
             <span className="proj-year">{project.year}</span>
-            {project.featured && <span className="proj-featured-badge">★ Featured</span>}
+            {project.featured && (
+              <span className="proj-featured-badge">★ Featured</span>
+            )}
             <span className="proj-category">
-              {project.category === 'bonus' ? 'Projet créatif' : 'Projet technique'}
+              {project.category === "bonus"
+                ? "Projet créatif"
+                : "Projet technique"}
             </span>
           </div>
           <h1 className="proj-title">{project.title}</h1>
           <div className="proj-tags">
-            {project.tags.map(tag => (
-              <span key={tag} className="proj-tag">{tag}</span>
+            {project.tags.map((tag) => (
+              <span key={tag} className="proj-tag">
+                {tag}
+              </span>
             ))}
           </div>
         </header>
@@ -87,8 +126,12 @@ export default function Project() {
         {allMedia.length > 0 && (
           <div className="proj-carousel">
             <div className="proj-carousel-inner">
-              {allMedia[mediaIdx].type === 'image' ? (
-                <img src={allMedia[mediaIdx].url} alt={allMedia[mediaIdx].alt} className="proj-carousel-img" />
+              {allMedia[mediaIdx].type === "image" ? (
+                <img
+                  src={allMedia[mediaIdx].url}
+                  alt={allMedia[mediaIdx].alt}
+                  className="proj-carousel-img"
+                />
               ) : (
                 <iframe
                   src={allMedia[mediaIdx].url}
@@ -102,16 +145,22 @@ export default function Project() {
                 <>
                   <button
                     className="proj-carousel-btn proj-carousel-btn--prev"
-                    onClick={() => setMediaIdx(i => Math.max(0, i - 1))}
+                    onClick={() => setMediaIdx((i) => Math.max(0, i - 1))}
                     disabled={mediaIdx === 0}
                     aria-label="Image précédente"
-                  >←</button>
+                  >
+                    ←
+                  </button>
                   <button
                     className="proj-carousel-btn proj-carousel-btn--next"
-                    onClick={() => setMediaIdx(i => Math.min(allMedia.length - 1, i + 1))}
+                    onClick={() =>
+                      setMediaIdx((i) => Math.min(allMedia.length - 1, i + 1))
+                    }
                     disabled={mediaIdx === allMedia.length - 1}
                     aria-label="Image suivante"
-                  >→</button>
+                  >
+                    →
+                  </button>
                 </>
               )}
             </div>
@@ -122,7 +171,7 @@ export default function Project() {
                     key={i}
                     role="tab"
                     aria-selected={i === mediaIdx}
-                    className={`proj-progress-segment ${i === mediaIdx ? 'proj-progress-segment--active' : ''}`}
+                    className={`proj-progress-segment ${i === mediaIdx ? "proj-progress-segment--active" : ""}`}
                     onClick={() => setMediaIdx(i)}
                   />
                 ))}
@@ -151,7 +200,9 @@ export default function Project() {
               {project.stack && (
                 <div className="proj-info-row">
                   <span className="proj-info-key">Stack</span>
-                  <span className="proj-info-val">{project.stack.join(' · ')}</span>
+                  <span className="proj-info-val">
+                    {project.stack.join(" · ")}
+                  </span>
                 </div>
               )}
             </div>
@@ -160,7 +211,9 @@ export default function Project() {
           {project.codeSnippet && (
             <div className="proj-section">
               <p className="section-label">Extrait</p>
-              <pre className="proj-pre"><code className="proj-code">{project.codeSnippet.code}</code></pre>
+              <pre className="proj-pre">
+                <code className="proj-code">{project.codeSnippet.code}</code>
+              </pre>
             </div>
           )}
 
@@ -168,8 +221,24 @@ export default function Project() {
             <div className="proj-section">
               <p className="section-label">Liens</p>
               <div className="proj-links-row">
+                {project.demo && (
+                  <a
+                    href={project.demo}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="btn-primary"
+                  >
+                    Voir la démo ↗
+                  </a>
+                )}
                 {project.links.map((link, i) => (
-                  <a key={i} href={link.url} target="_blank" rel="noreferrer" className="btn-secondary">
+                  <a
+                    key={i}
+                    href={link.url}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="btn-secondary"
+                  >
                     {link.label} ↗
                   </a>
                 ))}
@@ -179,5 +248,5 @@ export default function Project() {
         </div>
       </div>
     </div>
-  )
+  );
 }
