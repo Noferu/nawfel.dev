@@ -62,7 +62,6 @@ function yearFromDateStr(str) {
   if (!str) return 9999;
   const parts = str.split('/');
   if (parts.length === 3) return parseInt(parts[2], 10);
-  // Fallback : cherche 4 chiffres
   const match = str.match(/\d{4}/);
   return match ? parseInt(match[0], 10) : 9999;
 }
@@ -70,7 +69,6 @@ function yearFromDateStr(str) {
 function useStats() {
   const projectsCount = projects.length
 
-  // Cherche la plus ancienne date de début parmi les expériences
   const firstYear = resume.experiences.reduce((min, exp) => {
     const y = yearFromDateStr(exp.period?.[0])
     return y < min ? y : min
@@ -105,6 +103,11 @@ export default function Hero() {
     document.getElementById('projets')?.scrollIntoView({ behavior: 'smooth' })
   }
 
+  const scrollToContact = (e) => {
+    e.preventDefault()
+    document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })
+  }
+
   return (
     <section id="hero" className="hero-section">
       <div className="container hero-inner">
@@ -122,6 +125,17 @@ export default function Hero() {
         {/* ── Contenu ── */}
         <div className="hero-content">
 
+          {/* Badge objectif : disponibilité alternance */}
+          <a
+            href="#contact"
+            onClick={scrollToContact}
+            className="hero-status"
+            data-intro="badge"
+          >
+            <span className="hero-status-dot" aria-hidden="true" />
+            Disponible pour une alternance · Septembre 2026
+          </a>
+
           <h1 className="hero-h1">
             <span data-intro="h1-word">Développeur</span>
             {' '}
@@ -132,7 +146,10 @@ export default function Hero() {
           </h1>
 
           <p className="hero-desc" data-intro="desc">
-            Je suis <strong className="hero-name">Nawfel Ida-Ali</strong>, en troisième année d'un BUT. Je construis des systèmes complexes, automatise des processus métier et crée des expériences numériques qui ont du sens, comme d'autres peignent des tableaux.
+            Je suis <strong className="hero-name">Nawfel Ida-Ali</strong>, en troisième année de
+            BUT MMI. Je cherche une alternance pour poursuivre en master informatique. Je construis
+            des systèmes complexes, automatise des processus métier et crée des expériences
+            numériques qui ont du sens, comme d'autres peignent des tableaux.
           </p>
 
           {/* CTAs */}

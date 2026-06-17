@@ -1,9 +1,13 @@
 @import url('https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css');
 @import './tokens.css';
-@import './responsive.css';
 
-/* ── Reset ── */
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 
 html {
   scroll-behavior: smooth;
@@ -21,15 +25,41 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-::-webkit-scrollbar { width: 3px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: var(--copper); border-radius: 2px; }
+::-webkit-scrollbar {
+  width: 3px;
+}
 
-a { color: inherit; text-decoration: none; }
-img { display: block; max-width: 100%; }
-button { cursor: pointer; border: none; background: none; font: inherit; color: inherit; }
+::-webkit-scrollbar-track {
+  background: transparent;
+}
 
-h1, h2, h3, h4 {
+::-webkit-scrollbar-thumb {
+  background: var(--copper);
+  border-radius: 2px;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+  font: inherit;
+  color: inherit;
+}
+
+h1,
+h2,
+h3,
+h4 {
   font-family: var(--font-display);
   font-weight: 700;
   line-height: 1.15;
@@ -42,7 +72,6 @@ h1, h2, h3, h4 {
   padding: 0 var(--sp-lg);
 }
 
-/* ── Section label ── */
 .section-label {
   font-family: var(--font-display);
   font-size: 0.65rem;
@@ -59,65 +88,87 @@ h1, h2, h3, h4 {
 .section-label::before {
   content: '';
   display: block;
-  width: 20px; height: 1px;
+  width: 20px;
+  height: 1px;
   background: var(--amber);
   opacity: 0.6;
 }
 
-/* ── Animations globales ── */
 @keyframes fadeUp {
-  from { opacity: 0; transform: translateY(24px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to   { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes softPulse {
-  0%, 100% { opacity: 0.6; }
-  50%       { opacity: 1; }
+
+  0%,
+  100% {
+    opacity: 0.6;
+  }
+
+  50% {
+    opacity: 1;
+  }
 }
 
 @keyframes scrollLeft {
-  from { transform: translateX(0); }
-  to   { transform: translateX(-50%); }
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
 }
 
 @keyframes scrollRight {
-  from { transform: translateX(-50%); }
-  to   { transform: translateX(0); }
+  from {
+    transform: translateX(-50%);
+  }
+
+  to {
+    transform: translateX(0);
+  }
 }
 
-/* lightFloat : le translate(-50%,-50%) est intégré pour ne pas
-   entrer en conflit avec le translateY GSAP du wrapper parent */
 @keyframes lightFloat {
-  0%   { transform: translate(-50%, -50%) scale(1); }
-  25%  { transform: translate(calc(-50% + 55px), calc(-50% - 45px)) scale(1.07); }
-  50%  { transform: translate(calc(-50% + 20px), calc(-50% + 35px)) scale(0.97); }
-  75%  { transform: translate(calc(-50% - 50px), calc(-50% - 20px)) scale(1.04); }
-  100% { transform: translate(-50%, -50%) scale(1); }
-}
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+  }
 
-/* ── Utilitaires ── */
-.pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  padding: 0.3rem 0.75rem;
-  border-radius: 999px;
-  font-family: var(--font-display);
-  font-size: 0.7rem;
-  font-weight: 500;
-  letter-spacing: 0.04em;
-  border: 1px solid var(--border);
-  background: var(--surface);
-  color: var(--text-muted);
-  transition: all var(--t-fast);
-}
+  25% {
+    transform: translate(calc(-50% + 55px), calc(-50% - 45px)) scale(1.07);
+  }
 
-.pill:hover { border-color: var(--border-2); color: var(--text); }
+  50% {
+    transform: translate(calc(-50% + 20px), calc(-50% + 35px)) scale(0.97);
+  }
+
+  75% {
+    transform: translate(calc(-50% - 50px), calc(-50% - 20px)) scale(1.04);
+  }
+
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
 
 .btn-primary {
   display: inline-flex;
@@ -134,7 +185,10 @@ h1, h2, h3, h4 {
   letter-spacing: 0.01em;
 }
 
-.btn-primary:hover { background: var(--gold-warm); transform: translateY(-1px); }
+.btn-primary:hover {
+  background: var(--gold-warm);
+  transform: translateY(-1px);
+}
 
 .btn-secondary {
   display: inline-flex;
@@ -152,16 +206,23 @@ h1, h2, h3, h4 {
   letter-spacing: 0.01em;
 }
 
-.btn-secondary:hover { border-color: var(--amber); color: var(--gold-light); transform: translateY(-1px); }
+.btn-secondary:hover {
+  border-color: var(--amber);
+  color: var(--gold-light);
+  transform: translateY(-1px);
+}
 
-/* ── Glow card ── */
-.glow-card { position: relative; overflow: hidden; }
+.glow-card {
+  position: relative;
+  overflow: hidden;
+}
 
 .glow-card .glow-orb {
   position: absolute;
-  width: 200px; height: 200px;
+  width: 200px;
+  height: 200px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(251,195,115,0.15) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(251, 195, 115, 0.15) 0%, transparent 70%);
   pointer-events: none;
   transform: translate(-50%, -50%);
   transition: opacity var(--t-fast);
@@ -169,25 +230,52 @@ h1, h2, h3, h4 {
   z-index: 0;
 }
 
-.glow-card:hover .glow-orb { opacity: 1; }
+.glow-card:hover .glow-orb {
+  opacity: 1;
+}
 
-.page { min-height: 100vh; padding-top: 80px; }
+.page {
+  min-height: 100vh;
+  padding-top: 80px;
+}
 
-/* ── Devicons palette ── */
-.devicon { font-size: 0.9rem; color: var(--amber); opacity: 0.75; }
-.devicon.colored { color: inherit; }
+.devicon {
+  font-size: 0.9rem;
+  color: var(--amber);
+  opacity: 0.75;
+}
 
-/* État initial invisible — GSAP prend le relais via autoAlpha */
+.devicon.colored {
+  color: inherit;
+}
+
 [data-intro] {
   visibility: hidden;
 }
 
-/* ── Transition du background : on veut un scale très doux au démarrage ── */
 [data-intro="bg"] {
   transform-origin: center center;
 }
 
-/* ── Divider : transform-origin pour le wipe horizontal ── */
 [data-intro="divider"] {
   transform-origin: left center;
+}
+
+/* ═══ RESPONSIVE ═══ */
+
+@media (max-width: 1024px) {
+  .container {
+    padding: 0 1.5rem;
+  }
+}
+
+@media (max-width: 640px) {
+  :root {
+    --sp-xl: 2.5rem;
+    --sp-2xl: 4rem;
+  }
+
+  .container {
+    padding: 0 1rem;
+  }
 }

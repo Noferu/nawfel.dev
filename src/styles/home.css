@@ -16,10 +16,145 @@
   gap: 5rem;
 }
 
-/* Photo : pas de flip hover */
 .hero-photo-wrapper {
   position: relative;
   flex-shrink: 0;
+}
+
+.hero-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  align-self: flex-start;
+  padding: 0.3rem 0.85rem;
+  border-radius: 999px;
+  border: 1px solid rgba(74, 222, 128, 0.25);
+  background: rgba(74, 222, 128, 0.06);
+  font-family: var(--font-display);
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: rgba(245, 236, 215, 0.85);
+  letter-spacing: 0.02em;
+  transition: border-color var(--t-fast), background var(--t-fast);
+}
+
+.hero-status:hover {
+  border-color: rgba(74, 222, 128, 0.4);
+  background: rgba(74, 222, 128, 0.1);
+}
+
+.hero-status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #4ade80;
+  box-shadow: 0 0 6px #4ade80;
+  animation: softPulse 2s ease-in-out infinite;
+  flex-shrink: 0;
+}
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+  margin-top: 0.5rem;
+  max-width: 540px;
+}
+
+.contact-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.1rem;
+}
+
+.contact-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.contact-label {
+  font-family: var(--font-display);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+
+.contact-input,
+.contact-textarea {
+  width: 100%;
+  background: rgba(251, 195, 115, 0.04);
+  border: 1px solid rgba(251, 195, 115, 0.14);
+  border-radius: 8px;
+  padding: 0.7rem 0.9rem;
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  color: var(--text);
+  transition: border-color var(--t-fast), background var(--t-fast);
+}
+
+.contact-textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+.contact-input:focus,
+.contact-textarea:focus {
+  outline: none;
+  border-color: rgba(251, 195, 115, 0.4);
+  background: rgba(251, 195, 115, 0.07);
+}
+
+.contact-input::placeholder,
+.contact-textarea::placeholder {
+  color: var(--text-dim);
+}
+
+.contact-input[aria-invalid="true"],
+.contact-textarea[aria-invalid="true"] {
+  border-color: rgba(239, 68, 68, 0.6);
+  background: rgba(239, 68, 68, 0.04);
+}
+
+.contact-error {
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  color: #f87171;
+}
+
+.contact-form-footer {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  flex-wrap: wrap;
+  margin-top: 0.25rem;
+}
+
+.contact-submit:disabled {
+  opacity: 0.55;
+  cursor: default;
+  transform: none;
+}
+
+.contact-status {
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+.contact-status--success {
+  color: #4ade80;
+}
+
+.contact-status--error {
+  color: #f87171;
+}
+
+.contact-status-link {
+  text-decoration: underline;
+  text-underline-offset: 2px;
 }
 
 .hero-photo-ring {
@@ -54,7 +189,6 @@
   z-index: 0;
 }
 
-/* Contenu */
 .hero-content {
   flex: 1;
   display: flex;
@@ -62,7 +196,6 @@
   gap: 1.5rem;
 }
 
-/* ── Titre : deux lignes, typewriter en dessous sans impact layout ── */
 .hero-h1 {
   font-size: clamp(1.6rem, 3.2vw, 3rem);
   font-weight: 800;
@@ -82,12 +215,10 @@
   display: flex;
   align-items: baseline;
   gap: 2px;
-  /* largeur fixe = ne dépend plus du contenu du typewriter */
   width: max-content;
   max-width: 100%;
 }
 
-/* La zone du typewriter est fixe : pas de saut de layout */
 .hero-typewriter {
   display: inline-block;
   min-width: 0;
@@ -121,12 +252,10 @@
 
 
 /* ═══════════════════════════════════════════
-   CTA CRÉATIF — masque-reveal pixel art
+   CTA CRÉATIF
    ═══════════════════════════════════════════ */
 
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
-
-
 
 .btn-creative {
   position: relative;
@@ -150,14 +279,12 @@
   min-width: 190px;
 }
 
-/* ── Couche default : toujours visible, disparaît au hover ── */
 .btn-creative__default {
   display: flex;
   align-items: center;
   gap: 0.5rem;
   position: relative;
   z-index: 1;
-  /* clip-path wipe vers la droite au hover */
   clip-path: inset(0 0% 0 0);
   transition: clip-path 1.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -166,7 +293,6 @@
   clip-path: inset(0 0 0 100%);
 }
 
-/* ── Couche pixel art : cachée, révélée par le shine ── */
 .btn-creative__pixel {
   position: absolute;
   inset: 0;
@@ -187,14 +313,12 @@
   clip-path: inset(0 0% 0 0);
 }
 
-/* Style pixel art du container au hover */
 .btn-creative:hover {
   border-radius: 0;
   box-shadow: inset 0 0 0 3px #FFDE03;
   color: #FFDE03;
 }
 
-/* ── Shine ligne qui sert de front de révélation ── */
 .btn-creative__shine {
   position: absolute;
   top: 0;
@@ -217,7 +341,7 @@
 
 
 /* ═══════════════════════════════════════════
-   HERO — PILLS & STATS
+   HERO / PILLS & STATS
    ═══════════════════════════════════════════ */
 
 .hero-pills-row {
@@ -299,7 +423,6 @@
   margin-top: 2px;
 }
 
-
 /* ═══════════════════════════════════════════
    PROJECTS SECTION
    ═══════════════════════════════════════════ */
@@ -357,19 +480,6 @@
   will-change: transform;
 }
 
-.projects-track--left {
-  animation: scrollLeft 30s linear infinite;
-}
-
-.projects-track--right {
-  animation: scrollRight 36s linear infinite;
-}
-
-.projects-track--paused {
-  animation-play-state: paused !important;
-}
-
-
 /* ═══════════════════════════════════════════
    CV SNIPPET
    ═══════════════════════════════════════════ */
@@ -414,8 +524,15 @@
 }
 
 @keyframes dotPulse {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(212, 138, 57, 0.5); }
-  50%       { box-shadow: 0 0 0 4px rgba(212, 138, 57, 0); }
+
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(212, 138, 57, 0.5);
+  }
+
+  50% {
+    box-shadow: 0 0 0 4px rgba(212, 138, 57, 0);
+  }
 }
 
 .cv-snippet-item-title {
@@ -461,12 +578,10 @@
   color: var(--text-muted);
 }
 
-/* CTA sans divider au-dessus */
 .cv-snippet-cta {
   display: flex;
   justify-content: center;
   padding-top: 1rem;
-  /* Pas de border-top intentionnellement */
 }
 
 
@@ -553,7 +668,6 @@
   opacity: 0.6;
 }
 
-/* Flèche scroll-to-top sous la card, séparée */
 .contact-scroll-top {
   display: flex;
   justify-content: center;
@@ -582,9 +696,8 @@
   transform: translateY(-2px);
 }
 
-
 /* ═══════════════════════════════════════════
-   HOME / FOOTER avec spotlight SVG
+   FOOTER
    ═══════════════════════════════════════════ */
 
 .home-main {
@@ -637,14 +750,12 @@
   color: var(--text-muted);
 }
 
-/* Bloc nom SVG */
 .home-footer-name {
   position: relative;
   cursor: default;
   user-select: none;
 }
 
-/* Les deux SVG se superposent */
 .footer-svg {
   display: block;
   width: 100%;
@@ -658,7 +769,6 @@
   left: 0;
 }
 
-/* Texte outline (couche base) */
 .footer-name-outline {
   font-family: var(--font-display);
   font-size: 110px;
@@ -669,7 +779,6 @@
   stroke-width: 1;
 }
 
-/* Texte filled (couche révélée par mask souris) */
 .footer-name-fill {
   font-family: var(--font-display);
   font-size: 110px;
@@ -678,7 +787,184 @@
   fill: rgba(251, 195, 115, 0.75);
 }
 
-/* Le cercle spotlight suit --mx/--my via JS → cx/cy mis à jour inline */
-.footer-spotlight-circle {
-  /* cx/cy mis à jour via JS avec setAttribute ou style */
+/* ═══ RESPONSIVE ═══ */
+
+@media (max-width: 1024px) {
+  .hero-inner {
+    gap: 3rem;
+  }
+
+  .hero-photo-ring {
+    width: 180px;
+    height: 180px;
+  }
+
+  .cv-snippet-grid {
+    gap: 2rem;
+  }
+
+  .contact-card {
+    padding: 3rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .hero-section {
+    padding-top: 5.5rem;
+    padding-bottom: 3rem;
+    min-height: auto;
+  }
+
+  .hero-inner {
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+    text-align: center;
+  }
+
+  .hero-photo-ring {
+    width: 140px;
+    height: 140px;
+  }
+
+  .hero-content {
+    align-items: center;
+    gap: 1.25rem;
+  }
+
+  .hero-status {
+    align-self: center;
+  }
+
+  .hero-h1 {
+    font-size: clamp(1.6rem, 7vw, 2.2rem);
+    text-align: center;
+  }
+
+  .hero-accent {
+    justify-content: center;
+  }
+
+  .hero-desc {
+    text-align: center;
+    font-size: 0.9rem;
+    max-width: 100%;
+  }
+
+  .hero-ctas {
+    justify-content: center;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .btn-primary,
+  .btn-creative {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .btn-creative {
+    min-width: unset;
+  }
+
+  .hero-pills-row {
+    justify-content: center;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+  }
+
+  .hero-pills-divider {
+    width: 100%;
+    height: 1px;
+    opacity: 0;
+  }
+
+  .hero-stat {
+    padding: 0 0.4rem;
+  }
+
+  .home-divider {
+    margin: 0 1rem;
+  }
+
+  .projects-section {
+    padding: var(--sp-xl) 0;
+  }
+
+  .projects-header {
+    margin-bottom: 1.5rem;
+  }
+
+  .projects-fade-left,
+  .projects-fade-right {
+    width: 60px;
+    opacity: 0.7;
+    filter: blur(5px);
+  }
+
+  .cv-snippet-section {
+    padding: var(--sp-xl) 0;
+  }
+
+  .cv-snippet-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .contact-section {
+    padding: var(--sp-xl) 0 var(--sp-lg);
+  }
+
+  .contact-card {
+    padding: 2rem 1.5rem;
+    border-radius: 14px;
+  }
+
+  .contact-title {
+    font-size: clamp(1.5rem, 6vw, 2rem);
+  }
+
+  .contact-sub {
+    font-size: 0.9rem;
+  }
+
+  .contact-mail {
+    font-size: clamp(0.9rem, 4vw, 1.1rem);
+    word-break: break-all;
+  }
+
+  .contact-row {
+    grid-template-columns: 1fr;
+  }
+
+  .contact-form-footer {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .contact-submit {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .home-footer-top {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .home-footer-name {
+    display: none;
+  }
+}
+
+@media (max-width: 380px) {
+  .hero-photo-ring {
+    width: 110px;
+    height: 110px;
+  }
+
+  .hero-h1 {
+    font-size: 1.5rem;
+  }
 }

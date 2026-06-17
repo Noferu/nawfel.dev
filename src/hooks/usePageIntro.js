@@ -10,6 +10,7 @@
  *   400ms       : background canvas + soft lights fade-in (lent, 1.8s)
  *   700ms       : header island glisse du haut (blur → net)
  *   900ms       : photo + halo révélation
+ *  1000ms       : badge objectif (disponibilité)
  *  1100ms       : h1 ligne par ligne (stagger 120ms)
  *  1400ms       : description, pills sociales, stats
  *  1700ms       : CTAs
@@ -46,6 +47,7 @@ export function usePageIntro() {
     const header  = document.querySelector('[data-intro="header"]')
     const photo   = document.querySelector('[data-intro="photo"]')
     const halo    = document.querySelector('[data-intro="halo"]')
+    const badge   = document.querySelector('[data-intro="badge"]')
     const h1Words = document.querySelectorAll('[data-intro="h1-word"]')
     const desc    = document.querySelector('[data-intro="desc"]')
     const ctas    = document.querySelector('[data-intro="ctas"]')
@@ -90,6 +92,15 @@ export function usePageIntro() {
         { autoAlpha: 1, scale: 1, duration: 1.4, ease: 'expo.out' },
         1.0
       )
+
+      // ── ACTE 3.5 : Badge objectif ──
+      if (badge) {
+        tl.fromTo(badge,
+          { autoAlpha: 0, y: 10, filter: 'blur(6px)' },
+          { autoAlpha: 1, y: 0, filter: 'blur(0px)', duration: 0.6, ease: 'power3.out', clearProps: 'filter' },
+          1.0
+        )
+      }
 
       // ── ACTE 4 : H1 mot par mot ──
       if (h1Words.length) {
@@ -155,6 +166,14 @@ export function usePageIntro() {
         { autoAlpha: 1, y: 0, duration: 0.55, ease: 'power2.out' },
         0.1
       )
+
+      if (badge) {
+        tl.fromTo(badge,
+          { autoAlpha: 0, y: 6 },
+          { autoAlpha: 1, y: 0, duration: 0.4, ease: 'power2.out' },
+          0.15
+        )
+      }
 
       tl.fromTo(h1Words,
         { autoAlpha: 0, y: 8 },

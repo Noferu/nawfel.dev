@@ -1,14 +1,36 @@
-import { useRef, useEffect } from 'react'
+import { useRef, useEffect, useState } from 'react'
+
+/**
+ * Contact.jsx
+ *
+ * Section contact avec formulaire contrôlé et validation côté client.
+ * - Validation : nom (≥2), e-mail (regex), message (≥10) — au submit, l'erreur
+ *   d'un champ se nettoie dès qu'on le modifie.
+ * - Envoi : Web3Forms (gratuit, sans backend). Renseigner WEB3FORMS_ACCESS_KEY.
+ *   En cas d'échec réseau / clé manquante, fallback mailto proposé.
+ * - Accessibilité : labels liés, aria-invalid, aria-describedby, statut aria-live.
+ * - L'orb au curseur de la card est conservé.
+ */
+
+// → https://web3forms.com (créer une clé gratuite, 2 min). Sans backend.
+const WEB3FORMS_ACCESS_KEY = '71c0aeab-2d9a-4bcb-83be-7582efbd3812'
+
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 export default function Contact() {
   const cardRef = useRef(null)
   const orbRef  = useRef(null)
 
+  const [values, setValues] = useState({ name: '', email: '', message: '' })
+  const [errors, setErrors] = useState({})
+  const [status, setStatus] = useState('idle') // idle | sending | success | error
+
+  /* ── Orb au curseur (inchangé) ── */
   useEffect(() => {
     const card = cardRef.current
     const orb  = orbRef.current
     if (!card || !orb) return
-    const onMove  = (e) => {
+    const onMove = (e) => {
       const rect = card.getBoundingClientRect()
       orb.style.left    = `${e.clientX - rect.left}px`
       orb.style.top     = `${e.clientY - rect.top}px`
@@ -23,6 +45,59 @@ export default function Contact() {
     }
   }, [])
 
+  /* ── Validation ── */
+  const validate = (v) => {
+    const next = {}
+    if (v.name.trim().length < 2)        next.name    = 'Indiquez votre nom.'
+    if (!EMAIL_RE.test(v.email.trim()))  next.email   = 'Adresse e-mail invalide.'
+    if (v.message.trim().length < 10)    next.message = 'Message trop court (10 caractères minimum).'
+    return next
+  }
+
+  const handleChange = (e) => {
+    const { name, value } = e.target
+    setValues((v) => ({ ...v, [name]: value }))
+    // Nettoie l'erreur du champ en cours d'édition
+    setErrors((errs) => (errs[name] ? { ...errs, [name]: undefined } : errs))
+    if (status === 'success' || status === 'error') setStatus('idle')
+  }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    const next = validate(values)
+    setErrors(next)
+    if (Object.keys(next).length > 0) {
+      // Focus le premier champ en erreur
+      const firstKey = Object.keys(next)[0]
+      document.getElementById(`contact-${firstKey}`)?.focus()
+      return
+    }
+
+    setStatus('sending')
+    try {
+      const res = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({
+          access_key: WEB3FORMS_ACCESS_KEY,
+          name:    values.name,
+          email:   values.email,
+          message: values.message,
+          subject: `Portfolio — message de ${values.name}`,
+        }),
+      })
+      const data = await res.json()
+      if (data.success) {
+        setStatus('success')
+        setValues({ name: '', email: '', message: '' })
+      } else {
+        setStatus('error')
+      }
+    } catch {
+      setStatus('error')
+    }
+  }
+
   return (
     <section id="contact" className="contact-section">
       <div className="container">
@@ -32,8 +107,98 @@ export default function Contact() {
             <p className="section-label">Contact</p>
             <h2 className="contact-title">Travaillons ensemble.</h2>
             <p className="contact-sub">
-              Disponible pour une alternance sur Strasbourg ou Lille à partir de septembre 2026.
+              En recherche d'une <strong>alternance</strong> à partir de{' '}
+              <strong>septembre 2026</strong> (Strasbourg ou Lille), dans le développement,
+              l'automatisation et l'ingénierie logicielle.
             </p>
+
+            <form className="contact-form" onSubmit={handleSubmit} noValidate>
+              <div className="contact-row">
+                <div className="contact-field">
+                  <label className="contact-label" htmlFor="contact-name">Nom</label>
+                  <input
+                    id="contact-name"
+                    name="name"
+                    type="text"
+                    className="contact-input"
+                    placeholder="Votre nom"
+                    value={values.name}
+                    onChange={handleChange}
+                    aria-invalid={!!errors.name}
+                    aria-describedby={errors.name ? 'err-name' : undefined}
+                    autoComplete="name"
+                  />
+                  {errors.name && (
+                    <span id="err-name" className="contact-error">{errors.name}</span>
+                  )}
+                </div>
+
+                <div className="contact-field">
+                  <label className="contact-label" htmlFor="contact-email">E-mail</label>
+                  <input
+                    id="contact-email"
+                    name="email"
+                    type="email"
+                    className="contact-input"
+                    placeholder="vous@exemple.com"
+                    value={values.email}
+                    onChange={handleChange}
+                    aria-invalid={!!errors.email}
+                    aria-describedby={errors.email ? 'err-email' : undefined}
+                    autoComplete="email"
+                  />
+                  {errors.email && (
+                    <span id="err-email" className="contact-error">{errors.email}</span>
+                  )}
+                </div>
+              </div>
+
+              <div className="contact-field">
+                <label className="contact-label" htmlFor="contact-message">Message</label>
+                <textarea
+                  id="contact-message"
+                  name="message"
+                  className="contact-textarea"
+                  placeholder="Quelques mots sur votre projet ou votre proposition…"
+                  rows={5}
+                  value={values.message}
+                  onChange={handleChange}
+                  aria-invalid={!!errors.message}
+                  aria-describedby={errors.message ? 'err-message' : undefined}
+                />
+                {errors.message && (
+                  <span id="err-message" className="contact-error">{errors.message}</span>
+                )}
+              </div>
+
+              <div className="contact-form-footer">
+                <button
+                  type="submit"
+                  className="btn-primary contact-submit"
+                  disabled={status === 'sending'}
+                >
+                  {status === 'sending' ? 'Envoi…' : 'Envoyer le message'}
+                </button>
+
+                <p className="contact-status" aria-live="polite">
+                  {status === 'success' && (
+                    <span className="contact-status--success">
+                      Message envoyé, merci. Je reviens vers vous rapidement.
+                    </span>
+                  )}
+                  {status === 'error' && (
+                    <span className="contact-status--error">
+                      Échec de l'envoi. Vous pouvez m'écrire directement à{' '}
+                      <a href="mailto:nawfel.idaali.pro@gmail.com" className="contact-status-link">
+                        nawfel.idaali.pro@gmail.com
+                      </a>.
+                    </span>
+                  )}
+                </p>
+              </div>
+            </form>
+
+            {/* Lien mail direct conservé sous le formulaire */}
             <div className="contact-links">
               <a href="mailto:nawfel.idaali.pro@gmail.com" className="contact-mail">
                 nawfel.idaali.pro@gmail.com
@@ -43,7 +208,7 @@ export default function Contact() {
           </div>
         </div>
 
-        {/* Flèche scroll-to-top — sous la card, séparée visuellement */}
+        {/* Flèche scroll-to-top — sous la card */}
         <div className="contact-scroll-top">
           <button
             className="scroll-top-btn"
