@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { Routes, Route, useParams } from 'react-router-dom'
 
 import Header     from './components/Header'
+import MobileNav from './components/MobileNav'
 import Background from './components/Background'
 import CommandK   from './components/CommandK'
 
@@ -31,6 +32,7 @@ function App() {
   return (
     <>
       <Background />
+      <MobileNav />
       <Header onOpenCmd={() => setCmdOpen(true)} />
       <CommandK open={cmdOpen} onClose={() => setCmdOpen(false)} />
 
