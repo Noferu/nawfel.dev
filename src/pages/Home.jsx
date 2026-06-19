@@ -80,7 +80,7 @@ export default function Home() {
             </div>
           </div>
 
-          <div ref={nameRef} className="home-footer-name" aria-label="NAWFEL IDA-ALI">
+          <div ref={nameRef} className="home-footer-name" role="img" aria-label="NAWFEL IDA-ALI">
             <svg className="footer-svg" viewBox="0 0 1140 130"
               preserveAspectRatio="xMidYMid meet" aria-hidden="true">
               <text x="0" y="108" className="footer-name-outline">
