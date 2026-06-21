@@ -244,10 +244,6 @@ h4 {
   opacity: 0.75;
 }
 
-[data-intro] {
-  visibility: hidden;
-}
-
 [data-intro="bg"] {
   transform-origin: center center;
 }

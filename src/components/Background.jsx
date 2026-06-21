@@ -102,6 +102,9 @@ export default function Background() {
     };
     document.addEventListener("visibilitychange", onVisibility);
 
+    draw();
+    gsap.ticker.add(draw);
+
     return () => {
       window.removeEventListener("resize", resize);
       document.removeEventListener("visibilitychange", onVisibility);

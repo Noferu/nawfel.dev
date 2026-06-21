@@ -23,7 +23,7 @@
  * aux classes utilitaires existantes.
  */
 
-import { useEffect, useRef } from 'react'
+import { useLayoutEffect, useRef } from 'react'
 import gsap from 'gsap'
 
 const SESSION_KEY = 'portfolio_intro_played'
@@ -32,7 +32,7 @@ export function usePageIntro() {
   const isFirstVisit = !sessionStorage.getItem(SESSION_KEY)
   const tlRef = useRef(null)
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     sessionStorage.setItem(SESSION_KEY, '1')
 
     // Délai de base selon première visite ou non
