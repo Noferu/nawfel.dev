@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import gsap from "gsap";
 import { projects } from "../data/projects";
 import "../styles/project-page.css";
+import N8nWorkflow from "../components/N8nWorkflow";
 
 export default function Project() {
   const { slug } = useParams();
@@ -23,18 +24,25 @@ export default function Project() {
                 type: project.hero.type || "image",
                 url: project.hero.url,
                 alt: project.hero.alt || project.title,
+                poster: project.hero.poster || null,
               },
             ]
           : []),
         ...(project.media
           ? project.media.map((m) => ({
-              type: "image",
+              type: m.type || "image",
               url: m.url,
               alt: m.alt || "",
+              poster: m.poster || null,
             }))
           : []),
       ]
     : [];
+
+  // Index borné : si l'index dépasse (changement de projet), il est ramené
+  // dans les limites sans avoir besoin d'un effet de réinitialisation.
+  const safeIdx = Math.min(mediaIdx, Math.max(0, allMedia.length - 1));
+  const currentMedia = allMedia[safeIdx];
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "instant" });
@@ -126,15 +134,24 @@ export default function Project() {
         {allMedia.length > 0 && (
           <div className="proj-carousel">
             <div className="proj-carousel-inner">
-              {allMedia[mediaIdx].type === "image" ? (
+              {currentMedia.type === "image" ? (
                 <img
-                  src={allMedia[mediaIdx].url}
-                  alt={allMedia[mediaIdx].alt}
+                  src={currentMedia.url}
+                  alt={currentMedia.alt}
                   className="proj-carousel-img"
+                />
+              ) : currentMedia.type === "video" ? (
+                <video
+                  src={currentMedia.url}
+                  className="proj-carousel-video"
+                  controls
+                  loop
+                  playsInline
+                  poster={currentMedia.poster || undefined}
                 />
               ) : (
                 <iframe
-                  src={allMedia[mediaIdx].url}
+                  src={currentMedia.url}
                   title={project.title}
                   className="proj-carousel-iframe"
                   allow="autoplay; fullscreen"
@@ -146,8 +163,8 @@ export default function Project() {
                   <button
                     className="proj-carousel-btn proj-carousel-btn--prev"
                     onClick={() => setMediaIdx((i) => Math.max(0, i - 1))}
-                    disabled={mediaIdx === 0}
-                    aria-label="Image précédente"
+                    disabled={safeIdx === 0}
+                    aria-label="Média précédent"
                   >
                     ←
                   </button>
@@ -156,8 +173,8 @@ export default function Project() {
                     onClick={() =>
                       setMediaIdx((i) => Math.min(allMedia.length - 1, i + 1))
                     }
-                    disabled={mediaIdx === allMedia.length - 1}
-                    aria-label="Image suivante"
+                    disabled={safeIdx === allMedia.length - 1}
+                    aria-label="Média suivant"
                   >
                     →
                   </button>
@@ -170,8 +187,8 @@ export default function Project() {
                   <div
                     key={i}
                     role="tab"
-                    aria-selected={i === mediaIdx}
-                    className={`proj-progress-segment ${i === mediaIdx ? "proj-progress-segment--active" : ""}`}
+                    aria-selected={i === safeIdx}
+                    className={`proj-progress-segment ${i === safeIdx ? "proj-progress-segment--active" : ""}`}
                     onClick={() => setMediaIdx(i)}
                   />
                 ))}
@@ -180,9 +197,18 @@ export default function Project() {
           </div>
         )}
 
+        {project.workflows?.length > 0 && (
+          <div className="proj-workflow-wrapper">
+            <p className="section-label">
+              {project.workflows.length > 1 ? "Workflows" : "Workflow"}
+            </p>
+            <N8nWorkflow workflows={project.workflows} />
+          </div>
+        )}
+
         <div className="proj-body">
           <div className="proj-section">
-            <p className="section-label">Contexte</p>
+            <p className="section-label">Présentation</p>
             <p className="proj-long-desc">{project.longDesc}</p>
             <div className="proj-info-grid">
               {project.context && (
@@ -217,7 +243,7 @@ export default function Project() {
             </div>
           )}
 
-          {project.links?.length > 0 && (
+          {(project.demo || project.links?.length > 0) && (
             <div className="proj-section">
               <p className="section-label">Liens</p>
               <div className="proj-links-row">
@@ -231,7 +257,7 @@ export default function Project() {
                     Voir la démo ↗
                   </a>
                 )}
-                {project.links.map((link, i) => (
+                {project.links?.map((link, i) => (
                   <a
                     key={i}
                     href={link.url}

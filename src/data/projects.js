@@ -141,6 +141,24 @@ export const projects = [
       "Système d'automatisation développé en stage dans un cabinet comptable. Deux workflows PROD (MyUnisoft et Pennylane) se déclenchent le 26 de chaque mois, s'authentifient sur les APIs respectives, récupèrent les sociétés clientes et collectent trois niveaux de données financières. Les données sont normalisées, enrichies des budgets, avant d'être passées à un sous-workflow qui produit des KPIs financiers, un graphique d'évolution de trésorerie généré en code et un rapport HTML envoyé via Outlook. Le système inclut gestion des rate limits API, meta-orchestration via l'API n8n elle-même et parsing de dates non-standards via Gemini.",
     context: "Stage - Cabinet Comptable Doucy Consilium, Sélestat",
     role: "Conception et développement complet",
+    workflows: [
+      {
+        label: "Synthèse mensuelle Pennylane",
+        src: "/assets/workflows/synthese-comptable/synthese-demo.json",
+      },
+      {
+        label: "Calcul et envoi des synthèses",
+        src: "/assets/workflows/synthese-comptable/calculation_send-demo.json",
+      },
+      {
+        label: "Sélection des abonnements",
+        src: "/assets/workflows/synthese-comptable/subscribtion_selection-demo.json",
+      },
+      {
+        label: "Portail de Gestion des Abonnements",
+        src: "/assets/workflows/synthese-comptable/subs_manager_form-demo.json",
+      },
+    ],
     stack: [
       "n8n",
       "MyUnisoft API",
@@ -159,7 +177,7 @@ export const projects = [
     demo: null,
     codeSnippet: null,
     media: null,
-    links: [{ label: "GitHub", url: "https://github.com/Noferu" }],
+    links: [],
     thumbnail: "/assets/img/projects/pipeline-thumb.png",
   },
 
@@ -196,7 +214,7 @@ export const projects = [
     demo: null,
     codeSnippet: null,
     media: null,
-    links: [{ label: "GitHub", url: "https://github.com/Noferu" }],
+    links: [],
     thumbnail: "/assets/img/projects/onboarding-thumb.png",
   },
 

@@ -1,0 +1,2211 @@
+{
+  "name": "[PROD] Synthèse Pennylane",
+  "nodes": [
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "b6c30c0a-d3c6-43ba-be3e-ba0fc7ae6292",
+              "leftValue": "={{ $json.items.status }}",
+              "rightValue": "open",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            },
+            {
+              "id": "fcb44ee1-c44c-489e-9492-c64bc5c9b922",
+              "leftValue": "={{ $json.items.start }}",
+              "rightValue": "={{ $('First of Month').item.json.timestamp }}",
+              "operator": {
+                "type": "dateTime",
+                "operation": "before"
+              }
+            },
+            {
+              "id": "3af90b6c-7bff-42cb-b55b-b7df41eeb84b",
+              "leftValue": "={{ $json.items.finish }}",
+              "rightValue": "={{ $('First of Month').item.json.timestamp }}",
+              "operator": {
+                "type": "dateTime",
+                "operation": "afterOrEquals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        7472,
+        1328
+      ],
+      "id": "6ac241b0-f468-496c-9223-5beb07bd11dc",
+      "name": "Keep Current Fiscal Year"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "d38e8528-388d-46d3-9b9a-7540a9a66693",
+              "name": "identifier",
+              "value": "={{ $('Call - Subscription Selection Form').item.json.identifier }}",
+              "type": "number"
+            },
+            {
+              "id": "6bb5d1f2-4d11-40cf-aca4-c6aef4f17302",
+              "name": "accounts_prior",
+              "value": "={{ $json.items }}",
+              "type": "array"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        7024,
+        1520
+      ],
+      "id": "3eaa52be-2a31-453a-b9a6-01154c96f75f",
+      "name": "Shape Balance - Prior Month"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "04d8712c-28a6-40b6-8993-853b5fa6e8ed",
+              "leftValue": "={{ $json.accounts_month }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "array",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        7248,
+        1712
+      ],
+      "id": "2087c1ab-7d65-4c90-b5fd-eedd63060688",
+      "name": "Remove Empty - Month"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a2",
+              "name": "PERIOD_START",
+              "value": "={{ DateTime.now().minus({months: 1}).startOf('month').toISODate() }}",
+              "type": "string"
+            },
+            {
+              "id": "a3",
+              "name": "PERIOD_END",
+              "value": "={{ DateTime.now().minus({months: 1}).endOf('month').toISODate() }}",
+              "type": "string"
+            },
+            {
+              "id": "a4",
+              "name": "PERIOD_START_N1",
+              "value": "={{ DateTime.now().minus({months: 2}).startOf('month').toISODate() }}",
+              "type": "string"
+            },
+            {
+              "id": "a5",
+              "name": "PERIOD_END_N1",
+              "value": "={{ DateTime.now().minus({months: 2}).endOf('month').toISODate() }}",
+              "type": "string"
+            },
+            {
+              "id": "a6",
+              "name": "PERIOD_LABEL",
+              "value": "={{ DateTime.now().minus({months: 1}).setLocale('fr').toFormat('MMMM yyyy') }}",
+              "type": "string"
+            },
+            {
+              "id": "87775184-47dc-4262-affa-3beb81b691c1",
+              "name": "RECEIVER",
+              "value": "example@outlook.com",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        4208,
+        1232
+      ],
+      "id": "aeedbf9f-eaf5-44fb-acee-9b480ffdf655",
+      "name": "(Jet) Set Run Config"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "q0MUx5Y5YyUMdznT",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/q0MUx5Y5YyUMdznT",
+          "cachedResultName": "[SUB] Calcul et Envoi de Synthèse"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "PERIOD_LABEL": "={{ $('(Jet) Set Run Config').first().json.PERIOD_LABEL }}",
+            "associate_mail": "={{ $('Merge All Data').item.json.associate_mail }}",
+            "associate_name": "={{ $('Merge All Data').item.json.associate_name }}",
+            "name": "={{ $('Get Budgets').item.json.name }}",
+            "contacts": "={{ $('Merge All Data').item.json.executives }}",
+            "RECEIVER": "={{ $('(Jet) Set Run Config').first().json.RECEIVER }}",
+            "entries_month": "={{ $json.entries_month }}",
+            "entries_prior": "={{ $json.entries_prior }}",
+            "entries_ytd": "={{ $json.entries_ytd }}",
+            "budget_rev": "={{ $('Get Budgets').item.json.budget_rev }}",
+            "budget_margin": "={{ $('Get Budgets').item.json.budget_margin }}",
+            "budget_payroll": "={{ $('Get Budgets').item.json.budget_payroll }}",
+            "identifier": "={{ $json.identifier }}",
+            "source": "={{ $('Get Budgets').item.json.source_primary }}",
+            "comparison_dataset": "={{ null }}",
+            "fy_start": "={{ $now.toISODate() }}"
+          },
+          "matchingColumns": [
+            "society_id",
+            "",
+            "PERIOD_LABEL",
+            "associate_mail",
+            "associate_name",
+            "name",
+            "contacts",
+            "RECEIVER"
+          ],
+          "schema": [
+            {
+              "id": "identifier",
+              "displayName": "identifier",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "number",
+              "removed": false
+            },
+            {
+              "id": "name",
+              "displayName": "name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "source",
+              "displayName": "source",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "fy_start",
+              "displayName": "fy_start",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "PERIOD_LABEL",
+              "displayName": "PERIOD_LABEL",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "RECEIVER",
+              "displayName": "RECEIVER",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "associate_mail",
+              "displayName": "associate_mail",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "associate_name",
+              "displayName": "associate_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "contacts",
+              "displayName": "contacts",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "array",
+              "removed": false
+            },
+            {
+              "id": "entries_month",
+              "displayName": "entries_month",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "array",
+              "removed": false
+            },
+            {
+              "id": "entries_prior",
+              "displayName": "entries_prior",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "array",
+              "removed": false
+            },
+            {
+              "id": "entries_ytd",
+              "displayName": "entries_ytd",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "array",
+              "removed": false
+            },
+            {
+              "id": "comparison_dataset",
+              "displayName": "comparison_dataset",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "array",
+              "removed": false
+            },
+            {
+              "id": "budget_rev",
+              "displayName": "budget_rev",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "number",
+              "removed": false
+            },
+            {
+              "id": "budget_margin",
+              "displayName": "budget_margin",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "number",
+              "removed": false
+            },
+            {
+              "id": "budget_payroll",
+              "displayName": "budget_payroll",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "number",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": true,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        9936,
+        1520
+      ],
+      "name": "Call - Calculation and Summary Submission",
+      "id": "d35ccdcb-6825-41f1-a3c2-d83f5fa7c60b",
+      "notesInFlow": true,
+      "notes": "This workflow aggregates accounting entries (revenue, COGS, payroll, cash) across current, prior, and YTD periods, computes key KPIs against budget targets, and dispatches a styled HTML summary email per associate via Outlook."
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "items",
+        "include": "selectedOtherFields",
+        "fieldsToInclude": "identifier",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        7248,
+        1328
+      ],
+      "id": "0d087e1e-d6a3-4017-a8f9-e6d89866aae5",
+      "name": "Split Fiscal Years"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "571d7e2e-ca90-457d-9056-0173c6995288",
+              "leftValue": "={{ $json.headers['api-version-expires-at'] }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        4656,
+        1040
+      ],
+      "id": "d3ad09ac-fa8f-444b-9c86-82a2b2c47b35",
+      "name": "Expires Soon?"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-2.5-flash",
+          "mode": "list",
+          "cachedResultName": "models/gemini-2.5-flash"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=La valeur suivante est une date au format ISO 8601 ou timestamp Unix : {{ $json.headers['api-version-expires-at'] }}\nConvertis-la en date lisible en français, au format : jour mois année (ex : 15 mars 2026).\nRetourne uniquement la date, sans explication, sans ponctuation supplémentaire."
+            }
+          ]
+        },
+        "jsonOutput": true,
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        4880,
+        1040
+      ],
+      "id": "1c9efe57-1775-4a16-83f1-14472012478c",
+      "name": "Convert Datetime"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "ab52c1de-efbd-46d3-aea4-e37c8a871574",
+              "name": "uuid",
+              "value": "={{ $json.id }}",
+              "type": "string"
+            },
+            {
+              "id": "db18f2d7-8caf-49c2-ae12-d3d65fb6c4fd",
+              "name": "siren",
+              "value": "={{ $json.reg_no }}",
+              "type": "string"
+            },
+            {
+              "id": "178474e6-94d4-4afe-93c0-7a73bafc0684",
+              "name": "name",
+              "value": "={{ $json.name }}",
+              "type": "string"
+            },
+            {
+              "id": "5ceff896-26b4-496b-a670-79a2569ad72b",
+              "name": "associate_id",
+              "value": "={{ $json.accountant_id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        5904,
+        1232
+      ],
+      "id": "f95073c0-568d-4870-822a-8d1134e7a749",
+      "name": "Keep Relevant Infos"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "3ff80c0e-e7d2-4c7a-93ad-b39528e95ad1",
+              "leftValue": "={{ $json.siren }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "87ae144f-d69d-466a-b44a-2e9d46e48721",
+              "leftValue": "={{ $json.siren }}",
+              "rightValue": "pending",
+              "operator": {
+                "type": "string",
+                "operation": "notContains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        5456,
+        1328
+      ],
+      "id": "54e99c8c-8ff7-4c6c-a080-d148bdd6b645",
+      "name": "Keep w/ SIREN"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "fieldsToMatchString": "identifier",
+        "joinMode": "enrichInput2",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        7472,
+        1616
+      ],
+      "id": "93efdaf7-e03b-40fe-9fc7-c7b5c33b4522",
+      "name": "Enrich Month w/ Prior"
+    },
+    {
+      "parameters": {
+        "html": "{{\n(() => {\nconst C_NAVY     = \"#1A1A2E\";\nconst C_GREEN    = \"#1B4332\";\nconst C_GOLD     = \"#E9A800\";\nconst C_CREAM    = \"#F5F4F0\";\nconst C_WHITE    = \"#FFFFFF\";\nconst C_BORDER   = \"#E2DDD5\";\nconst C_BODY     = \"#4A4A5A\";\nconst C_MUTED    = \"#8A8A9A\";\nconst C_WARN_BG  = \"#FEFCE8\";\nconst C_WARN_BD  = \"#D97706\";\nconst C_WARN_TX  = \"#78350F\";\nconst FONT_SERIF = \"Georgia,serif\";\nconst FONT_SANS  = \"Arial,Helvetica,sans-serif\";\n\nconst expiresAt = $json.content.parts[0].text || \"date inconnue\";\n\nreturn `\n\n<table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" role=\"presentation\"\n       bgcolor=\"${C_CREAM}\" style=\"background-color:${C_CREAM};font-family:${FONT_SANS};\">\n  <tr>\n    <td align=\"center\" style=\"padding:32px 16px;\">\n      <table width=\"620\" cellpadding=\"0\" cellspacing=\"0\" role=\"presentation\">\n\n```\n    <tr>\n      <td style=\"height:4px;font-size:0;line-height:0;\n          background:linear-gradient(90deg,${C_GREEN},${C_GOLD},${C_GREEN});\">&nbsp;</td>\n    </tr>\n\n    <tr>\n      <td bgcolor=\"${C_WHITE}\"\n          style=\"background-color:${C_WHITE};padding:24px 32px;\n                 border-bottom:1px solid ${C_BORDER};\">\n        <table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" role=\"presentation\">\n          <tr>\n            <td valign=\"middle\">\n              <table cellpadding=\"0\" cellspacing=\"0\" role=\"presentation\">\n                <tr>\n                  <td bgcolor=\"${C_NAVY}\"\n                      style=\"background-color:${C_NAVY};width:40px;height:40px;\n                             text-align:center;vertical-align:middle;\">\n                    <span style=\"font-family:${FONT_SERIF};font-size:13px;\n                                 font-weight:700;color:${C_GOLD};letter-spacing:2px;\">EX</span>\n                  </td>\n                  <td style=\"padding-left:14px;vertical-align:middle;\">\n                    <span style=\"font-family:${FONT_SERIF};font-size:17px;font-weight:600;\n                                 color:${C_NAVY};letter-spacing:-0.3px;display:block;\">\n                      Client anonymisé\n                    </span>\n                    <span style=\"font-family:${FONT_SANS};font-size:10px;font-weight:700;\n                                 color:${C_GOLD};letter-spacing:1.5px;text-transform:uppercase;\">\n                      Automatisation &mdash; Alerte API\n                    </span>\n                  </td>\n                </tr>\n              </table>\n            </td>\n            <td align=\"right\" valign=\"middle\">\n              <span style=\"display:inline-block;background-color:${C_NAVY};color:${C_GOLD};\n                           font-family:${FONT_SANS};font-size:10px;font-weight:700;\n                           letter-spacing:1px;padding:5px 12px;text-transform:uppercase;\">\n                EXEMPLE\n              </span>\n            </td>\n          </tr>\n        </table>\n      </td>\n    </tr>\n\n    <tr>\n      <td style=\"height:2px;font-size:0;line-height:0;\n          background:linear-gradient(90deg,${C_GREEN},${C_GOLD},transparent);\">&nbsp;</td>\n    </tr>\n\n    <tr>\n      <td bgcolor=\"${C_WHITE}\"\n          style=\"background-color:${C_WHITE};padding:32px 32px 24px;\">\n        <p style=\"margin:0 0 8px;font-family:${FONT_SANS};font-size:10px;font-weight:700;\n                  color:${C_GOLD};letter-spacing:2px;text-transform:uppercase;\">\n          API externe &mdash; Version à mettre à jour\n        </p>\n        <h1 style=\"margin:0 0 10px;font-family:${FONT_SERIF};font-size:24px;font-weight:600;\n                   color:${C_NAVY};line-height:1.25;letter-spacing:-0.3px;\">\n          Mise à jour requise avant le ${expiresAt}\n        </h1>\n        <p style=\"margin:0;font-family:${FONT_SANS};font-size:14px;\n                  color:${C_BODY};line-height:1.7;\">\n          La version de l'API utilisée par ce workflow automatisé arrive en fin de vie.\n          Après cette date, certains appels API peuvent échouer.\n        </p>\n      </td>\n    </tr>\n\n    <tr>\n      <td bgcolor=\"${C_WHITE}\" style=\"background-color:${C_WHITE};padding:0 32px;\">\n        <div style=\"height:1px;background-color:${C_BORDER};font-size:0;line-height:0;\">&nbsp;</div>\n      </td>\n    </tr>\n\n    <tr>\n      <td bgcolor=\"${C_WHITE}\"\n          style=\"background-color:${C_WHITE};padding:24px 32px 0;\">\n        <table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" role=\"presentation\">\n          <tr>\n            <td bgcolor=\"${C_WARN_BG}\"\n                style=\"background-color:${C_WARN_BG};border-left:3px solid ${C_WARN_BD};padding:16px 20px;\">\n              <p style=\"margin:0 0 6px;font-family:${FONT_SANS};font-size:11px;font-weight:700;\n                        color:${C_WARN_BD};letter-spacing:1px;text-transform:uppercase;\">\n                ⚠️ Action requise\n              </p>\n              <p style=\"margin:0;font-family:${FONT_SANS};font-size:13px;\n                        color:${C_WARN_TX};line-height:1.65;\">\n                La version actuellement utilisée sera <strong>désactivée le ${expiresAt}</strong>.\n                Une mise à jour est nécessaire pour éviter une interruption du workflow.\n              </p>\n            </td>\n          </tr>\n        </table>\n      </td>\n    </tr>\n\n    <tr>\n      <td bgcolor=\"${C_WHITE}\"\n          style=\"background-color:${C_WHITE};padding:20px 32px 0;\">\n        <p style=\"margin:0 0 14px;font-family:${FONT_SANS};font-size:10px;font-weight:700;\n                  color:${C_GOLD};letter-spacing:2px;text-transform:uppercase;\">\n          Étapes de correction\n        </p>\n        <table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" role=\"presentation\"\n               style=\"border:1px solid ${C_BORDER};\">\n\n          <tr>\n            <td bgcolor=\"${C_WHITE}\"\n                style=\"background-color:${C_WHITE};padding:14px 18px;\n                       border-bottom:1px solid ${C_BORDER};\">\n              <table cellpadding=\"0\" cellspacing=\"0\" role=\"presentation\">\n                <tr>\n                  <td valign=\"top\" style=\"padding-right:14px;\">\n                    <span style=\"display:inline-block;width:22px;height:22px;\n                                 background-color:${C_NAVY};text-align:center;\n                                 font-family:${FONT_SANS};font-size:11px;font-weight:700;\n                                 color:${C_GOLD};line-height:22px;\">1</span>\n                  </td>\n                  <td valign=\"top\">\n                    <p style=\"margin:0 0 3px;font-family:${FONT_SANS};font-size:12px;\n                              font-weight:700;color:${C_NAVY};\">\n                      Vérifier la documentation API\n                    </p>\n                    <p style=\"margin:0;font-family:${FONT_SANS};font-size:12px;\n                              color:${C_BODY};line-height:1.6;\">\n                      Identifier les changements nécessaires entre la version utilisée\n                      et la dernière version disponible.\n                    </p>\n                  </td>\n                </tr>\n              </table>\n            </td>\n          </tr>\n\n          <tr>\n            <td bgcolor=\"${C_CREAM}\"\n                style=\"background-color:${C_CREAM};padding:14px 18px;\n                       border-bottom:1px solid ${C_BORDER};\">\n              <table cellpadding=\"0\" cellspacing=\"0\" role=\"presentation\">\n                <tr>\n                  <td valign=\"top\" style=\"padding-right:14px;\">\n                    <span style=\"display:inline-block;width:22px;height:22px;\n                                 background-color:${C_NAVY};text-align:center;\n                                 font-family:${FONT_SANS};font-size:11px;font-weight:700;\n                                 color:${C_GOLD};line-height:22px;\">2</span>\n                  </td>\n                  <td valign=\"top\">\n                    <p style=\"margin:0 0 3px;font-family:${FONT_SANS};font-size:12px;\n                              font-weight:700;color:${C_NAVY};\">\n                      Mettre à jour les endpoints concernés\n                    </p>\n                    <p style=\"margin:0;font-family:${FONT_SANS};font-size:12px;\n                              color:${C_BODY};line-height:1.6;\">\n                      Remplacer l'ancien chemin <span style=\"font-family:'Courier New',monospace;\n                      font-size:11px;color:#B03A2E;\">/api/ancienne-version</span> par le\n                      nouveau chemin recommandé.\n                    </p>\n                  </td>\n                </tr>\n              </table>\n            </td>\n          </tr>\n\n          <tr>\n            <td bgcolor=\"${C_WHITE}\"\n                style=\"background-color:${C_WHITE};padding:14px 18px;\">\n              <table cellpadding=\"0\" cellspacing=\"0\" role=\"presentation\">\n                <tr>\n                  <td valign=\"top\" style=\"padding-right:14px;\">\n                    <span style=\"display:inline-block;width:22px;height:22px;\n                                 background-color:${C_NAVY};text-align:center;\n                                 font-family:${FONT_SANS};font-size:11px;font-weight:700;\n                                 color:${C_GOLD};line-height:22px;\">3</span>\n                  </td>\n                  <td valign=\"top\">\n                    <p style=\"margin:0 0 3px;font-family:${FONT_SANS};font-size:12px;\n                              font-weight:700;color:${C_NAVY};\">\n                      Tester avant mise en production\n                    </p>\n                    <p style=\"margin:0;font-family:${FONT_SANS};font-size:12px;\n                              color:${C_BODY};line-height:1.6;\">\n                      Contrôler les réponses API, valider le résultat attendu,\n                      puis réactiver le workflow en production.\n                    </p>\n                  </td>\n                </tr>\n              </table>\n            </td>\n          </tr>\n\n        </table>\n      </td>\n    </tr>\n\n    <tr>\n      <td bgcolor=\"${C_WHITE}\"\n          style=\"background-color:${C_WHITE};padding:20px 32px 32px;\">\n        <table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" role=\"presentation\">\n          <tr>\n            <td style=\"background-color:#FBF6E3;border-left:3px solid ${C_GOLD};padding:14px 18px;\">\n              <p style=\"margin:0;font-family:${FONT_SANS};font-size:12px;\n                        color:${C_BODY};line-height:1.6;\">\n                Cette alerte est générée automatiquement lorsqu'un header de dépréciation,\n                comme <span style=\"font-family:'Courier New',monospace;\n                font-size:11px;color:${C_NAVY};\">Api-Version-Expires-At</span>,\n                est détecté dans une réponse API.\n              </p>\n            </td>\n          </tr>\n        </table>\n      </td>\n    </tr>\n\n    <tr>\n      <td style=\"height:2px;font-size:0;line-height:0;\n          background:linear-gradient(90deg,${C_GREEN},${C_GOLD},transparent);\">&nbsp;</td>\n    </tr>\n\n    <tr>\n      <td bgcolor=\"${C_CREAM}\"\n          style=\"background-color:${C_CREAM};padding:22px 32px;\">\n        <table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" role=\"presentation\">\n          <tr>\n            <td valign=\"top\">\n              <p style=\"margin:0 0 4px;font-family:${FONT_SANS};font-size:12px;\n                        font-weight:700;color:${C_NAVY};\">Client anonymisé</p>\n              <a href=\"mailto:example@outlook.fr\"\n                 style=\"font-family:${FONT_SANS};font-size:12px;\n                        color:${C_GOLD};text-decoration:none;\">\n                example@outlook.fr\n              </a>\n            </td>\n            <td align=\"right\" valign=\"top\">\n              <span style=\"font-family:${FONT_SANS};font-size:11px;color:${C_MUTED};\">\n                API Monitor\n              </span>\n            </td>\n          </tr>\n        </table>\n        <p style=\"margin:14px 0 0;font-family:${FONT_SANS};font-size:11px;\n                  color:${C_MUTED};line-height:1.5;\n                  border-top:1px solid ${C_BORDER};padding-top:14px;\">\n          Message généré automatiquement &mdash; Ne pas répondre à cet email.\n        </p>\n      </td>\n    </tr>\n\n  </table>\n</td>\n```\n\n  </tr>\n</table>\n  `;\n})()\n}}\n"
+      },
+      "type": "n8n-nodes-base.html",
+      "typeVersion": 1.2,
+      "position": [
+        5232,
+        1040
+      ],
+      "id": "bf9cd086-6531-4bcd-8b26-0c59db64dc55",
+      "name": "Generate API Alert"
+    },
+    {
+      "parameters": {
+        "url": "https://app.pennylane.com/api/external/firm/v1/companies",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "per_page",
+              "value": "1000"
+            }
+          ]
+        },
+        "options": {
+          "pagination": {
+            "pagination": {
+              "parameters": {
+                "parameters": [
+                  {
+                    "name": "page",
+                    "value": "={{ $response.body.current_page + 1 }}"
+                  }
+                ]
+              },
+              "paginationCompleteWhen": "other",
+              "completeExpression": "={{ $response.body.current_page == $response.body.total_pages }}",
+              "requestInterval": 250
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        4656,
+        1424
+      ],
+      "id": "db2d39a6-79cb-4718-ba0e-d7f932bb5c17",
+      "name": "Get Companies List (API2)",
+      "notesInFlow": true,
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000,
+      "notes": "The 250ms delay avoids reaching the 25 requests every 5 seconds Pennylane API request limit."
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "companies",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        4656,
+        1232
+      ],
+      "id": "7ad23b93-bbb8-4df3-88d4-ab997c6a1880",
+      "name": "Split Companies (API3)"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "items",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        4944,
+        1424
+      ],
+      "id": "7fd0d1ca-82d6-4848-b546-079c86a1ff8f",
+      "name": "Split Companies (API2)"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "fieldsToMatchString": "siren",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        5232,
+        1328
+      ],
+      "id": "bc412a80-b9b7-4cba-b3c0-73287624c6a4",
+      "name": "Merge Company Datas"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "f9421d90-4af4-41a6-be3e-ec96319764c4",
+              "name": "uuid",
+              "value": "={{ $json.id }}",
+              "type": "string"
+            },
+            {
+              "id": "660de4c2-9f7a-4c3d-91ff-267d979b212f",
+              "name": "siren",
+              "value": "={{ $json.reg_no }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        4944,
+        1232
+      ],
+      "id": "d3ad1ee2-86be-4348-8f89-d42ec35c6579",
+      "name": "Adapt Data"
+    },
+    {
+      "parameters": {
+        "toRecipients": "={{ $('(Jet) Set Run Config').item.json.RECEIVER.join(',') }}",
+        "subject": "=API Pennylane (Version dépréciée)",
+        "bodyContent": "={{ $json.html }}",
+        "additionalFields": {
+          "bodyContentType": "html"
+        }
+      },
+      "type": "n8n-nodes-base.microsoftOutlook",
+      "typeVersion": 2,
+      "position": [
+        5456,
+        1040
+      ],
+      "id": "05ae0a53-1e34-4149-81bb-86035f541d8b",
+      "name": "Alert for API",
+      "webhookId": "b00ab706-1feb-4e5a-8e6c-1c4495a802f8"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "fieldsToMatchString": "identifier",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        8368,
+        1520
+      ],
+      "id": "0e3a97f8-4c1b-4654-8cb5-c7fc42bfd785",
+      "name": "Merge w/ Year-to-Date"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "oB4aY1O5QD7fYAHY",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/oB4aY1O5QD7fYAHY",
+          "cachedResultName": "[SUB] Sélection d'Abonnement"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "identifier": "={{ $json.id.toString() }}",
+            "source_primary": "Pennylane",
+            "name": "={{ $json.name }}",
+            "siren": "={{ $json.siren }}",
+            "receiver": "={{ $('(Jet) Set Run Config').item.json.RECEIVER }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "identifier",
+              "displayName": "identifier",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "source_primary",
+              "displayName": "source_primary",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "name",
+              "displayName": "name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "siren",
+              "displayName": "siren",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "receiver",
+              "displayName": "receiver",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "array",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        6576,
+        1520
+      ],
+      "name": "Call - Subscription Selection Form",
+      "id": "835d4be4-c6de-4007-b59f-5697438ab5a5",
+      "notesInFlow": true,
+      "notes": "This workflow acts as a subscription gate: it registers or updates each incoming company in the subscriptions table, prompts a human reviewer via a time-limited form, then routes validated entities by data source and returns their identifiers downstream."
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "users",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        8816,
+        1616
+      ],
+      "id": "2fecccc0-d47e-47d7-9b43-5846246745e6",
+      "name": "Split Users"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "fieldsToMatchString": "siren",
+        "joinMode": "enrichInput1",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        6128,
+        1328
+      ],
+      "id": "efbe0f3d-362c-49e1-957c-8821578d4b33",
+      "name": "Join Company & Executives"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "const users = $input.item.json.users;\nconst executives = users\n  .filter(u => u.role === \"executive\")\n  .map(u => u.email);\n\nconst { siren, id } = $('Keep w/ SIREN').item.json;\n\nreturn { json: { executives, siren, id } };"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        5904,
+        1424
+      ],
+      "id": "07fb9e53-bfea-4261-b2c5-6e66b6e5d9de",
+      "name": "Keep Executive(s)"
+    },
+    {
+      "parameters": {
+        "url": "https://app.pennylane.com/api/firm/v3/me",
+        "options": {
+          "response": {
+            "response": {
+              "fullResponse": true
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        4432,
+        1040
+      ],
+      "id": "25ea2841-3e58-457b-a411-5352e840964a",
+      "name": "Poke API3",
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "url": "=https://app.pennylane.com/api/firm/v3/companies/{{ $json.uuid }}",
+        "options": {
+          "batching": {
+            "batch": {
+              "batchSize": 1,
+              "batchInterval": 500
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        5680,
+        1232
+      ],
+      "id": "c6f03ba0-c3ce-45d2-92e0-85ead7de7b7c",
+      "name": "Retrieve Company (API3)",
+      "retryOnFail": true,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "url": "=https://app.pennylane.com/api/firm/v3/companies/{{ $json.uuid }}/users",
+        "options": {
+          "batching": {
+            "batch": {
+              "batchSize": 1,
+              "batchInterval": 250
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        5680,
+        1424
+      ],
+      "id": "766a2b3d-b003-4a89-91b1-5356f717d5eb",
+      "name": "Fetch Company Users (API3)",
+      "retryOnFail": true,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "url": "=https://app.pennylane.com/api/external/firm/v1/companies/{{ $json.identifier }}/trial_balance",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "per_page",
+              "value": "1000"
+            },
+            {
+              "name": "period_start",
+              "value": "={{ $('(Jet) Set Run Config').item.json.PERIOD_START }}"
+            },
+            {
+              "name": "period_end",
+              "value": "={{ $('(Jet) Set Run Config').item.json.PERIOD_END }}"
+            }
+          ]
+        },
+        "options": {
+          "batching": {
+            "batch": {
+              "batchSize": 1,
+              "batchInterval": 200
+            }
+          },
+          "pagination": {
+            "pagination": {
+              "parameters": {
+                "parameters": [
+                  {
+                    "name": "page",
+                    "value": "={{ $response.body.current_page + 1 }}"
+                  }
+                ]
+              },
+              "paginationCompleteWhen": "other",
+              "completeExpression": "={{ $response.body.current_page == $response.body.total_pages }}",
+              "requestInterval": 200
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        6800,
+        1712
+      ],
+      "id": "d5c61e2d-9e03-4e42-bf8b-050a1981c9e6",
+      "name": "Get Balance - Month (API2)",
+      "notesInFlow": true,
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000,
+      "onError": "continueErrorOutput",
+      "notes": "The 200ms delay avoids reaching the 25 requests every 5 seconds Pennylane API request limit."
+    },
+    {
+      "parameters": {
+        "url": "=https://app.pennylane.com/api/external/firm/v1/companies/{{ $json.identifier }}/trial_balance",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "per_page",
+              "value": "1000"
+            },
+            {
+              "name": "period_start",
+              "value": "={{ $('(Jet) Set Run Config').item.json.PERIOD_START_N1 }}"
+            },
+            {
+              "name": "period_end",
+              "value": "={{ $('(Jet) Set Run Config').item.json.PERIOD_END_N1 }}"
+            }
+          ]
+        },
+        "options": {
+          "batching": {
+            "batch": {
+              "batchSize": 1,
+              "batchInterval": 200
+            }
+          },
+          "pagination": {
+            "pagination": {
+              "parameters": {
+                "parameters": [
+                  {
+                    "name": "page",
+                    "value": "={{ $response.body.current_page + 1 }}"
+                  }
+                ]
+              },
+              "paginationCompleteWhen": "other",
+              "completeExpression": "={{ $response.body.current_page == $response.body.total_pages }}",
+              "requestInterval": 200
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        6800,
+        1520
+      ],
+      "id": "9fdad49f-1633-447a-b85f-27ed71bb304d",
+      "name": "Get Balance - Prior Month (API2)",
+      "notesInFlow": true,
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000,
+      "onError": "continueErrorOutput",
+      "notes": "The 200ms delay avoids reaching the 25 requests every 5 seconds Pennylane API request limit."
+    },
+    {
+      "parameters": {
+        "url": "=https://app.pennylane.com/api/external/firm/v1/companies/{{ $json.identifier }}/trial_balance",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "per_page",
+              "value": "1000"
+            },
+            {
+              "name": "period_start",
+              "value": "={{ $json.items.start }}"
+            },
+            {
+              "name": "period_end",
+              "value": "={{ $('(Jet) Set Run Config').item.json.PERIOD_END }}"
+            }
+          ]
+        },
+        "options": {
+          "batching": {
+            "batch": {
+              "batchSize": 1,
+              "batchInterval": 200
+            }
+          },
+          "pagination": {
+            "pagination": {
+              "parameters": {
+                "parameters": [
+                  {
+                    "name": "page",
+                    "value": "={{ $response.body.current_page + 1 }}"
+                  }
+                ]
+              },
+              "paginationCompleteWhen": "other",
+              "completeExpression": "={{ $response.body.current_page == $response.body.total_pages }}",
+              "requestInterval": 200
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        7696,
+        1328
+      ],
+      "id": "f603fd4e-f8b3-4c39-999a-9836ba51c1cc",
+      "name": "Get Balance - Y.T.D. (API2)",
+      "notesInFlow": true,
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000,
+      "onError": "continueErrorOutput",
+      "notes": "The 200ms delay avoids reaching the 25 requests every 5 seconds Pennylane API request limit."
+    },
+    {
+      "parameters": {
+        "url": "https://app.pennylane.com/api/firm/v3/users",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "per_page",
+              "value": "500"
+            }
+          ]
+        },
+        "options": {
+          "pagination": {
+            "pagination": {
+              "parameters": {
+                "parameters": [
+                  {
+                    "name": "page",
+                    "value": "={{ $response.body.current_page + 1 }}"
+                  }
+                ]
+              },
+              "paginationCompleteWhen": "other",
+              "completeExpression": "={{ $response.body.current_page == $response.body.total_pages }}",
+              "requestInterval": 250
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        8592,
+        1616
+      ],
+      "id": "5d839f0e-048e-4fbb-8703-7d730b81c6cd",
+      "name": "Fetch Users (API3)",
+      "notesInFlow": true,
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000,
+      "executeOnce": true,
+      "notes": "The 250ms delay avoids reaching the 25 requests every 5 seconds Pennylane API request limit."
+    },
+    {
+      "parameters": {
+        "url": "=https://app.pennylane.com/api/external/firm/v1/companies/{{ $json.identifier }}/fiscal_years",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "per_page",
+              "value": "100"
+            }
+          ]
+        },
+        "options": {
+          "batching": {
+            "batch": {
+              "batchSize": 1,
+              "batchInterval": 200
+            }
+          },
+          "pagination": {
+            "pagination": {
+              "parameters": {
+                "parameters": [
+                  {
+                    "name": "page",
+                    "value": "={{ $response.body.current_page + 1 }}"
+                  }
+                ]
+              },
+              "paginationCompleteWhen": "other",
+              "completeExpression": "={{ $response.body.current_page == $response.body.total_pages }}",
+              "requestInterval": 200
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        6800,
+        1328
+      ],
+      "id": "015a7c83-afbc-4b4c-a13f-43175454ebb8",
+      "name": "Get Fiscal Year List (API2)",
+      "notesInFlow": true,
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000,
+      "onError": "continueErrorOutput",
+      "notes": "The 200ms delay avoids reaching the 25 requests every 5 seconds Pennylane API request limit."
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "d38e8528-388d-46d3-9b9a-7540a9a66693",
+              "name": "identifier",
+              "value": "={{ $('Call - Subscription Selection Form').item.json.identifier }}",
+              "type": "number"
+            },
+            {
+              "id": "6bb5d1f2-4d11-40cf-aca4-c6aef4f17302",
+              "name": "accounts_month",
+              "value": "={{ $json.items }}",
+              "type": "array"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        7024,
+        1712
+      ],
+      "id": "4b768359-7fe5-45f2-9e74-f822e59f66af",
+      "name": "Shape Balance - Month"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "7351de91-920b-43f5-82af-3f919796504e",
+              "leftValue": "={{ $json.accounts_ytd }}",
+              "rightValue": "",
+              "operator": {
+                "type": "array",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        8144,
+        1328
+      ],
+      "id": "5eadc2c7-d62f-4e45-9011-bae4d64d3073",
+      "name": "Remove Empty - Y.T.D."
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "d38e8528-388d-46d3-9b9a-7540a9a66693",
+              "name": "identifier",
+              "value": "={{ $('Keep Current Fiscal Year').item.json.identifier }}",
+              "type": "number"
+            },
+            {
+              "id": "6bb5d1f2-4d11-40cf-aca4-c6aef4f17302",
+              "name": "accounts_ytd",
+              "value": "={{ $json.items }}",
+              "type": "array"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        7920,
+        1328
+      ],
+      "id": "bf808c2f-ef1a-46a5-aae6-fce2fd20b81d",
+      "name": "Shape Balance - Y.T.D."
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "8217ddb7-7265-4905-b69c-eb1bad4d941b",
+              "name": "identifier",
+              "value": "={{ $('Call - Subscription Selection Form').item.json.identifier }}",
+              "type": "number"
+            },
+            {
+              "id": "4a09148a-8ef5-40d0-b1c6-936d3c9c46dc",
+              "name": "items",
+              "value": "={{ $json.items }}",
+              "type": "array"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        7024,
+        1328
+      ],
+      "id": "bd5f4409-8ff2-442c-836c-8f8dae0758da",
+      "name": "Retrieve Identifier"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "// Extract source datasets and identifier from the input\nconst { identifier, accounts_month, accounts_prior, accounts_ytd } = $('Merge All Data').item.json;\n\n// Transforms a list of raw accounts into a structured format\nconst transformBalances = (accountList) => {\n  if (!accountList || !Array.isArray(accountList)) {\n    return [];\n  }\n  \n  return accountList.map(account => ({\n    account: String(account.formatted_number || account.number || \"\"),\n    balance: (Number(account.debits) || 0) - (Number(account.credits) || 0)\n  }));\n};\n\n// Consolidate transformed data into the final output structure\nreturn {\n  identifier,\n  entries_month: transformBalances(accounts_month),\n  entries_prior: transformBalances(accounts_prior),\n  entries_ytd: transformBalances(accounts_ytd),\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        9712,
+        1520
+      ],
+      "id": "531ecbcc-7d13-41eb-adc4-139675dc5830",
+      "name": "Payload Schema Alignment",
+      "notesInFlow": true,
+      "notes": "This node maps incoming data to the pre-existing My Unisoft self-enhanced schema for downstream compatibility. It acts as a transformation layer, conforming the input to the script architecture rather than refactoring the core logic."
+    },
+    {
+      "parameters": {
+        "jsCode": "const map = Object.fromEntries($(\"Is Uncomplete?\").all().map(i => [i.json.id, i.json]));\n\nreturn $input.all().filter(i => {\n  const match = map[i.json.identifier];\n  return match && Object.assign(i.json, match);\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        9040,
+        1424
+      ],
+      "id": "fba4601e-eb7b-446f-96a9-764db3da8b42",
+      "name": "Retrieve Company Data by ID"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "pJ5eSclfktUVYhzi",
+          "mode": "list",
+          "cachedResultName": "Monthly_Report_Subscriptions",
+          "cachedResultUrl": "/projects/P12IYFJkigLfcsQb/datatables/pJ5eSclfktUVYhzi"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "identifier_pnl",
+              "keyValue": "={{ $json.identifier }}"
+            }
+          ]
+        },
+        "returnAll": true
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        9488,
+        1520
+      ],
+      "id": "aca4d12a-a16b-42a6-a66f-6b5729e96e63",
+      "name": "Get Budgets"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "0d587787-fe22-4223-b9c3-eb0a566d5d21",
+              "name": "associate_mail",
+              "value": "={{ $json.email }}",
+              "type": "string"
+            },
+            {
+              "id": "45715acb-45de-49bc-b883-9f1da100ddf2",
+              "name": "associate_id",
+              "value": "={{ $json.id }}",
+              "type": "string"
+            },
+            {
+              "id": "a92c7435-7934-4d1c-838d-00bab2962422",
+              "name": "associate_name",
+              "value": "={{ $json.last_name.toUpperCase() }} {{ $json.first_name.toSentenceCase() }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        9040,
+        1616
+      ],
+      "id": "9088cd4a-e40a-4500-9868-bcf295c09be9",
+      "name": "Shape Users Contact"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "fieldsToMatchString": "associate_id",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        9264,
+        1520
+      ],
+      "id": "bfce8e6f-3ffd-4288-abbe-6b45db27d338",
+      "name": "Merge All Data"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "b33f82e9-1186-4e77-b9f3-814676d99195",
+              "leftValue": "={{ $json.executives }}",
+              "rightValue": "",
+              "operator": {
+                "type": "array",
+                "operation": "empty",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "f5d3d708-5e26-4f5d-8144-8bc7492c6fd8",
+              "leftValue": "={{ $json.associate_id }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "empty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        6352,
+        1328
+      ],
+      "id": "5b739366-925d-4194-aab8-244e1cc84b39",
+      "name": "Is Uncomplete?",
+      "notesInFlow": true,
+      "notes": "Companies that do not have a contact email address or any associates."
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a3cb177e-0a8c-4b47-8ad9-c60bb6bebecf",
+              "name": "name",
+              "value": "={{ $json.name }}",
+              "type": "string"
+            },
+            {
+              "id": "7776fbff-8163-489c-b66a-2878ea8e6690",
+              "name": "siren",
+              "value": "={{ $json.siren }}",
+              "type": "string"
+            },
+            {
+              "id": "be483516-52c1-438d-9b19-a2da41cc1884",
+              "name": "has_associate",
+              "value": "={{ ($json.associate_id || 0).toBoolean() }}",
+              "type": "boolean"
+            },
+            {
+              "id": "42b7e6d9-2629-4cdd-9f70-7c397941e01e",
+              "name": "has_contact",
+              "value": "={{ ($json.executives).length > 0 }}",
+              "type": "boolean"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        6576,
+        1136
+      ],
+      "id": "26b7ebc5-acae-4086-97fd-420793334cbd",
+      "name": "Shape Uncomplete Client"
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        6800,
+        1136
+      ],
+      "id": "2245cfa2-b575-4a6d-b73f-da4950f8b2fa",
+      "name": "Aggregate Uncomplete Clients"
+    },
+    {
+      "parameters": {
+        "html": "{{\n(() => {\nconst FONT_MAIN = \"-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif\";\nconst FONT_STD = \"Arial,sans-serif\";\nconst COLOR_PRIMARY = \"#1B4332\";\nconst COLOR_SECONDARY = \"#1A1A2E\";\nconst COLOR_WARNING = \"#E9A800\";\nconst COLOR_MUTED = \"#868E96\";\nconst COLOR_BORDER = \"#E9ECEF\";\nconst COLOR_BG_LIGHT = \"#F8F9FA\";\nconst COLOR_CALLOUT_BG = \"#FFF3CD\";\nconst COLOR_CALLOUT_TEXT = \"#856404\";\n\n```\n  const clients = $json.data || [];\n  const count = clients.length;\n  const plural = count > 1 ? 's' : '';\n  const source = \"logiciel métier\";\n\n  return `\n```\n\n<table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" role=\"presentation\" bgcolor=\"${COLOR_BG_LIGHT}\" style=\"background-color:${COLOR_BG_LIGHT};\">\n  <tr>\n    <td align=\"center\" style=\"padding:24px 16px;\">\n      <table width=\"620\" cellpadding=\"0\" cellspacing=\"0\" role=\"presentation\">\n\n```\n    <tr>\n      <td bgcolor=\"${COLOR_PRIMARY}\" style=\"background-color:${COLOR_PRIMARY};border-radius:16px 16px 0 0;padding:28px 32px;\">\n        <table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" role=\"presentation\">\n          <tr>\n            <td>\n              <span style=\"font-family:${FONT_MAIN};font-size:17px;font-weight:700;color:#FFFFFF;\">\n                Client anonymisé\n              </span>\n            </td>\n            <td align=\"right\">\n              <span style=\"display:inline-block;background-color:${COLOR_WARNING};color:#FFFFFF;font-family:${FONT_STD};font-size:10px;font-weight:700;letter-spacing:1px;padding:4px 10px;border-radius:4px;\">\n                ACTION REQUISE\n              </span>\n            </td>\n          </tr>\n        </table>\n      </td>\n    </tr>\n\n    <tr>\n      <td bgcolor=\"#FFFFFF\" style=\"background-color:#FFFFFF;padding:28px 32px 20px;\">\n        <p style=\"margin:0 0 6px;font-family:${FONT_STD};font-size:11px;font-weight:600;color:${COLOR_WARNING};letter-spacing:1px;text-transform:uppercase;\">\n          Rapport mensuel automatisé\n        </p>\n        <h1 style=\"margin:0 0 12px;font-family:${FONT_MAIN};font-size:22px;font-weight:700;color:${COLOR_SECONDARY};line-height:1.25;\">\n          ${count} dossier${plural} incomplet${plural} ce mois-ci\n        </h1>\n        <p style=\"margin:0;font-family:${FONT_STD};font-size:14px;color:#495057;line-height:1.6;\">\n          Les dossiers suivants ne pourront pas recevoir leur synthèse mensuelle. Certaines informations nécessaires sont manquantes, comme le responsable associé ou une adresse de contact.\n        </p>\n      </td>\n    </tr>\n\n    <tr>\n      <td bgcolor=\"#FFFFFF\" style=\"background-color:#FFFFFF;padding:0 32px;\">\n        <div style=\"height:1px;background-color:${COLOR_BORDER};font-size:0;line-height:0;\">&nbsp;</div>\n      </td>\n    </tr>\n\n    <tr>\n      <td bgcolor=\"#FFFFFF\" style=\"background-color:#FFFFFF;padding:24px 32px;\">\n        <table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" role=\"presentation\" style=\"border:1px solid ${COLOR_BORDER};border-radius:8px;table-layout:fixed;\">\n          <tr bgcolor=\"#F0F4F0\">\n            <th style=\"padding:10px 14px;font-family:${FONT_STD};font-size:11px;font-weight:600;color:${COLOR_MUTED};text-align:left;letter-spacing:0.5px;text-transform:uppercase;border-bottom:2px solid ${COLOR_WARNING};width:40px;\">#</th>\n            <th style=\"padding:10px 14px;font-family:${FONT_STD};font-size:11px;font-weight:600;color:${COLOR_MUTED};text-align:left;letter-spacing:0.5px;text-transform:uppercase;border-bottom:2px solid ${COLOR_WARNING};\">Dossier</th>\n            <th style=\"padding:10px 14px;font-family:${FONT_STD};font-size:12px;font-weight:600;color:${COLOR_MUTED};text-align:center;letter-spacing:0.5px;text-transform:uppercase;border-bottom:2px solid ${COLOR_WARNING};width:40px;\">👤</th>\n            <th style=\"padding:10px 14px;font-family:${FONT_STD};font-size:12px;font-weight:600;color:${COLOR_MUTED};text-align:center;letter-spacing:0.5px;text-transform:uppercase;border-bottom:2px solid ${COLOR_WARNING};width:40px;\">✉️</th>\n          </tr>\n          ${clients.map((item, index) => {\n    const bgColor = index % 2 === 1 ? COLOR_BG_LIGHT : '#FFFFFF';\n\n    return `\n            <tr style=\"background-color:${bgColor};\">\n              <td style=\"padding:11px 14px;font-family:${FONT_STD};font-size:13px;color:${COLOR_MUTED};border-top:1px solid #F0F0F0;\">\n                ${index + 1}\n              </td>\n              <td style=\"padding:11px 14px;border-top:1px solid #F0F0F0;\">\n                <span style=\"font-family:${FONT_STD};font-size:13px;font-weight:600;color:${COLOR_SECONDARY};\">${item.name || 'Non renseigné'}</span><br>\n                <span style=\"font-family:${FONT_STD};font-size:11px;color:${COLOR_MUTED};\">Identifiant : ${item.siren || 'Non renseigné'}</span>\n              </td>\n              <td style=\"padding:0;text-align:center;vertical-align:middle;font-family:${FONT_STD};font-size:14px;${item.has_associate ? 'color:' + COLOR_MUTED + ';' : 'font-weight:bold;'}border-top:1px solid #F0F0F0;background-color:${item.has_associate ? '#FFFFFF' : '#f7ce94'};\">\n                ${item.has_associate ? \"OUI\" : \"NON\"}\n              </td>\n              <td style=\"padding:0;text-align:center;vertical-align:middle;font-family:${FONT_STD};font-size:14px;${item.has_contact ? 'color:' + COLOR_MUTED + ';' : 'font-weight:bold;'}border-top:1px solid #F0F0F0;background-color:${item.has_contact ? '#FFFFFF' : '#f7a894'};\">\n                ${item.has_contact ? \"OUI\" : \"NON\"}\n              </td>\n            </tr>`;\n  }).join('')}\n        </table>\n      </td>\n    </tr>\n\n    <tr>\n      <td bgcolor=\"#FFFFFF\" style=\"background-color:#FFFFFF;padding:0 32px 28px;\">\n        <table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" role=\"presentation\">\n          <tr>\n            <td bgcolor=\"${COLOR_CALLOUT_BG}\" style=\"background-color:${COLOR_CALLOUT_BG};border-left:4px solid ${COLOR_WARNING};border-radius:0 8px 8px 0;padding:14px 18px;\">\n              <p style=\"margin:0;font-family:${FONT_STD};font-size:13px;color:${COLOR_CALLOUT_TEXT};line-height:1.5;\">\n                💡 <strong>Pour corriger ce problème :</strong> complétez les informations manquantes dans le ${source}, notamment le responsable du dossier et l'adresse e-mail de contact.\n              </p>\n            </td>\n          </tr>\n        </table>\n      </td>\n    </tr>\n\n    <tr>\n      <td bgcolor=\"${COLOR_SECONDARY}\" style=\"background-color:${COLOR_SECONDARY};border-radius:0 0 16px 16px;padding:18px 32px;\">\n        <p style=\"margin:0;font-family:${FONT_STD};font-size:12px;color:#FFFFFF;\">\n          Client anonymisé &mdash;\n          <a href=\"mailto:example@outlook.fr\" style=\"color:#52B788;text-decoration:none;\">example@outlook.fr</a>\n        </p>\n      </td>\n    </tr>\n\n  </table>\n</td>\n```\n\n  </tr>\n</table>\n  `;\n    })()\n}}\n"
+      },
+      "type": "n8n-nodes-base.html",
+      "typeVersion": 1.2,
+      "position": [
+        7024,
+        1136
+      ],
+      "id": "52c955e9-7502-40b0-acfc-2ccfc8de01d2",
+      "name": "Generate Uncomplete Alert"
+    },
+    {
+      "parameters": {
+        "toRecipients": "={{ $('(Jet) Set Run Config').item.json.RECEIVER.join(',') }}",
+        "subject": "=Action requise | {{ $('Aggregate Uncomplete Clients').item.json.data.length }} client{{ $('Aggregate Uncomplete Clients').item.json.data.length > 1 ? 's' : '' }} injoignable(s) ce mois-ci sur Pennylane",
+        "bodyContent": "={{ $json.html }}",
+        "additionalFields": {
+          "bodyContentType": "html"
+        }
+      },
+      "type": "n8n-nodes-base.microsoftOutlook",
+      "typeVersion": 2,
+      "position": [
+        7248,
+        1136
+      ],
+      "id": "1456af0f-4f6d-4201-b91a-938630d453a5",
+      "name": "Alert for Uncomplete Clients",
+      "webhookId": "9ddbb7ff-79f7-445f-ae5d-a6fee7a30587"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "7351de91-920b-43f5-82af-3f919796504e",
+              "leftValue": "={{ $json.accounts_prior }}",
+              "rightValue": "",
+              "operator": {
+                "type": "array",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        7248,
+        1520
+      ],
+      "id": "743cc706-b9c1-486c-a58e-595836f82a5b",
+      "name": "Remove Empty - Prior Month"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "months",
+              "triggerAtHour": 8,
+              "triggerAtMinute": 30
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        3984,
+        1232
+      ],
+      "id": "275a5f74-fc93-488f-92ec-39f46e8a0c4c",
+      "name": "First of Month"
+    },
+    {
+      "parameters": {
+        "url": "https://app.pennylane.com/api/firm/v3/companies",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "per_page",
+              "value": "500"
+            }
+          ]
+        },
+        "options": {
+          "pagination": {
+            "pagination": {
+              "parameters": {
+                "parameters": [
+                  {
+                    "name": "page",
+                    "value": "={{ $response.body.current_page + 1 }}"
+                  }
+                ]
+              },
+              "paginationCompleteWhen": "other",
+              "completeExpression": "={{ $response.body.current_page == $response.body.total_pages }}",
+              "requestInterval": 250
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        4432,
+        1232
+      ],
+      "id": "1ce46a05-e941-4561-b5c4-abd27747335f",
+      "name": "Get Companies List (API3)",
+      "notesInFlow": true,
+      "retryOnFail": true,
+      "maxTries": 5,
+      "waitBetweenTries": 5000,
+      "notes": "The 250ms delay avoids reaching the 25 requests every 5 seconds Pennylane API request limit."
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Keep Current Fiscal Year": {
+      "main": [
+        [
+          {
+            "node": "Get Balance - Y.T.D. (API2)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Shape Balance - Prior Month": {
+      "main": [
+        [
+          {
+            "node": "Remove Empty - Prior Month",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Remove Empty - Month": {
+      "main": [
+        [
+          {
+            "node": "Enrich Month w/ Prior",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "(Jet) Set Run Config": {
+      "main": [
+        [
+          {
+            "node": "Get Companies List (API3)",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Poke API3",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Get Companies List (API2)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Fiscal Years": {
+      "main": [
+        [
+          {
+            "node": "Keep Current Fiscal Year",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Expires Soon?": {
+      "main": [
+        [
+          {
+            "node": "Convert Datetime",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert Datetime": {
+      "main": [
+        [
+          {
+            "node": "Generate API Alert",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Keep Relevant Infos": {
+      "main": [
+        [
+          {
+            "node": "Join Company & Executives",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Keep w/ SIREN": {
+      "main": [
+        [
+          {
+            "node": "Retrieve Company (API3)",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Fetch Company Users (API3)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Enrich Month w/ Prior": {
+      "main": [
+        [
+          {
+            "node": "Merge w/ Year-to-Date",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Generate API Alert": {
+      "main": [
+        [
+          {
+            "node": "Alert for API",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Companies List (API2)": {
+      "main": [
+        [
+          {
+            "node": "Split Companies (API2)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Companies (API3)": {
+      "main": [
+        [
+          {
+            "node": "Adapt Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Companies (API2)": {
+      "main": [
+        [
+          {
+            "node": "Merge Company Datas",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge Company Datas": {
+      "main": [
+        [
+          {
+            "node": "Keep w/ SIREN",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Adapt Data": {
+      "main": [
+        [
+          {
+            "node": "Merge Company Datas",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge w/ Year-to-Date": {
+      "main": [
+        [
+          {
+            "node": "Fetch Users (API3)",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Retrieve Company Data by ID",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call - Subscription Selection Form": {
+      "main": [
+        [
+          {
+            "node": "Get Balance - Month (API2)",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Get Balance - Prior Month (API2)",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Get Fiscal Year List (API2)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Users": {
+      "main": [
+        [
+          {
+            "node": "Shape Users Contact",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Join Company & Executives": {
+      "main": [
+        [
+          {
+            "node": "Is Uncomplete?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Keep Executive(s)": {
+      "main": [
+        [
+          {
+            "node": "Join Company & Executives",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Poke API3": {
+      "main": [
+        [
+          {
+            "node": "Expires Soon?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Retrieve Company (API3)": {
+      "main": [
+        [
+          {
+            "node": "Keep Relevant Infos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Company Users (API3)": {
+      "main": [
+        [
+          {
+            "node": "Keep Executive(s)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Balance - Month (API2)": {
+      "main": [
+        [
+          {
+            "node": "Shape Balance - Month",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Balance - Prior Month (API2)": {
+      "main": [
+        [
+          {
+            "node": "Shape Balance - Prior Month",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Balance - Y.T.D. (API2)": {
+      "main": [
+        [
+          {
+            "node": "Shape Balance - Y.T.D.",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Users (API3)": {
+      "main": [
+        [
+          {
+            "node": "Split Users",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Fiscal Year List (API2)": {
+      "main": [
+        [
+          {
+            "node": "Retrieve Identifier",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Shape Balance - Month": {
+      "main": [
+        [
+          {
+            "node": "Remove Empty - Month",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Shape Balance - Y.T.D.": {
+      "main": [
+        [
+          {
+            "node": "Remove Empty - Y.T.D.",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Remove Empty - Y.T.D.": {
+      "main": [
+        [
+          {
+            "node": "Merge w/ Year-to-Date",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Retrieve Identifier": {
+      "main": [
+        [
+          {
+            "node": "Split Fiscal Years",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Payload Schema Alignment": {
+      "main": [
+        [
+          {
+            "node": "Call - Calculation and Summary Submission",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Retrieve Company Data by ID": {
+      "main": [
+        [
+          {
+            "node": "Merge All Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Budgets": {
+      "main": [
+        [
+          {
+            "node": "Payload Schema Alignment",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Shape Users Contact": {
+      "main": [
+        [
+          {
+            "node": "Merge All Data",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge All Data": {
+      "main": [
+        [
+          {
+            "node": "Get Budgets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Is Uncomplete?": {
+      "main": [
+        [
+          {
+            "node": "Shape Uncomplete Client",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Call - Subscription Selection Form",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Shape Uncomplete Client": {
+      "main": [
+        [
+          {
+            "node": "Aggregate Uncomplete Clients",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate Uncomplete Clients": {
+      "main": [
+        [
+          {
+            "node": "Generate Uncomplete Alert",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Uncomplete Alert": {
+      "main": [
+        [
+          {
+            "node": "Alert for Uncomplete Clients",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Remove Empty - Prior Month": {
+      "main": [
+        [
+          {
+            "node": "Enrich Month w/ Prior",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "First of Month": {
+      "main": [
+        [
+          {
+            "node": "(Jet) Set Run Config",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Companies List (API3)": {
+      "main": [
+        [
+          {
+            "node": "Split Companies (API3)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "f42f96b5-44e7-4f85-a59b-e722db2e056e",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "6c558c414da21e3a3de7a733b22e8d1f3995630ab97eb345fcacecab82fb2a58"
+  },
+  "id": "oDYaYkRHhkD0iAsE",
+  "tags": []
+}

@@ -30,6 +30,10 @@
   color: var(--text-muted);
 }
 
+/* ═══════════════════════════════════════════
+   NAVIGATION PROJET
+   ═══════════════════════════════════════════ */
+
 .proj-nav {
   display: flex;
   align-items: center;
@@ -85,6 +89,10 @@
   color: var(--gold-light);
   background: rgba(251, 195, 115, 0.07);
 }
+
+/* ═══════════════════════════════════════════
+   HEADER PROJET
+   ═══════════════════════════════════════════ */
 
 .proj-header {
   display: flex;
@@ -151,6 +159,10 @@
   letter-spacing: 0.03em;
 }
 
+/* ═══════════════════════════════════════════
+   CAROUSEL MEDIA
+   ═══════════════════════════════════════════ */
+
 .proj-carousel {
   width: 100%;
   border-radius: 12px;
@@ -180,6 +192,14 @@
   width: 100%;
   height: 100%;
   border: none;
+  display: block;
+  background: #000;
+}
+
+.proj-carousel-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
   display: block;
   background: #000;
 }
@@ -247,6 +267,156 @@
 .proj-progress-segment--active {
   background: var(--gold-light);
 }
+
+/* ═══════════════════════════════════════════
+   WORKFLOW N8N + TABS
+   ═══════════════════════════════════════════ */
+
+.proj-workflow-wrapper {
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.proj-workflow-block {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.proj-workflow-tabs {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  width: fit-content;
+  max-width: 100%;
+  padding: 0.25rem;
+  border-radius: 10px;
+  border: 1px solid rgba(251, 195, 115, 0.1);
+  background: rgba(251, 195, 115, 0.025);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.proj-workflow-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.proj-workflow-tab {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  min-height: 32px;
+  padding: 0.38rem 0.75rem;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--text-muted);
+  font-family: var(--font-display);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.025em;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    color var(--t-fast),
+    background var(--t-fast),
+    border-color var(--t-fast),
+    transform var(--t-fast);
+}
+
+.proj-workflow-tab:hover {
+  color: var(--text);
+  background: rgba(251, 195, 115, 0.045);
+  border-color: rgba(251, 195, 115, 0.1);
+}
+
+.proj-workflow-tab:focus-visible {
+  outline: none;
+  border-color: rgba(251, 195, 115, 0.35);
+  box-shadow: 0 0 0 3px rgba(251, 195, 115, 0.08);
+}
+
+.proj-workflow-tab--active {
+  color: var(--gold-light);
+  background: rgba(251, 195, 115, 0.075);
+  border-color: rgba(251, 195, 115, 0.18);
+}
+
+.proj-workflow-tab--active:hover {
+  color: var(--gold-light);
+  background: rgba(251, 195, 115, 0.09);
+  border-color: rgba(251, 195, 115, 0.24);
+}
+
+.proj-workflow-tab-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 999px;
+  background: rgba(245, 236, 215, 0.28);
+  flex-shrink: 0;
+  transition:
+    background var(--t-fast),
+    box-shadow var(--t-fast),
+    transform var(--t-fast);
+}
+
+.proj-workflow-tab--active .proj-workflow-tab-dot {
+  background: var(--amber);
+  box-shadow: 0 0 6px rgba(212, 138, 57, 0.45);
+  transform: scale(1.1);
+}
+
+.proj-workflow-tab-label {
+  line-height: 1;
+}
+
+.proj-workflow-panel {
+  position: relative;
+}
+
+.proj-workflow-state {
+  margin-bottom: 0.6rem;
+  font-family: var(--font-body);
+  font-size: 0.82rem;
+  color: var(--text-dim);
+}
+
+.proj-workflow-state--error {
+  color: #ffb4a8;
+}
+
+.proj-workflow {
+  border: 1px solid rgba(251, 195, 115, 0.15);
+  border-radius: 12px;
+  overflow: hidden;
+  background: #fff;
+  min-height: 360px;
+  transition:
+    opacity var(--t-fast),
+    border-color var(--t-fast);
+}
+
+.proj-workflow:hover {
+  border-color: rgba(251, 195, 115, 0.22);
+}
+
+.proj-workflow--loading {
+  opacity: 0.45;
+  pointer-events: none;
+}
+
+.proj-workflow n8n-demo {
+  display: block;
+  width: 100%;
+  min-height: 360px;
+}
+
+/* ═══════════════════════════════════════════
+   BODY PROJET
+   ═══════════════════════════════════════════ */
 
 .proj-body {
   display: flex;
@@ -318,7 +488,7 @@
 }
 
 .proj-code {
-  font-family: 'DM Mono', 'Fira Code', monospace;
+  font-family: "DM Mono", "Fira Code", monospace;
   font-size: 0.8rem;
   color: var(--text-muted);
   line-height: 1.8;
@@ -330,7 +500,9 @@
   flex-wrap: wrap;
 }
 
-/* ═══ RESPONSIVE ═══ */
+/* ═══════════════════════════════════════════
+   RESPONSIVE
+   ═══════════════════════════════════════════ */
 
 @media (max-width: 1024px) {
   .proj-body {
@@ -365,6 +537,31 @@
 
   .proj-carousel-inner {
     aspect-ratio: 4/3;
+  }
+
+  .proj-workflow-wrapper {
+    margin-top: 1.5rem;
+  }
+
+  .proj-workflow-tabs {
+    width: 100%;
+    border-radius: 14px;
+    padding: 0.35rem;
+  }
+
+  .proj-workflow-tab {
+    flex: 1;
+    justify-content: center;
+    padding: 0.5rem 0.65rem;
+    font-size: 0.68rem;
+  }
+
+  .proj-workflow {
+    min-height: 300px;
+  }
+
+  .proj-workflow n8n-demo {
+    min-height: 300px;
   }
 
   .proj-body {

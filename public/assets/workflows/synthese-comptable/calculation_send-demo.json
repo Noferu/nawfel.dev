@@ -1,0 +1,617 @@
+{
+  "name": "[SUB] Calcul et Envoi de Synthèse",
+  "nodes": [
+    {
+      "parameters": {
+        "toRecipients": "={{ $('Shape Report').item.json.contacts.join(', ') }}",
+        "subject": "=Où en êtes-vous ? {{ $('Shape Report').item.json.name }}",
+        "bodyContent": "={{ $json.html }}",
+        "additionalFields": {
+          "bodyContentType": "html"
+        }
+      },
+      "type": "n8n-nodes-base.microsoftOutlook",
+      "typeVersion": 2,
+      "position": [
+        5888,
+        928
+      ],
+      "id": "d1e95464-33a8-4449-9c4f-f8cb04ed9644",
+      "name": "Send Report",
+      "webhookId": "1eb6d8fa-93e5-4bd1-87a9-23efd4a4d741",
+      "notes": "{{ $('Shape Report').item.json.contacts.join(', ') }}"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "const rev        = $json.rev            || {};\nconst margin_rev = $json.rev_for_margin || {};\nconst cogs       = $json.cogs           || {};\nconst payroll    = $json.payroll        || {};\nconst cash       = $json.cash           || {};\n\n// --- FORMATTING & SECURITY FUNCTIONS ---\nconst isAvail = (val) => val !== null && val !== undefined;\nconst safeNum = (val) => (typeof val === 'number' && !isNaN(val) ? val : 0);\n\nconst formatCurrency = (value) => new Intl.NumberFormat('fr-FR', {\n  style: 'currency', currency: 'EUR'\n}).format(value === 0 ? 0 : value);\n\nconst formatDiff = (val) => {\n  const sign = val > 0 ? '+' : '';\n  return sign + formatCurrency(val);\n};\n\nconst formatPercentage = (numerator, denominator) => {\n  if (!denominator || denominator === 0) return '0.00 %';\n  return ((numerator / denominator) * 100).toFixed(2) + ' %';\n};\n\nconst formatEvo = (numerator, denominator) => {\n  if (!denominator || denominator === 0) return '—';\n  const val  = (numerator / denominator) * 100;\n  const sign = val > 0 ? '+' : '';\n  return sign + val.toFixed(2) + ' %';\n};\n\nconst n = safeNum($json.months_elapsed) || 1;\n\n// --- DATA EXTRACTION & SIGNS INVERSION ---\n\nconst b_rev     = safeNum($json.budget_rev);\nconst b_margin  = safeNum($json.budget_margin);\nconst b_payroll = safeNum($json.budget_payroll);\n\nconst b_rev_annual     = b_rev     * 12;\nconst b_margin_annual  = b_margin  * 12;\nconst b_payroll_annual = b_payroll * 12;\n\nconst b_rev_cumul     = b_rev     * n;\nconst b_margin_cumul  = b_margin  * n;\nconst b_payroll_cumul = b_payroll * n;\n\nconst r_cur              = safeNum(rev.cur)   * -1;\nconst r_prior            = safeNum(rev.prior) * -1;\nconst r_ytd              = safeNum(rev.ytd)   * -1;\nconst revenue_prior_available = isAvail(rev.prior);\n\nconst rm_cur   = safeNum(margin_rev.cur)   * -1;\nconst rm_prior = safeNum(margin_rev.prior) * -1;\nconst rm_ytd   = safeNum(margin_rev.ytd)   * -1;\n\nconst c_cur                   = safeNum(cogs.cur);\nconst c_prior                 = safeNum(cogs.prior);\nconst c_ytd                   = safeNum(cogs.ytd);\nconst cogs_prior_available    = isAvail(cogs.prior);\nconst margin_prior_available  = revenue_prior_available || cogs_prior_available;\n\nconst p_cur                    = safeNum(payroll.cur);\nconst p_prior                  = safeNum(payroll.prior);\nconst p_ytd                    = safeNum(payroll.ytd);\nconst payroll_prior_available  = isAvail(payroll.prior);\n\nconst cash_cur               = safeNum(cash.cur);\nconst cash_ytd               = safeNum(cash.ytd);\nconst cash_prior_available   = isAvail(cash.prior);\n\n// --- CALCULATIONS AND REPORT GENERATION ---\n\nreturn {\n  identifier: $json.identifier,\n  data: {\n    // --- PERIOD MONTH ---\n    revenue_monthly:           formatCurrency(r_cur),\n    gross_margin_monthly:      formatCurrency(rm_cur - c_cur),\n    gross_margin_rate_monthly: formatPercentage(rm_cur - c_cur, rm_cur),\n    payroll_monthly:           formatCurrency(p_cur),\n    payroll_rate_monthly:      formatPercentage(p_cur, r_cur),\n\n    // --- EVOLUTION vs M-1 ---\n    revenue_prior_available,\n    revenue_evo:        revenue_prior_available ? formatEvo(r_cur - r_prior, r_prior) : '—',\n    revenue_evo_color:  !revenue_prior_available ? '#868E96' : (r_cur - r_prior) < 0 ? '#C0392B' : '#2D6A4F',\n    revenue_diff_value: revenue_prior_available ? formatDiff(r_cur - r_prior) : '—',\n    revenue_icon:       revenue_prior_available ? ((r_cur - r_prior) < 0 ? '↓' : '↑') : '',\n\n    margin_prior_available,\n    margin_evo:       margin_prior_available ? formatEvo((rm_cur - c_cur) - (rm_prior - c_prior), Math.abs(rm_prior - c_prior)) : '—',\n    margin_evo_color: !margin_prior_available ? '#868E96' : ((rm_cur - c_cur) - (rm_prior - c_prior)) < 0 ? '#C0392B' : '#2D6A4F',\n\n    payroll_prior_available,\n    payroll_evo:       payroll_prior_available ? formatEvo(p_cur - p_prior, Math.abs(p_prior)) : '—',\n    payroll_evo_color: !payroll_prior_available ? '#868E96' : (p_cur - p_prior) > 0 ? '#C0392B' : '#2D6A4F',\n\n    // --- CUMUL ---\n    revenue_cumul:           formatCurrency(r_ytd),\n    gross_margin_cumul:      formatCurrency(rm_ytd - c_ytd),\n    gross_margin_rate_cumul: formatPercentage(rm_ytd - c_ytd, rm_ytd),\n    payroll_cumul:           formatCurrency(p_ytd),\n\n    // --- BUDGET (annual displayed, cumulative for variance) ---\n    revenue_budget:            formatCurrency(b_rev_annual),\n    revenue_budget_diff:       formatDiff(r_ytd - b_rev_cumul),\n    revenue_budget_diff_color: (r_ytd - b_rev_cumul) < 0 ? '#C0392B' : '#2D6A4F',\n\n    margin_budget:            formatCurrency(b_margin_annual),\n    margin_budget_diff:       formatDiff((rm_ytd - c_ytd) - b_margin_cumul),\n    margin_budget_diff_color: ((rm_ytd - c_ytd) - b_margin_cumul) < 0 ? '#C0392B' : '#2D6A4F',\n\n    payroll_budget:            formatCurrency(b_payroll_annual),\n    payroll_budget_diff:       formatDiff(p_ytd - b_payroll_cumul),\n    payroll_budget_diff_color: (p_ytd - b_payroll_cumul) > 0 ? '#C0392B' : '#2D6A4F',\n\n    // --- CASH ---\n    cash_variation_monthly: formatDiff(cash_cur),\n    cash_prior_available,\n    cash_color:         !cash_prior_available ? '#868E96' : cash_cur < 0 ? '#E06F63' : '#56A884',\n    cash_icon:          cash_cur < 0 ? '↓' : '↑',\n    cash_total_balance: formatCurrency(cash_ytd),\n  }\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        4992,
+        704
+      ],
+      "id": "49d1b743-6f84-4dbb-8aff-109f951c0b46",
+      "name": "Format KPIs"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "const { entries_month, entries_prior, entries_ytd } = $json;\n\n// --- CONFIGURATION ---\nconst REVENUE_ROOTS = [\"70\", \"72\"];\nconst MARGIN_REV_ROOTS = [\"70\", \"72\", \"71\"];\nconst COGS_ROOTS = [\n    \"601\", \"602\", \"6031\", \"6032\", \"6037\", \"604\", \"605\", \"607\",\n    \"6081\", \"6082\", \"6084\", \"6085\", \"6087\",\n    \"6091\", \"6092\", \"6094\", \"6095\", \"6097\", \"690\"\n];\nconst CASH_ROOTS = [\"512\", \"53\"];\nconst PAYROLL_ROOTS = [\"64\"];\n\n// --- PRE-AGGREGATION FUNCTION ---\n/**\n * Aggregates all entries into a map of totals by root in a single pass.\n * This is the most efficient way to handle large datasets.\n */\nconst aggregateEntries = (entries) => {\n  const totals = {};\n  if (!entries?.length) return totals;\n\n  entries.forEach(line => {\n    const num = line.account?.toString() || \"\";\n    const balance = Number(line.balance) || 0;\n\n    // Store sum for every possible root length (e.g., \"6\", \"60\")\n    for (let i = 1; i <= num.length; i++) {\n      const root = num.substring(0, i);\n      totals[root] = (totals[root] || 0) + balance;\n    }\n  });\n  return totals;\n};\n\nconst round2 = (n) => Math.round(n * 100) / 100;\n\n// Returns null if no matching root is found, to distinguish \"no data\" from \"zero balance\"\nconst sumFromTotals = (totals, roots) => {\n  const hasAnyRoot = roots.some(root => root in totals);\n  if (!hasAnyRoot) return null;\n  return round2(roots.reduce((sum, root) => sum + (totals[root] || 0), 0));\n};\n\n// Derive months elapsed from fy_start (ISO or yyyyMMdd) and $now\nconst fyDate       = DateTime.fromISO($json.fy_start);\nconst nowMinus1    = DateTime.now().minus({ months: 1 }).startOf('month');\nconst months_elapsed = Math.round(nowMinus1.diff(fyDate, 'months').months) + 1;\n\n// Single pass for each period\nconst totalsCur   = aggregateEntries(entries_month);\nconst totalsPrior = aggregateEntries(entries_prior);\nconst totalsYtd   = aggregateEntries(entries_ytd);\n\nreturn {\n    identifier: $json.identifier,\n    months_elapsed,\n  \n    budget_rev: $json.budget_rev || 0,\n    budget_margin: $json.budget_margin || 0,\n    budget_payroll: $json.budget_payroll || 0,\n\n    rev: {\n      cur:   sumFromTotals(totalsCur,   REVENUE_ROOTS),\n      prior: sumFromTotals(totalsPrior, REVENUE_ROOTS),\n      ytd:   sumFromTotals(totalsYtd,   REVENUE_ROOTS),\n    },\n    rev_for_margin: {\n      cur:   sumFromTotals(totalsCur,   MARGIN_REV_ROOTS),\n      prior: sumFromTotals(totalsPrior, MARGIN_REV_ROOTS),\n      ytd:   sumFromTotals(totalsYtd,   MARGIN_REV_ROOTS),\n    },\n    cogs: {\n      cur:   sumFromTotals(totalsCur,   COGS_ROOTS),\n      prior: sumFromTotals(totalsPrior, COGS_ROOTS), \n      ytd:   sumFromTotals(totalsYtd,   COGS_ROOTS),\n    },\n    payroll: {\n      cur:   sumFromTotals(totalsCur,   PAYROLL_ROOTS),\n      prior: sumFromTotals(totalsPrior, PAYROLL_ROOTS), \n      ytd:   sumFromTotals(totalsYtd,   PAYROLL_ROOTS),\n    },\n    cash: {\n      cur:   sumFromTotals(totalsCur,   CASH_ROOTS),\n      prior: sumFromTotals(totalsPrior, CASH_ROOTS), \n      ytd:   sumFromTotals(totalsYtd,   CASH_ROOTS),\n    },\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        4768,
+        704
+      ],
+      "id": "0f8a5315-c017-4f28-bb13-d0eb644a13b6",
+      "name": "Compute Raw Figures"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "d38e8528-388d-46d3-9b9a-7540a9a66693",
+              "name": "identifier",
+              "value": "={{ $json.identifier }}",
+              "type": "number"
+            },
+            {
+              "id": "e6af161e-bedc-40eb-a164-b2be26b25b94",
+              "name": "PERIOD_LABEL",
+              "value": "={{ $('Start').item.json.PERIOD_LABEL }}",
+              "type": "string"
+            },
+            {
+              "id": "af1e41bb-e59e-484a-ba92-8497fe0fe177",
+              "name": "associate_mail",
+              "value": "={{ $('Start').item.json.associate_mail }}",
+              "type": "string"
+            },
+            {
+              "id": "637e443c-24cf-459b-8df3-4bf807300d42",
+              "name": "associate_name",
+              "value": "={{ $('Start').item.json.associate_name }}",
+              "type": "string"
+            },
+            {
+              "id": "1759f54d-ba19-4c89-87f0-aef93f4b7a2f",
+              "name": "name",
+              "value": "={{ $('Start').item.json.name }}",
+              "type": "string"
+            },
+            {
+              "id": "26b2df06-c17b-44cb-ae8a-a42401440468",
+              "name": "data",
+              "value": "={{ $json.data }}",
+              "type": "object"
+            },
+            {
+              "id": "08c26c9d-f21d-481f-9ce4-cb74dd324a04",
+              "name": "source",
+              "value": "={{ $('Start').item.json.source }}",
+              "type": "string"
+            },
+            {
+              "id": "fdb7de0e-d4a6-450b-9861-02f22c48420f",
+              "name": "contacts",
+              "value": "={{ $('Start').item.json.contacts }}",
+              "type": "array"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        5216,
+        704
+      ],
+      "id": "4f597fe0-b900-4d32-8f63-89982e486c0a",
+      "name": "Shape Report"
+    },
+    {
+      "parameters": {
+        "fieldsToSummarize": {
+          "values": [
+            {
+              "aggregation": "append",
+              "field": "identifier",
+              "includeEmpty": true
+            },
+            {
+              "aggregation": "append",
+              "field": "data",
+              "includeEmpty": true
+            },
+            {
+              "aggregation": "append",
+              "field": "name"
+            },
+            {
+              "aggregation": "append",
+              "field": "associate_name"
+            },
+            {
+              "aggregation": "append",
+              "field": "PERIOD_LABEL"
+            }
+          ]
+        },
+        "fieldsToSplitBy": "associate_mail",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.summarize",
+      "typeVersion": 1.1,
+      "position": [
+        5664,
+        704
+      ],
+      "id": "6a3de140-84de-4e9f-a6e7-8958ebd62d23",
+      "name": "Aggregate for Associates"
+    },
+    {
+      "parameters": {
+        "sortFieldsUi": {
+          "sortField": [
+            {
+              "fieldName": "name"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.sort",
+      "typeVersion": 1,
+      "position": [
+        5440,
+        704
+      ],
+      "id": "b022e82b-71d8-48ad-9acc-211d7e078b2e",
+      "name": "Sort"
+    },
+    {
+      "parameters": {
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "identifier",
+              "type": "number"
+            },
+            {
+              "name": "name"
+            },
+            {
+              "name": "source"
+            },
+            {
+              "name": "fy_start"
+            },
+            {
+              "name": "PERIOD_LABEL"
+            },
+            {
+              "name": "RECEIVER",
+              "type": "any"
+            },
+            {
+              "name": "associate_mail"
+            },
+            {
+              "name": "associate_name"
+            },
+            {
+              "name": "contacts",
+              "type": "array"
+            },
+            {
+              "name": "entries_month",
+              "type": "array"
+            },
+            {
+              "name": "entries_prior",
+              "type": "array"
+            },
+            {
+              "name": "entries_ytd",
+              "type": "array"
+            },
+            {
+              "name": "comparison_dataset",
+              "type": "array"
+            },
+            {
+              "name": "budget_rev",
+              "type": "number"
+            },
+            {
+              "name": "budget_margin",
+              "type": "number"
+            },
+            {
+              "name": "budget_payroll",
+              "type": "number"
+            }
+          ]
+        }
+      },
+      "id": "0b844cca-fd2f-48aa-89fb-5be56bf8b8a9",
+      "typeVersion": 1.1,
+      "name": "Start",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "position": [
+        4544,
+        928
+      ]
+    },
+    {
+      "parameters": {
+        "toRecipients": "={{ $('Aggregate for Associates').item.json.associate_mail }}",
+        "subject": "=📊 Synthèses {{ $('Sort').first().json.source }} : {{ $('Aggregate for Associates').item.json.appended_name.length }} dossiers traités ({{ $('Aggregate for Associates').item.json.appended_PERIOD_LABEL[0] }})",
+        "bodyContent": "={{ $json.html }}",
+        "additionalFields": {
+          "bodyContentType": "html"
+        }
+      },
+      "type": "n8n-nodes-base.microsoftOutlook",
+      "typeVersion": 2,
+      "position": [
+        6112,
+        704
+      ],
+      "id": "663f7e3c-a160-493c-9206-b9cc3a53044e",
+      "name": "Prevent Associates",
+      "webhookId": "1eb6d8fa-93e5-4bd1-87a9-23efd4a4d741"
+    },
+    {
+      "parameters": {
+        "html": "{{\n(() => {\n\n  const FONT_SERIF = \"'Playfair Display',Georgia,serif\";\n  const FONT_SANS = \"Arial,Helvetica,sans-serif\";\n  const C_NAVY = \"#1A1A2E\";\n  const C_GREEN = \"#1B4332\";\n  const C_GOLD = \"#E9A800\";\n  const C_CREAM = \"#F5F4F0\";\n  const C_WHITE = \"#FFFFFF\";\n  const C_BORDER = \"#E2DDD5\";\n  const C_BORDER_S = \"#EDE9E3\";\n  const C_BODY = \"#4A4A5A\";\n  const C_MUTED = \"#8A8A9A\";\n  const C_SUCCESS = \"#1B4332\";\n  const C_SUCCESS_BG = \"#EDFAF3\";\n\n  const th = (align = \"right\") =>\n    `background-color:${C_NAVY};padding:11px 16px;font-family:${FONT_SANS};font-size:10px;font-weight:700;color:rgba(233,168,0,0.75);text-transform:uppercase;letter-spacing:1px;border-bottom:3px solid ${C_GOLD};text-align:${align};`;\n\n  const th_budget = (align = \"right\") =>\n    `background-color:#0F0F1E;padding:11px 16px;font-family:${FONT_SANS};font-size:10px;font-weight:700;color:${C_GOLD};text-transform:uppercase;letter-spacing:1px;border-bottom:3px solid ${C_GOLD};text-align:${align};border-left:2px solid ${C_GOLD};`;\n\n  const monthName = $json.PERIOD_LABEL.split(' ')[0];\n  const monthCapitalized = monthName.charAt(0).toUpperCase() + monthName.slice(1);\n\n  const chartUrl = $json.chart_config\n  ? `https://quickchart.io/chart?c=${encodeURIComponent(JSON.stringify($json.chart_config))}&width=600&height=300&backgroundColor=%23F5F4F0`\n  : null;\n\n  const indicators = [\n    {\n      label: \"Chiffre d'affaires\",\n      monthly: $json.data.revenue_monthly,\n      budget: $json.data.revenue_budget,\n      ecart: $json.data.revenue_budget_diff,\n      ecart_col: $json.data.revenue_budget_diff_color,\n      evo: $json.data.revenue_evo,\n      evo_col: $json.data.revenue_evo_color,\n      cumul: $json.data.revenue_cumul,\n      sub: null\n    },\n    {\n      label: \"Marge brute\",\n      monthly: $json.data.gross_margin_monthly,\n      budget: $json.data.margin_budget,\n      ecart: $json.data.margin_budget_diff,\n      ecart_col: $json.data.margin_budget_diff_color,\n      evo: $json.data.margin_evo,\n      evo_col: $json.data.margin_evo_color,\n      cumul: $json.data.gross_margin_cumul,\n      sub: `${$json.data.gross_margin_rate_monthly} du CA`,\n      sub_cumul: `${$json.data.gross_margin_rate_cumul} du CA`\n    },\n    {\n      label: \"Masse salariale\",\n      monthly: $json.data.payroll_monthly,\n      budget: $json.data.payroll_budget,\n      ecart: $json.data.payroll_budget_diff,\n      ecart_col: $json.data.payroll_budget_diff_color,\n      evo: $json.data.payroll_evo,\n      evo_col: $json.data.payroll_evo_color,\n      cumul: $json.data.payroll_cumul,\n      sub: `${$json.data.payroll_rate_monthly} du CA`\n    }\n  ];\n\n  return `\n<table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" role=\"presentation\" bgcolor=\"${C_CREAM}\" style=\"background-color:${C_CREAM};font-family:${FONT_SANS};\">\n  <tr>\n    <td align=\"center\" style=\"padding:32px 16px;\">\n      <table width=\"680\" cellpadding=\"0\" cellspacing=\"0\" role=\"presentation\">\n        <tr>\n          <td bgcolor=\"${C_GREEN}\" style=\"background-color:${C_GREEN};height:4px;font-size:0;line-height:0;\n              background:linear-gradient(90deg,${C_GREEN},${C_GOLD},${C_GREEN});\">&nbsp;</td>\n        </tr>\n        <tr>\n          <td bgcolor=\"${C_WHITE}\" style=\"background-color:${C_WHITE};padding:24px 32px;border-bottom:1px solid ${C_BORDER};\">\n            <table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" role=\"presentation\">\n              <tr>\n                <td valign=\"middle\">\n                  <table cellpadding=\"0\" cellspacing=\"0\" role=\"presentation\" style=\"display:inline-table;\">\n                    <tr>\n                      <td bgcolor=\"${C_NAVY}\" style=\"background-color:${C_NAVY};width:40px;height:40px;text-align:center;vertical-align:middle;\">\n                        <span style=\"font-family:${FONT_SERIF};font-size:13px;font-weight:700;color:${C_GOLD};letter-spacing:2px;\">LC</span>\n                      </td>\n                      <td style=\"padding-left:14px;vertical-align:middle;\">\n                        <span style=\"font-family:${FONT_SERIF};font-size:17px;font-weight:600;color:${C_NAVY};letter-spacing:-0.3px;display:block;\">Cabinet Lumen Conseil</span>\n                        <span style=\"font-family:${FONT_SANS};font-size:10px;font-weight:700;color:${C_GOLD};letter-spacing:1.5px;text-transform:uppercase;\">Expertise Comptable</span>\n                      </td>\n                    </tr>\n                  </table>\n                </td>\n              </tr>\n            </table>\n          </td>\n        </tr>\n        <tr>\n          <td bgcolor=\"${C_WHITE}\" style=\"background-color:${C_WHITE};height:2px;font-size:0;line-height:0;\n              background:linear-gradient(90deg,${C_GREEN},${C_GOLD},transparent);\">&nbsp;</td>\n        </tr>\n        <tr>\n          <td bgcolor=\"${C_WHITE}\" style=\"background-color:${C_WHITE};padding:32px 32px 0;\">\n            <p style=\"margin:0 0 8px;font-family:${FONT_SANS};font-size:10px;font-weight:700;color:${C_GOLD};letter-spacing:2px;text-transform:uppercase;\">\n              Synthèse Financière &mdash; ${$json.PERIOD_LABEL}\n            </p>\n            <h1 style=\"margin:0 0 8px;font-family:${FONT_SERIF};font-size:26px;font-weight:600;color:${C_NAVY};line-height:1.25;letter-spacing:-0.3px;\">\n              ${$json.name}\n            </h1>\n            <p style=\"margin:0;font-family:${FONT_SANS};font-size:14px;color:${C_BODY};line-height:1.65;\">\n              Tableau de bord des indicateurs clés de performance\n            </p>\n          </td>\n        </tr>\n        <tr>\n          <td bgcolor=\"${C_WHITE}\" style=\"background-color:${C_WHITE};padding:20px 32px 0;\">\n            <div style=\"height:1px;background-color:${C_BORDER};font-size:0;line-height:0;\">&nbsp;</div>\n          </td>\n        </tr>\n        <tr>\n          <td bgcolor=\"${C_WHITE}\" style=\"background-color:${C_WHITE};padding:20px 32px 0;\">\n            <table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" role=\"presentation\" style=\"border:1px solid ${C_BORDER};\">\n              <tr>\n                <td bgcolor=\"${C_WHITE}\" style=\"background-color:${C_WHITE};padding:14px 18px;width:50%;\">\n                  <p style=\"margin:0 0 5px;font-family:${FONT_SANS};font-size:10px;font-weight:700;color:${C_MUTED};text-transform:uppercase;letter-spacing:1.5px;\">Copilote responsable</p>\n                  <p style=\"margin:0;font-family:${FONT_SANS};font-size:13px;font-weight:600;color:${C_NAVY};\">${$json.associate_name} <span style=\"font-weight:400;color:${C_BODY};\">(${$json.associate_mail})</span></p>\n                </td>\n                <td bgcolor=\"${C_WHITE}\" style=\"background-color:${C_WHITE};padding:14px 18px;border-left:1px solid ${C_BORDER};\">\n                  <p style=\"margin:0 0 5px;font-family:${FONT_SANS};font-size:10px;font-weight:700;color:${C_MUTED};text-transform:uppercase;letter-spacing:1.5px;\">Destinataire${$json.contacts.length >= 2 ? 's' : ''}</p>\n                  <p style=\"margin:0;font-family:${FONT_SANS};font-size:13px;color:${C_NAVY};\">${$json.contacts.join(', ')}</p>\n                </td>\n              </tr>\n            </table>\n          </td>\n        </tr>\n        <tr>\n          <td bgcolor=\"${C_WHITE}\" style=\"background-color:${C_WHITE};padding:24px 32px 0;\">\n            <table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" role=\"presentation\">\n              <tr>\n                <td width=\"310\" valign=\"top\" bgcolor=\"${C_NAVY}\" style=\"background-color:${C_NAVY};padding:24px;position:relative;\">\n                  <div style=\"height:3px;background:linear-gradient(90deg,${C_GREEN},${C_GOLD});font-size:0;margin-bottom:16px;\">&nbsp;</div>\n                  <p style=\"margin:0 0 6px;font-family:${FONT_SANS};font-size:10px;font-weight:700;color:rgba(233,168,0,0.7);letter-spacing:1.5px;text-transform:uppercase;\">Solde Trésorerie</p>\n                  <p style=\"margin:0 0 8px;font-family:${FONT_SERIF};font-size:30px;font-weight:700;color:${C_WHITE};line-height:1.1;\">${$json.data.cash_total_balance}</p>\n                  ${$json.data.cash_prior_available\n                    ? `<p style=\"margin:0;font-family:${FONT_SANS};font-size:12px;color:${$json.data.cash_color};\">Variation&nbsp;: ${$json.data.cash_variation_monthly} ${$json.data.cash_icon}</p>`\n                    : `<p style=\"margin:0;font-family:${FONT_SANS};font-size:12px;color:${C_MUTED};\">Variation non disponible</p>`\n                  }\n                </td>\n                <td width=\"20\" style=\"font-size:0;line-height:0;\">&nbsp;</td>\n                <td width=\"310\" valign=\"top\" bgcolor=\"${C_WHITE}\" style=\"background-color:${C_WHITE};border:1px solid ${C_BORDER};padding:24px;position:relative;\">\n                  <div style=\"height:3px;background:${C_GOLD};font-size:0;margin-bottom:16px;\">&nbsp;</div>\n                  <p style=\"margin:0 0 6px;font-family:${FONT_SANS};font-size:10px;font-weight:700;color:${C_MUTED};letter-spacing:1.5px;text-transform:uppercase;\">Chiffre d'Affaires (${monthCapitalized})</p>\n                  <p style=\"margin:0 0 8px;font-family:${FONT_SERIF};font-size:30px;font-weight:700;color:${C_NAVY};line-height:1.1;\">${$json.data.revenue_monthly}</p>\n                  ${$json.data.revenue_prior_available\n                    ? `<p style=\"margin:0;font-family:${FONT_SANS};font-size:12px;font-weight:600;color:${$json.data.revenue_evo_color};\">Variation&nbsp;: ${$json.data.revenue_diff_value} ${$json.data.revenue_icon}</p>`\n                    : `<p style=\"margin:0;font-family:${FONT_SANS};font-size:12px;color:${C_MUTED};\">Variation non disponible</p>`\n                  }\n                </td>\n              </tr>\n            </table>\n          </td>\n        </tr>\n        <tr>\n          <td bgcolor=\"${C_WHITE}\" style=\"background-color:${C_WHITE};padding:24px 32px 0;\">\n            <p style=\"margin:0 0 14px;font-family:${FONT_SANS};font-size:10px;font-weight:700;color:${C_GOLD};letter-spacing:2px;text-transform:uppercase;\">Indicateurs détaillés</p>\n            <table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" role=\"presentation\" style=\"border:1px solid ${C_BORDER};overflow:hidden;\">\n              <tr>\n                <th style=\"${th(\"left\")}\">Indicateurs</th>\n                <th style=\"${th()}\">${monthCapitalized}</th>\n                <th style=\"${th()}\">Évol. M-1</th>\n                <th style=\"${th()}\">Cumul</th>\n                <th style=\"${th_budget()}\">Budget</th>\n                <th style=\"${th_budget()}\">Écart</th>\n              </tr>\n              ${indicators.map((ind, i) => {\n                const bg = i % 2 === 0 ? C_WHITE : C_CREAM;\n                const bg_bud = i % 2 === 0 ? \"#F0EDE8\" : \"#E8E4DC\";\n                return `\n              <tr>\n                <td bgcolor=\"${bg}\" style=\"background-color:${bg};padding:13px 16px;font-family:${FONT_SANS};font-size:13px;font-weight:700;color:${C_NAVY};border-bottom:1px solid ${C_BORDER_S};\">${ind.label}</td>\n                <td bgcolor=\"${bg}\" style=\"background-color:${bg};padding:13px 16px;font-family:${FONT_SANS};font-size:13px;color:${C_NAVY};text-align:right;border-bottom:1px solid ${C_BORDER_S};\">\n                  ${ind.monthly}${ind.sub ? `<br><span style=\"font-size:10px;color:${C_MUTED};font-weight:600;\">${ind.sub}</span>` : \"\"}\n                </td>\n                <td bgcolor=\"${bg}\" style=\"background-color:${bg};padding:13px 16px;font-family:${FONT_SANS};font-size:12px;font-weight:700;text-align:right;border-bottom:1px solid ${C_BORDER_S};color:${ind.evo_col};\">${ind.evo}</td>\n                <td bgcolor=\"${bg}\" style=\"background-color:${bg};padding:13px 16px;font-family:${FONT_SANS};font-size:13px;color:${C_MUTED};text-align:right;border-bottom:1px solid ${C_BORDER_S};\">${ind.cumul}${ind.sub_cumul ? `<br><span style=\"font-size:10px;color:${C_MUTED};font-weight:600;\">${ind.sub_cumul}</span>` : \"\"}</td>\n                <td bgcolor=\"${bg_bud}\" style=\"background-color:${bg_bud};padding:13px 16px;font-family:${FONT_SANS};font-size:13px;color:${C_NAVY};text-align:right;border-bottom:1px solid ${C_BORDER_S};border-left:2px solid ${C_GOLD};\">${ind.budget}</td>\n                <td bgcolor=\"${bg_bud}\" style=\"background-color:${bg_bud};padding:13px 16px;font-family:${FONT_SANS};font-size:12px;font-weight:700;text-align:right;border-bottom:1px solid ${C_BORDER_S};color:${ind.ecart_col};\">${ind.ecart}</td>\n              </tr>`;\n              }).join('')}\n            </table>\n          ${chartUrl ? `\n          <tr>\n            <td bgcolor=\"${C_WHITE}\" style=\"background-color:${C_WHITE};padding:24px 32px 0;\">\n              <p style=\"margin:0 0 14px;font-family:${FONT_SANS};font-size:10px;font-weight:700;color:${C_GOLD};letter-spacing:2px;text-transform:uppercase;\">Évolution de la Trésorerie</p>\n              <div style=\"border:1px solid ${C_BORDER};line-height:0;max-width:100%;overflow:hidden;\">\n                <img src=\"${chartUrl}\" width=\"616\" height=\"300\" style=\"display:block;width:100%;max-width:616px;height:auto;border:0;outline:none;\" alt=\"Analyse Graphique\" />\n              </div>\n            </td>\n          </tr>` : ''}\n        <tr>\n          <td bgcolor=\"${C_WHITE}\" style=\"background-color:${C_WHITE};padding:20px 32px 32px;\">\n            <table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" role=\"presentation\">\n              <tr>\n                <td bgcolor=\"${C_SUCCESS_BG}\" style=\"background-color:${C_SUCCESS_BG};border-left:3px solid ${C_SUCCESS};padding:14px 18px;\">\n                  <p style=\"margin:0;font-family:${FONT_SANS};font-size:12px;color:${C_SUCCESS};line-height:1.6;\">\n                    <strong>Avertissement :</strong> Ces états financiers sont établis à partir des données comptables saisies à ce jour et vous sont communiqués à titre strictement indicatif pour la gestion courante de votre entreprise. Ils ne tiennent pas compte des écritures d'inventaire de fin d'année (amortissements, provisions, régularisations, etc.) et ne constituent en aucun cas un bilan, un compte de résultat ou une situation intermédiaire certifiée. En conséquence, la responsabilité du Cabinet Lumen Conseil ne saurait être engagée sur la base de ces seuls indicateurs.\n                  </p>\n                </td>\n              </tr>\n            </table>\n          </td>\n        </tr>\n        <tr>\n          <td bgcolor=\"${C_WHITE}\" style=\"background-color:${C_WHITE};height:2px;font-size:0;line-height:0;\n              background:linear-gradient(90deg,${C_GREEN},${C_GOLD},transparent);\">&nbsp;</td>\n        </tr>\n        <tr>\n          <td bgcolor=\"${C_CREAM}\" style=\"background-color:${C_CREAM};padding:22px 32px;\">\n            <table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" role=\"presentation\">\n              <tr>\n                <td valign=\"top\">\n                  <p style=\"margin:0 0 4px;font-family:${FONT_SANS};font-size:12px;font-weight:700;color:${C_NAVY};\">Cabinet Lumen Conseil</p>\n                  <a href=\"mailto:${$json.associate_mail}\" style=\"font-family:${FONT_SANS};font-size:12px;color:${C_GOLD};text-decoration:none;\">${$json.associate_mail}</a>\n                </td>\n                <td align=\"right\" valign=\"top\">\n                  <p style=\"margin:0;font-family:${FONT_SANS};font-size:11px;color:${C_MUTED};\">${$json.PERIOD_LABEL}</p>\n                </td>\n              </tr>\n            </table>\n            <p style=\"margin:14px 0 0;font-family:${FONT_SANS};font-size:11px;color:${C_MUTED};line-height:1.5;border-top:1px solid ${C_BORDER};padding-top:14px;\">\n              Message confidentiel généré automatiquement &mdash; Ne pas répondre à cet email.\n            </p>\n          </td>\n        </tr>\n      </table>\n    </td>\n  </tr>\n</table>\n  `;\n})()\n}}"
+      },
+      "type": "n8n-nodes-base.html",
+      "typeVersion": 1.2,
+      "position": [
+        5664,
+        928
+      ],
+      "id": "5699aca8-47b1-49d9-a62e-e75d3c7dacda",
+      "name": "Generate Report"
+    },
+    {
+      "parameters": {
+        "html": "{{\n(() => {\n  const FONT_SERIF  = \"'Playfair Display',Georgia,serif\";\n  const FONT_SANS   = \"Arial,Helvetica,sans-serif\";\n  const C_NAVY      = \"#1A1A2E\";\n  const C_GREEN     = \"#1B4332\";\n  const C_GOLD      = \"#E9A800\";\n  const C_CREAM     = \"#F5F4F0\";\n  const C_WHITE     = \"#FFFFFF\";\n  const C_BORDER    = \"#E2DDD5\";\n  const C_BORDER_S  = \"#EDE9E3\";\n  const C_BODY      = \"#4A4A5A\";\n  const C_MUTED     = \"#8A8A9A\";\n\n  const th = (align = \"right\") =>\n    `background-color:${C_NAVY};padding:11px 16px;font-family:${FONT_SANS};font-size:10px;font-weight:700;color:rgba(233,168,0,0.75);text-transform:uppercase;letter-spacing:1px;border-bottom:3px solid ${C_GOLD};text-align:${align};`;\n\n  const th_budget = (align = \"right\") =>\n    `background-color:#0F0F1E;padding:11px 16px;font-family:${FONT_SANS};font-size:10px;font-weight:700;color:${C_GOLD};text-transform:uppercase;letter-spacing:1px;border-bottom:3px solid ${C_GOLD};text-align:${align};border-left:2px solid ${C_GOLD};`;\n\n  const td_label = (bg) =>\n    `background-color:${bg};padding:12px 16px;font-family:${FONT_SANS};font-size:13px;font-weight:700;color:${C_NAVY};border-bottom:1px solid ${C_BORDER_S};`;\n\n  const td_val = (bg, extra = \"\") =>\n    `background-color:${bg};padding:12px 16px;font-family:${FONT_SANS};font-size:13px;text-align:right;border-bottom:1px solid ${C_BORDER_S};${extra}`;\n\n  const count    = $json.appended_name.length;\n  const plural   = count > 1 ? 's' : '';\n  const period   = $json.appended_PERIOD_LABEL[0];\n  const associate= $json.appended_associate_name[0];\n  const monthName= period.split(' ')[0];\n  const monthCap = monthName.charAt(0).toUpperCase() + monthName.slice(1);\n\n  return `\n<table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" role=\"presentation\" bgcolor=\"${C_CREAM}\" style=\"background-color:${C_CREAM};font-family:${FONT_SANS};\">\n  <tr>\n    <td align=\"center\" style=\"padding:32px 16px;\">\n      <table width=\"750\" cellpadding=\"0\" cellspacing=\"0\" role=\"presentation\">\n\n        <tr>\n          <td bgcolor=\"${C_GREEN}\" style=\"background-color:${C_GREEN};height:4px;font-size:0;line-height:0;\n              background:linear-gradient(90deg,${C_GREEN},${C_GOLD},${C_GREEN});\">&nbsp;</td>\n        </tr>\n\n        <tr>\n          <td bgcolor=\"${C_WHITE}\" style=\"background-color:${C_WHITE};padding:24px 32px;border-bottom:1px solid ${C_BORDER};\">\n            <table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" role=\"presentation\">\n              <tr>\n                <td valign=\"middle\">\n                  <table cellpadding=\"0\" cellspacing=\"0\" role=\"presentation\" style=\"display:inline-table;\">\n                    <tr>\n                      <td bgcolor=\"${C_NAVY}\" style=\"background-color:${C_NAVY};width:40px;height:40px;text-align:center;vertical-align:middle;\">\n                        <span style=\"font-family:${FONT_SERIF};font-size:13px;font-weight:700;color:${C_GOLD};letter-spacing:2px;\">LC</span>\n                      </td>\n                      <td style=\"padding-left:14px;vertical-align:middle;\">\n                        <span style=\"font-family:${FONT_SERIF};font-size:17px;font-weight:600;color:${C_NAVY};letter-spacing:-0.3px;display:block;\">Cabinet Lumen Conseil</span>\n                        <span style=\"font-family:${FONT_SANS};font-size:10px;font-weight:700;color:${C_GOLD};letter-spacing:1.5px;text-transform:uppercase;\">Expertise Comptable</span>\n                      </td>\n                    </tr>\n                  </table>\n                </td>\n                <td align=\"right\" valign=\"middle\">\n\n                  <span style=\"display:inline-block;background-color:${C_NAVY};color:${C_GOLD};font-family:${FONT_SANS};font-size:10px;font-weight:700;letter-spacing:1px;padding:5px 12px;text-transform:uppercase;\">INTERNE</span>\n                </td>\n              </tr>\n            </table>\n          </td>\n        </tr>\n\n        <tr>\n          <td bgcolor=\"${C_WHITE}\" style=\"background-color:${C_WHITE};height:2px;font-size:0;line-height:0;\n              background:linear-gradient(90deg,${C_GREEN},${C_GOLD},transparent);\">&nbsp;</td>\n        </tr>\n\n        <tr>\n          <td bgcolor=\"${C_WHITE}\" style=\"background-color:${C_WHITE};padding:32px 32px 24px;\">\n            <p style=\"margin:0 0 8px;font-family:${FONT_SANS};font-size:10px;font-weight:700;color:${C_GOLD};letter-spacing:2px;text-transform:uppercase;\">\n              Récapitulatif &mdash; ${period}\n            </p>\n            <h1 style=\"margin:0 0 8px;font-family:${FONT_SERIF};font-size:24px;font-weight:600;color:${C_NAVY};line-height:1.25;letter-spacing:-0.3px;\">\n              Synthèses Financières &mdash; ${associate}\n            </h1>\n            <p style=\"margin:0;font-family:${FONT_SANS};font-size:14px;color:${C_BODY};line-height:1.65;\">\n              ${count} dossier${plural} traité${plural} et envoyé${plural} ce mois\n            </p>\n          </td>\n        </tr>\n\n        <tr>\n          <td bgcolor=\"${C_WHITE}\" style=\"background-color:${C_WHITE};padding:0 32px;\">\n            <div style=\"height:1px;background-color:${C_BORDER};font-size:0;line-height:0;\">&nbsp;</div>\n          </td>\n        </tr>\n\n        <tr>\n          <td bgcolor=\"${C_WHITE}\" style=\"background-color:${C_WHITE};padding:20px 32px 0;\">\n            <table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" role=\"presentation\">\n              <tr>\n                <td bgcolor=\"rgba(233,168,0,0.08)\" style=\"background-color:#FBF6E3;border-left:3px solid ${C_GOLD};padding:14px 18px;\">\n                  <p style=\"margin:0;font-family:${FONT_SANS};font-size:12px;color:${C_BODY};line-height:1.6;\">\n                    <strong style=\"color:${C_NAVY};\">CONFIDENTIEL</strong> &mdash; Ces données indicatives sont réservées à l'usage interne du cabinet. Ne pas transmettre.\n                  </p>\n                </td>\n              </tr>\n            </table>\n          </td>\n        </tr>\n\n        <tr>\n          <td bgcolor=\"${C_WHITE}\" style=\"background-color:${C_WHITE};padding:20px 32px 0;\">\n            <table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" role=\"presentation\">\n              <tr>\n\n                <td width=\"345\" valign=\"top\" bgcolor=\"${C_NAVY}\" style=\"background-color:${C_NAVY};padding:24px;\">\n                  <div style=\"height:3px;background:linear-gradient(90deg,${C_GREEN},${C_GOLD});font-size:0;margin-bottom:16px;\">&nbsp;</div>\n                  <p style=\"margin:0 0 6px;font-family:${FONT_SANS};font-size:10px;font-weight:700;color:rgba(233,168,0,0.7);letter-spacing:1.5px;text-transform:uppercase;\">Dossiers traités</p>\n                  <p style=\"margin:0 0 6px;font-family:${FONT_SERIF};font-size:42px;font-weight:700;color:${C_WHITE};line-height:1.0;\">${count}</p>\n                  <p style=\"margin:0;font-family:${FONT_SANS};font-size:12px;color:${C_GOLD};\">${period}</p>\n                </td>\n                <td width=\"20\" style=\"font-size:0;line-height:0;\">&nbsp;</td>\n\n                <td width=\"345\" valign=\"top\" bgcolor=\"${C_WHITE}\" style=\"background-color:${C_WHITE};border:1px solid ${C_BORDER};padding:24px;\">\n                  <div style=\"height:3px;background:${C_GOLD};font-size:0;margin-bottom:16px;\">&nbsp;</div>\n                  <p style=\"margin:0 0 6px;font-family:${FONT_SANS};font-size:10px;font-weight:700;color:${C_MUTED};letter-spacing:1.5px;text-transform:uppercase;\">Collaborateur responsable</p>\n                  <p style=\"margin:0 0 6px;font-family:${FONT_SERIF};font-size:20px;font-weight:600;color:${C_NAVY};line-height:1.2;\">${associate}</p>\n                  <p style=\"margin:0;font-family:${FONT_SANS};font-size:12px;color:${C_MUTED};\">Responsable des envois</p>\n                </td>\n              </tr>\n            </table>\n          </td>\n        </tr>\n\n        <tr>\n          <td bgcolor=\"${C_WHITE}\" style=\"background-color:${C_WHITE};padding:32px 32px 24px;\">\n            <p style=\"margin:0 0 20px;font-family:${FONT_SANS};font-size:10px;font-weight:700;color:${C_GOLD};letter-spacing:2px;text-transform:uppercase;\">Détail des synthèses par dossier</p>\n\n            ${$json.appended_name.map((name, i) => {\n              const d    = $json.appended_data[i];\n              const bg1  = C_WHITE;\n              const bg2  = C_CREAM;\n              const bud1 = \"#F0EDE8\";\n              const bud2 = \"#E8E4DC\";\n\n              return `\n            <table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" role=\"presentation\" style=\"border:1px solid ${C_BORDER};margin-bottom:28px;\">\n\n              <tr>\n                <td colspan=\"6\" bgcolor=\"${C_NAVY}\" style=\"background-color:${C_NAVY};padding:14px 18px;border-top:3px solid ${C_GOLD};\">\n                  <span style=\"font-family:${FONT_SERIF};font-size:15px;font-weight:600;color:${C_WHITE};\">${name}</span>\n                </td>\n              </tr>\n\n              <tr>\n                <th style=\"${th(\"left\")}\">Indicateurs</th>\n                <th style=\"${th()}\">${monthCap}</th>\n                <th style=\"${th()}\">Évol. M-1</th>\n                <th style=\"${th()}\">Cumul</th>\n                <th style=\"${th_budget()}\">Budget</th>\n                <th style=\"${th_budget()}\">Écart</th>\n              </tr>\n\n              <tr>\n                <td bgcolor=\"${bg1}\" style=\"${td_label(bg1)}\">Chiffre d'affaires</td>\n                <td bgcolor=\"${bg1}\" style=\"${td_val(bg1, `font-weight:700;color:${C_NAVY};`)}\">${d.revenue_monthly}</td>\n                <td bgcolor=\"${bg1}\" style=\"${td_val(bg1, `font-weight:700;color:${d.revenue_evo_color};`)}\">${d.revenue_evo}</td>\n                <td bgcolor=\"${bg1}\" style=\"${td_val(bg1, `color:${C_MUTED};`)}\">${d.revenue_cumul}</td>\n                <td bgcolor=\"${bud1}\" style=\"${td_val(bud1, `color:${C_NAVY};border-left:2px solid ${C_GOLD};`)}\">${d.revenue_budget}</td>\n                <td bgcolor=\"${bud1}\" style=\"${td_val(bud1, `font-weight:700;color:${d.revenue_budget_diff_color};`)}\">${d.revenue_budget_diff}</td>\n              </tr>\n\n              <tr>\n                <td bgcolor=\"${bg2}\" style=\"${td_label(bg2)}\">Marge brute</td>\n                <td bgcolor=\"${bg2}\" style=\"${td_val(bg2, `color:${C_NAVY};`)}\">${d.gross_margin_monthly}<br><span style=\"font-size:10px;color:${C_MUTED};font-weight:600;\">${d.gross_margin_rate_monthly} du CA</span></td>\n                <td bgcolor=\"${bg2}\" style=\"${td_val(bg2, `font-weight:700;color:${d.margin_evo_color};`)}\">${d.margin_evo}</td>\n                <td bgcolor=\"${bg2}\" style=\"${td_val(bg2, `color:${C_MUTED};`)}\">${d.gross_margin_cumul}<br><span style=\"font-size:10px;color:${C_MUTED};font-weight:600;\">${d.gross_margin_rate_cumul} du CA</span></td>\n                <td bgcolor=\"${bud2}\" style=\"${td_val(bud2, `color:${C_NAVY};border-left:2px solid ${C_GOLD};`)}\">${d.margin_budget}</td>\n                <td bgcolor=\"${bud2}\" style=\"${td_val(bud2, `font-weight:700;color:${d.margin_budget_diff_color};`)}\">${d.margin_budget_diff}</td>\n              </tr>\n\n              <tr>\n                <td bgcolor=\"${bg1}\" style=\"${td_label(bg1)}\">Masse salariale</td>\n                <td bgcolor=\"${bg1}\" style=\"${td_val(bg1, `color:${C_NAVY};`)}\">${d.payroll_monthly}<br><span style=\"font-size:10px;color:${C_MUTED};font-weight:600;\">${d.payroll_rate_monthly} du CA</span></td>\n                <td bgcolor=\"${bg1}\" style=\"${td_val(bg1, `font-weight:700;color:${d.payroll_evo_color};`)}\">${d.payroll_evo}</td>\n                <td bgcolor=\"${bg1}\" style=\"${td_val(bg1, `color:${C_MUTED};`)}\">${d.payroll_cumul}</td>\n                <td bgcolor=\"${bud1}\" style=\"${td_val(bud1, `color:${C_NAVY};border-left:2px solid ${C_GOLD};`)}\">${d.payroll_budget}</td>\n                <td bgcolor=\"${bud1}\" style=\"${td_val(bud1, `font-weight:700;color:${d.payroll_budget_diff_color};`)}\">${d.payroll_budget_diff}</td>\n              </tr>\n\n              <tr>\n                <td bgcolor=\"${bg2}\" style=\"background-color:${bg2};padding:12px 16px;font-family:${FONT_SANS};font-size:13px;font-weight:700;color:${C_NAVY};border-bottom:none;\">Flux Trésorerie</td>\n                <td bgcolor=\"${bg2}\" style=\"background-color:${bg2};padding:12px 16px;font-family:${FONT_SANS};font-size:13px;font-weight:700;color:${d.cash_color};text-align:right;border-bottom:none;\">${d.cash_prior_available ? `${d.cash_variation_monthly}&nbsp;${d.cash_icon}` : '—'}</td>\n                <td bgcolor=\"${bg2}\" style=\"background-color:${bg2};padding:12px 16px;font-family:${FONT_SANS};font-size:11px;color:${C_MUTED};text-align:right;border-bottom:none;\">Variation</td>\n                <td bgcolor=\"${bg2}\" style=\"background-color:${bg2};padding:12px 16px;font-family:${FONT_SANS};font-size:13px;font-weight:700;color:${C_NAVY};text-align:right;border-bottom:none;\">${d.cash_total_balance}</td>\n                <td bgcolor=\"${bud2}\" style=\"background-color:${bud2};padding:12px 16px;border-bottom:none;border-left:2px solid ${C_GOLD};\"></td>\n                <td bgcolor=\"${bud2}\" style=\"background-color:${bud2};padding:12px 16px;border-bottom:none;\"></td>\n              </tr>\n\n            </table>`;\n            }).join('')}\n\n          </td>\n        </tr>\n\n        <tr>\n          <td bgcolor=\"${C_WHITE}\" style=\"background-color:${C_WHITE};height:2px;font-size:0;line-height:0;\n              background:linear-gradient(90deg,${C_GREEN},${C_GOLD},transparent);\">&nbsp;</td>\n        </tr>\n\n        <tr>\n          <td bgcolor=\"${C_CREAM}\" style=\"background-color:${C_CREAM};padding:22px 32px;\">\n            <table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" role=\"presentation\">\n              <tr>\n                <td valign=\"top\">\n                  <p style=\"margin:0 0 4px;font-family:${FONT_SANS};font-size:12px;font-weight:700;color:${C_NAVY};\">Cabinet Lumen Conseil</p>\n                  <p style=\"margin:0;font-family:${FONT_SANS};font-size:12px;color:${C_MUTED};\">Service Digitalisation &amp; Automatisation</p>\n                </td>\n                <td align=\"right\" valign=\"top\">\n                  <p style=\"margin:0;font-family:${FONT_SANS};font-size:11px;color:${C_MUTED};\">Envoi automatique &mdash; Ne pas répondre</p>\n                </td>\n              </tr>\n            </table>\n            <p style=\"margin:14px 0 0;font-family:${FONT_SANS};font-size:11px;color:${C_MUTED};line-height:1.5;border-top:1px solid ${C_BORDER};padding-top:14px;\">\n              Message confidentiel généré automatiquement &mdash; Ne pas répondre à cet email.\n            </p>\n          </td>\n        </tr>\n\n      </table>\n    </td>\n  </tr>\n</table>\n  `;\n})()\n\n}}"
+      },
+      "type": "n8n-nodes-base.html",
+      "typeVersion": 1.2,
+      "position": [
+        5888,
+        704
+      ],
+      "id": "d0f3dc94-3ba1-490d-8ea8-a488099d63c7",
+      "name": "Generate Prevention"
+    },
+    {
+      "parameters": {
+        "jsCode": "const allItems = $input.all();\nif (!allItems.length) return [];\n\nconst fmt = (val) => val !== null && val !== undefined\n  ? new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(val)\n  : null;\n\nconst MONTH_LABELS = ['Janv.','Févr.','Mars','Avr.','Mai','Juin','Juil.','Août','Sept.','Oct.','Nov.','Déc.'];\n\nconst fy_n  = allItems[0].json.fy_n;\nconst fy_n1 = allItems[0].json.fy_n1;\n\nconst startMonth = fy_n ? parseInt(fy_n.substring(4, 6), 10) : 1;\nconst orderedMonths = Array.from({ length: 12 }, (_, i) => {\n  const m = startMonth + i;\n  return m > 12 ? m - 12 : m;\n});\n\nconst byMonthN  = {};\nconst byMonthN1 = {};\n\nfor (const item of allItems) {\n  const monthNum = parseInt(item.json.calendar_month.split('-')[1], 10);\n  if (item.json.n)  byMonthN[monthNum]  = item.json.n;\n  if (item.json.n1) byMonthN1[monthNum] = item.json.n1;\n}\n\nconst dataN  = orderedMonths.map(m => byMonthN[m]?.has_data  ? byMonthN[m].balance  : null);\nconst dataN1 = orderedMonths.map(m => byMonthN1[m]?.has_data ? byMonthN1[m].balance : null);\n\nconst chartConfig = {\n  type: 'line',\n  data: {\n    labels: orderedMonths.map(m => MONTH_LABELS[m - 1]),\n    datasets: [\n      {\n        label:                'Trésorerie N',\n        data:                 dataN,\n        borderColor:          '#1A1A2E',\n        backgroundColor:      'rgba(27,67,50,0.08)',\n        borderWidth:          2.5,\n        pointRadius:          4,\n        pointBackgroundColor: '#1A1A2E',\n        tension:              0.3,\n        spanGaps:             true,\n        fill:                 false,\n      },\n      {\n        label:                'Trésorerie N-1',\n        data:                 dataN1,\n        borderColor:          '#E9A800',\n        backgroundColor:      'rgba(233,168,0,0.08)',\n        borderWidth:          2,\n        borderDash:           [6, 4],\n        pointRadius:          3,\n        pointBackgroundColor: '#E9A800',\n        tension:              0.3,\n        spanGaps:             true,\n        fill:                 false,\n      },\n    ],\n  },\n  options: {\n    responsive: true,\n    plugins: {\n      title: {\n        display: true,\n        text:    'Comparaison trésorerie N-1 vs N',\n        font:    { size: 14 },\n        color:   '#1A1A2E',\n        padding: { bottom: 16 },\n      },\n      legend: { position: 'top' },\n    },\n    scales: {\n      y: { ticks: { callback: (val) => fmt(val) } },\n    },\n  },\n};\n\nreturn [{\n  json: {\n    chart_config: chartConfig,\n    months: orderedMonths.map(m => ({\n      month:          m,\n      balance_n:      byMonthN[m]?.balance  ?? null,\n      balance_n1:     byMonthN1[m]?.balance ?? null,\n      has_data_n:     byMonthN[m]?.has_data  ?? false,\n      has_data_n1:    byMonthN1[m]?.has_data ?? false,\n    })),\n  },\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        6112,
+        1264
+      ],
+      "id": "2e7b6cd9-b7fc-4915-9789-f66b6e3d3fef",
+      "name": "Build Cash Chart"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "const CASH_ROOTS  = [\"512\", \"53\"];\nconst EXCL_ROOTS  = [\"580\"];\nconst round2 = (n) => Math.round(n * 100) / 100;\n\nconst entries = $json.entries ?? [];\n\nconst cashEntries = entries.filter(e => {\n  const num = String(e.formatted_number || e.number || \"\");\n  const isCash    = CASH_ROOTS.some(r => num.startsWith(r));\n  const isExcluded = EXCL_ROOTS.some(r => num.startsWith(r));\n  return isCash && !isExcluded;\n});\n\nconst monthCash = cashEntries.length\n  ? round2(cashEntries.reduce((sum, e) => sum + ((Number(e.debits) || 0) - (Number(e.credits) || 0)), 0))\n  : null;\n\nreturn {\n  fiscal_year:       $json.fiscal_year,\n  period:            $json.period,\n  calendar_month:    $json.period.start.substring(0, 7),\n  monthCash,\n  has_data:          entries.length > 0,\n  native_carry_over: $json.native_carry_over ?? true,\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        5664,
+        1136
+      ],
+      "id": "31dc0b4a-e3ac-4fe1-9ec1-ed0fa8cf0bfa",
+      "name": "Compute Cash Balances"
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all().map(i => i.json);\nif (!items.length) return [];\n\nconst round2 = (n) => Math.round(n * 100) / 100;\n\nconst byFY = {};\nfor (const item of items) {\n  const fy = item.fiscal_year?.start;\n  if (!fy) continue;\n  (byFY[fy] ??= []).push(item);\n}\n\nconst fyKeys = Object.keys(byFY).sort();\nif (!fyKeys.length) return [];\n\nconst fy_n1 = fyKeys[0];\nconst fy_n  = fyKeys[1] ?? fyKeys[0];\n\nconst mergeByMonth = (fyItems) => {\n  const byMonth = {};\n  for (const item of fyItems) {\n    const key = item.calendar_month;\n    if (!byMonth[key]) byMonth[key] = { ...item, monthCash: null };\n    if (item.monthCash !== null)\n      byMonth[key].monthCash = round2((byMonth[key].monthCash ?? 0) + item.monthCash);\n    if (item.has_data) byMonth[key].has_data = true;\n  }\n  return Object.values(byMonth).sort((a, b) => a.period.start.localeCompare(b.period.start));\n};\n\nconst processSeries = (fyStart, carryOver = null) => {\n  const months = mergeByMonth(byFY[fyStart] || []);\n  const result = {};\n  let balance = null;\n\n  months.forEach((m, i) => {\n    const cash = m.monthCash ?? null;\n    let movement = cash;\n\n    if (i === 0) {\n      if (carryOver !== null) {\n        if (m.native_carry_over) {\n          // API returns absolute balance — movement is the delta vs carry-over\n          balance  = cash;\n          movement = cash !== null ? round2(cash - carryOver) : null;\n        } else {\n          // API returns a movement — add it to carry-over\n          balance  = cash !== null ? round2(carryOver + cash) : carryOver;\n        }\n      } else {\n        balance  = cash;\n        movement = null;\n      }\n    } else {\n      if (cash !== null)\n        balance = balance !== null ? round2(balance + cash) : cash;\n    }\n\n    result[m.calendar_month] = {\n      period_start:   m.period.start,\n      calendar_month: m.calendar_month,\n      balance,\n      movement,\n      has_data: m.has_data,\n    };\n  });\n\n  return result;\n};\n\nconst dataN1 = processSeries(fy_n1);\n\nlet carryOver = null;\nif (fy_n1 !== fy_n) {\n  const lastMonth = Object.keys(dataN1).sort().at(-1);\n  if (lastMonth) carryOver = dataN1[lastMonth].balance;\n}\n\nconst dataN = processSeries(fy_n, carryOver);\n\nconst allMonths = [...new Set([...Object.keys(dataN1), ...Object.keys(dataN)])].sort();\n\nreturn allMonths.map(month => ({\n  json: {\n    calendar_month: month,\n    n:    dataN[month]  ?? null,\n    n1:   dataN1[month] ?? null,\n    fy_n,\n    fy_n1,\n  }\n}));"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        5888,
+        1136
+      ],
+      "id": "b8a838aa-5db2-434a-9486-34c15dd07020",
+      "name": "Stack Cash Balances"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "comparison_dataset",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        5440,
+        1136
+      ],
+      "id": "c0f819a9-4633-4e50-ac5b-8947ecc1a051",
+      "name": "Split Monthly Balances"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        5440,
+        928
+      ],
+      "id": "ff1fe58e-87f4-439a-af20-b649a3a4e7c6",
+      "name": "Combine Insights"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        4992,
+        1136
+      ],
+      "id": "947c32e4-e9fe-4f22-a271-a310f613d55b",
+      "name": "Loop Over Societies"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "991ebb2b-ecda-41c5-b3e6-4b9b5810dde5",
+              "leftValue": "={{ $json.comparison_dataset && $json.comparison_dataset.length > 0 }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        5216,
+        1136
+      ],
+      "id": "9d0acff9-8f45-4ec8-b04a-ba068ea09813",
+      "name": "Has Data?"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Format KPIs": {
+      "main": [
+        [
+          {
+            "node": "Shape Report",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Compute Raw Figures": {
+      "main": [
+        [
+          {
+            "node": "Format KPIs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Shape Report": {
+      "main": [
+        [
+          {
+            "node": "Sort",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Combine Insights",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate for Associates": {
+      "main": [
+        [
+          {
+            "node": "Generate Prevention",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sort": {
+      "main": [
+        [
+          {
+            "node": "Aggregate for Associates",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Start": {
+      "main": [
+        [
+          {
+            "node": "Compute Raw Figures",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Loop Over Societies",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Report": {
+      "main": [
+        [
+          {
+            "node": "Send Report",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Prevention": {
+      "main": [
+        [
+          {
+            "node": "Prevent Associates",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Compute Cash Balances": {
+      "main": [
+        [
+          {
+            "node": "Stack Cash Balances",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Stack Cash Balances": {
+      "main": [
+        [
+          {
+            "node": "Build Cash Chart",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Monthly Balances": {
+      "main": [
+        [
+          {
+            "node": "Compute Cash Balances",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Cash Chart": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Societies",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Combine Insights": {
+      "main": [
+        [
+          {
+            "node": "Generate Report",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Societies": {
+      "main": [
+        [
+          {
+            "node": "Combine Insights",
+            "type": "main",
+            "index": 1
+          }
+        ],
+        [
+          {
+            "node": "Has Data?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Has Data?": {
+      "main": [
+        [
+          {
+            "node": "Split Monthly Balances",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Combine Insights",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "3dd8da42-dfb1-404a-815e-47c97ca99ad5",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "6c558c414da21e3a3de7a733b22e8d1f3995630ab97eb345fcacecab82fb2a58"
+  },
+  "id": "oDYaYkRHhkD0iAsE",
+  "tags": []
+}

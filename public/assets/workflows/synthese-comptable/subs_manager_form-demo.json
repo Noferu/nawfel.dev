@@ -1,0 +1,989 @@
+{
+  "name": "[FORM] Portail de Gestion des Abonnements",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "Synthèses mensuelles — Pilotage",
+        "formDescription": "=Gérez les abonnements aux synthèses et renseignez les budgets pour les dossiers du mois.",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Que voulez-vous faire ?",
+              "fieldType": "radio",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "⚙️ Modifier les abonnements et les budgets"
+                  },
+                  {
+                    "option": "✅ Tout est bon — on continue"
+                  },
+                  {
+                    "option": "🛑 Annuler — ne rien envoyer ce mois-ci"
+                  }
+                ]
+              },
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {
+          "buttonLabel": "Confirmer",
+          "path": "6f00af60-1062-4d77-90a0-6a4b40214138",
+          "ignoreBots": true,
+          "useWorkflowTimezone": true,
+          "customCss": "@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=DM+Sans:wght@300;400;500;600&display=swap');\n\n:root {\n  /* ── Doucy Consilium Palette ── */\n  --green-deep:    #1B4332;\n  --green-mid:     #2D6A4F;\n  --navy:          #1A1A2E;\n  --gold:          #E9A800;\n  --gold-light:    #F5C842;\n  --gold-dim:      rgba(233,168,0,0.12);\n  --cream:         #F5F4F0;\n  --white:         #FFFFFF;\n  --border:        #E2DDD5;\n  --text-dark:     #1A1A2E;\n  --text-body:     #4A4A5A;\n  --text-muted:    #8A8A9A;\n\n  /* ── Mapping native n8n variables ── */\n  --color-background:       var(--cream);\n  --color-card-bg:          var(--white);\n  --color-card-border:      var(--border);\n  --color-card-shadow:      rgba(26,26,46,0.10);\n  --color-header:           var(--navy);\n  --color-label:            var(--text-body);\n  --color-input-border:     var(--border);\n  --color-input-text:       var(--text-dark);\n  --color-focus-border:     var(--gold);\n  --color-submit-btn-bg:    var(--green-deep);\n  --color-submit-btn-text:  var(--white);\n  --color-required:         var(--gold);\n  --color-error:            #B03A2E;\n  --color-link:             var(--green-mid);\n  --color-html-text:        var(--text-body);\n  --color-html-link:        var(--green-deep);\n  --color-header-subtext:   var(--text-muted);\n\n  --border-radius-card:     0px;\n  --border-radius-input:    4px;\n  --box-shadow-card:        0 0 0 1px var(--border), 0 8px 40px rgba(26,26,46,0.08);\n  --submit-btn-height:      52px;\n  --container-width:        520px;\n  --padding-card:           48px;\n}\n\n/* ── Reset typography ── */\n* { font-family: 'DM Sans', sans-serif !important; }\n\n/* ── Background with subtle texture ── */\nbody {\n  background-color: var(--cream) !important;\n  background-image:\n    radial-gradient(ellipse at 20% 50%, rgba(27,67,50,0.04) 0%, transparent 60%),\n    radial-gradient(ellipse at 80% 20%, rgba(233,168,0,0.04) 0%, transparent 60%) !important;\n  min-height: 100vh !important;\n  display: flex !important;\n  align-items: center !important;\n}\n\n/* ── Vertical centering ── */\n.container {\n  padding-top: 0 !important;\n  margin-top: auto !important;\n  margin-bottom: auto !important;\n}\n\n/* ── Card: cabinet style ── */\n.card {\n  border: 1px solid var(--border) !important;\n  border-top: none !important;\n  border-radius: 0 !important;\n  box-shadow: var(--box-shadow-card) !important;\n  position: relative !important;\n  overflow: visible !important;\n}\n\n/* ── Gold band at the top ── */\n.card::before {\n  content: '' !important;\n  display: block !important;\n  height: 4px !important;\n  background: linear-gradient(90deg, var(--green-deep), var(--gold), var(--green-deep)) !important;\n  position: absolute !important;\n  top: 0 !important; left: 0 !important; right: 0 !important;\n}\n\n/* ── Form header ── */\n.form-header {\n  padding: 48px 48px 32px !important;\n  text-align: center !important;\n}\n\n/* ── Logo/monogram above the title ── */\n.form-header::before {\n  content: 'DC' !important;\n  display: block !important;\n  width: 48px !important;\n  height: 48px !important;\n  line-height: 48px !important;\n  background: var(--navy) !important;\n  color: var(--gold) !important;\n  font-family: 'Playfair Display', serif !important;\n  font-size: 16px !important;\n  font-weight: 700 !important;\n  letter-spacing: 2px !important;\n  margin: 0 auto 20px !important;\n}\n\n.form-header h1 {\n  font-family: 'Playfair Display', serif !important;\n  font-size: 26px !important;\n  font-weight: 600 !important;\n  color: var(--navy) !important;\n  letter-spacing: -0.3px !important;\n  line-height: 1.3 !important;\n}\n\n.form-header p {\n  font-size: 14px !important;\n  color: var(--text-muted) !important;\n  margin-top: 10px !important;\n  line-height: 1.6 !important;\n  font-weight: 400 !important;\n}\n\n/* ── Gold separator below the header ── */\n.form-header::after {\n  content: '' !important;\n  display: block !important;\n  width: 40px !important;\n  height: 2px !important;\n  background: var(--gold) !important;\n  margin: 24px auto 0 !important;\n}\n\n/* ── Zone inputs ── */\n.inputs-wrapper {\n  padding: 24px 48px 32px !important;\n}\n\n/* ── Labels ── */\nform label {\n  font-size: 11px !important;\n  font-weight: 600 !important;\n  letter-spacing: 1px !important;\n  text-transform: uppercase !important;\n  color: var(--text-muted) !important;\n}\n\n/* ── Radio buttons (main choice) ── */\n.multiselect-option {\n  padding: 14px 16px !important;\n  border: 1px solid var(--border) !important;\n  border-radius: 4px !important;\n  margin-top: 8px !important;\n  transition: all 0.2s ease !important;\n  cursor: pointer !important;\n}\n\n.multiselect-option:hover {\n  border-color: var(--gold) !important;\n  background: var(--gold-dim) !important;\n}\n\n.multiselect-option label {\n  font-size: 14px !important;\n  font-weight: 500 !important;\n  letter-spacing: 0 !important;\n  text-transform: none !important;\n  color: var(--text-dark) !important;\n  cursor: pointer !important;\n}\n\n/* ── Focus ── */\ninput:focus, select:focus, textarea:focus {\n  outline: none !important;\n  border-color: var(--gold) !important;\n  box-shadow: 0 0 0 3px rgba(233,168,0,0.12) !important;\n}\n\n/* ── Submit button ── */\n#submit-btn {\n  font-family: 'DM Sans', sans-serif !important;\n  font-size: 13px !important;\n  font-weight: 600 !important;\n  letter-spacing: 1.5px !important;\n  text-transform: uppercase !important;\n  background: var(--green-deep) !important;\n  color: var(--white) !important;\n  border-radius: 0 !important;\n  height: var(--submit-btn-height) !important;\n  transition: background 0.25s ease, transform 0.15s ease !important;\n  border: none !important;\n}\n\n#submit-btn:hover {\n  background: var(--navy) !important;\n  opacity: 1 !important;\n  transform: translateY(-1px) !important;\n}\n\n#submit-btn:active {\n  transform: translateY(0) !important;\n}\n\n/* ── Discreet n8n footer ── */\n.n8n-link {\n  padding: 20px 0 16px !important;\n  text-align: center !important;\n}\n.n8n-link a {\n  color: var(--border) !important;\n  font-size: 10px !important;\n  text-decoration: none !important;\n}\n.n8n-link svg path { fill: var(--border) !important; }"
+        }
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.5,
+      "position": [
+        2528,
+        2392
+      ],
+      "id": "976b2f59-03c6-40d1-a117-405aa3ba07be",
+      "name": "Portal Entry Trigger",
+      "webhookId": "6f00af60-1062-4d77-90a0-6a4b40214138",
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {
+        "batchSize": 50,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        3424,
+        2368
+      ],
+      "id": "f0199f90-cbab-4a16-99db-5fc9b0ce449b",
+      "name": "Batch Processing Loop"
+    },
+    {
+      "parameters": {
+        "defineForm": "json",
+        "jsonOutput": "={{ $('Build Form Options').item.json.formConfig }}",
+        "options": {
+          "formTitle": "=Dossiers {{ $('Portal Entry Trigger').item.json.formQueryParameters.source }} à configurer ({{ $(\"Batch Processing Loop\").context.currentRunIndex + 1 }}/{{ Math.ceil($(\"Alphabetical Sort\").all().length / 50) }}).",
+          "formDescription": "=Vérifiez la source active et renseignez les budgets pour chaque dossier. Ne fermez pas la fenêtre avant d'avoir terminé.",
+          "buttonLabel": "={{ $(\"Batch Processing Loop\").context.noItemsLeft ? \"Terminer\" : \"Suivant\" }}",
+          "customCss": "@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=DM+Sans:wght@300;400;500;600&display=swap');\n\n:root {\n  --green-deep:    #1B4332;\n  --green-mid:     #2D6A4F;\n  --navy:          #1A1A2E;\n  --gold:          #E9A800;\n  --gold-dim:      rgba(233,168,0,0.10);\n  --cream:         #F5F4F0;\n  --white:         #FFFFFF;\n  --border:        #E2DDD5;\n  --row-alt:       #FAFAF8;\n  --text-dark:     #1A1A2E;\n  --text-body:     #4A4A5A;\n  --text-muted:    #8A8A9A;\n  --myunisoft-bg:  #EEF4FF;\n  --myunisoft-fg:  #1D4ED8;\n  --pennylane-bg:  #EDFAF3;\n  --pennylane-fg:  #166534;\n}\n\n* { font-family: 'DM Sans', sans-serif !important; box-sizing: border-box; }\n\nbody {\n  background-color: var(--cream) !important;\n  background-image:\n    radial-gradient(ellipse at 20% 50%, rgba(27,67,50,0.04) 0%, transparent 60%),\n    radial-gradient(ellipse at 80% 20%, rgba(233,168,0,0.04) 0%, transparent 60%) !important;\n  min-height: 100vh !important;\n}\n\n/* ── Wide container ── */\n.container {\n  width: 96% !important;\n  max-width: 1280px !important;\n  margin: 0 auto !important;\n  padding: 40px 0 60px !important;\n}\n\n/* ── Card ── */\n.card {\n  border-radius: 0 !important;\n  border: 1px solid var(--border) !important;\n  border-top: none !important;\n  box-shadow: 0 0 0 1px var(--border), 0 8px 40px rgba(26,26,46,0.08) !important;\n  background: var(--white) !important;\n  overflow: hidden !important;\n  position: relative !important;\n}\n\n/* ── Faded band at the top ── */\n.card::before {\n  content: '' !important;\n  display: block !important;\n  height: 4px !important;\n  background: linear-gradient(90deg, var(--green-deep), var(--gold), var(--green-deep)) !important;\n  position: absolute !important;\n  top: 0 !important; left: 0 !important; right: 0 !important;\n}\n\n/* ── Form header ── */\n.form-header {\n  padding: 40px 48px 28px !important;\n  background: var(--white) !important;\n  border-bottom: 1px solid var(--border) !important;\n  display: flex !important;\n  align-items: center !important;\n  gap: 20px !important;\n}\n\n/* ── Monogram in the header ── */\n.form-header::before {\n  content: 'DC' !important;\n  display: flex !important;\n  align-items: center !important;\n  justify-content: center !important;\n  flex-shrink: 0 !important;\n  width: 44px !important;\n  height: 44px !important;\n  background: var(--navy) !important;\n  color: var(--gold) !important;\n  font-family: 'Playfair Display', serif !important;\n  font-size: 14px !important;\n  font-weight: 700 !important;\n  letter-spacing: 2px !important;\n}\n\n.form-header h1 {\n  font-family: 'Playfair Display', serif !important;\n  font-size: 20px !important;\n  font-weight: 600 !important;\n  color: var(--navy) !important;\n  letter-spacing: -0.2px !important;\n}\n\n.form-header p {\n  font-size: 13px !important;\n  color: var(--text-muted) !important;\n  margin-top: 4px !important;\n  font-weight: 400 !important;\n}\n\n/* ── 4-column grid ── */\n.inputs-wrapper {\n  display: grid !important;\n  grid-template-columns: minmax(240px, 1.8fr) repeat(3, 1fr) !important;\n  gap: 0 !important;\n  align-items: stretch !important;\n  border-top: 3px solid var(--gold) !important;\n  padding: 0 !important;\n}\n\n/* ── Company line (full-width) ── */\n.form-group.html {\n  grid-column: 1 / -1 !important;\n  padding: 20px 32px 12px !important;\n  background: var(--row-alt) !important;\n  border-top: 6px solid var(--cream) !important;\n  border-bottom: 1px solid var(--border) !important;\n  margin: 0 !important;\n}\n\n.form-group.html:first-child { border-top: none !important; }\n\n.form-group.html div {\n  font-family: 'DM Sans', sans-serif !important;\n  font-size: 14px !important;\n  font-weight: 600 !important;\n  color: var(--navy) !important;\n  letter-spacing: 0.1px !important;\n}\n\n.form-group.html small {\n  font-weight: 400 !important;\n  color: var(--text-muted) !important;\n  font-size: 12px !important;\n  margin-left: 6px !important;\n}\n\n/* ── Hidden fields ── */\n.form-group.hiddenField, input[type=\"hidden\"] {\n  display: none !important;\n}\n\n/* ── Input cells ── */\n.form-group:not(.html):not(.hiddenField) {\n  padding: 14px 20px !important;\n  border-right: 1px solid var(--border) !important;\n  border-bottom: 1px solid var(--border) !important;\n  background: var(--white) !important;\n  display: flex !important;\n  flex-direction: column !important;\n  justify-content: flex-end !important;\n  margin: 0 !important;\n  height: 100% !important;\n}\n\n.form-group:not(.html):not(.hiddenField):nth-child(8n) {\n  border-right: none !important;\n}\n\n/* ── Deceptive labels ── */\n.inputs-wrapper > .form-group:not(.html) > label {\n  visibility: hidden !important;\n  font-size: 0 !important;\n  position: relative !important;\n  height: 14px !important;\n  margin-bottom: 6px !important;\n}\n\n.inputs-wrapper > .form-group:not(.html) > label::after {\n  visibility: visible !important;\n  position: absolute !important;\n  top: 0 !important; left: 0 !important;\n  font-size: 9px !important;\n  font-weight: 700 !important;\n  color: var(--text-muted) !important;\n  text-transform: uppercase !important;\n  letter-spacing: 1px !important;\n}\n\n.inputs-wrapper > .form-group:nth-child(8n + 5) > label::after { content: \"Source\"; }\n.inputs-wrapper > .form-group:nth-child(8n + 6) > label::after { content: \"Budget CA (€)\"; }\n.inputs-wrapper > .form-group:nth-child(8n + 7) > label::after { content: \"Budget marge (€)\"; }\n.inputs-wrapper > .form-group:nth-child(8n + 8) > label::after { content: \"Budget masse sal. (€)\"; }\n\n/* ── Inputs & Selects ── */\n.select-input {\n  border: none !important;\n  padding: 0 !important;\n  margin: 0 !important;\n  border-radius: 4px !important;\n}\n\ninput.form-input,\nform input[type=\"number\"],\nform select {\n  height: 40px !important;\n  border: 1px solid var(--border) !important;\n  border-radius: 4px !important;\n  font-size: 13px !important;\n  font-family: 'DM Sans', sans-serif !important;\n  color: var(--text-dark) !important;\n  padding: 0 12px !important;\n  width: 100% !important;\n  background: #FDFDFD !important;\n  transition: border-color 0.2s, box-shadow 0.2s !important;\n  margin: 0 !important;\n}\n\nform select {\n  cursor: pointer !important;\n  font-weight: 600 !important;\n  font-size: 12px !important;\n}\n\ninput[type=\"number\"]::-webkit-outer-spin-button,\ninput[type=\"number\"]::-webkit-inner-spin-button { -webkit-appearance: none !important; }\n\ninput.form-input:focus,\nform input[type=\"number\"]:focus,\nform select:focus {\n  outline: none !important;\n  border-color: var(--gold) !important;\n  background: var(--white) !important;\n  box-shadow: 0 0 0 3px rgba(233,168,0,0.10) !important;\n}\n\n/* ── Source select colors ── */\nselect[data-source=\"MyUnisoft\"] { background-color: var(--myunisoft-bg) !important; color: var(--myunisoft-fg) !important; }\nselect[data-source=\"Pennylane\"] { background-color: var(--pennylane-bg) !important; color: var(--pennylane-fg) !important; }\n\n/* ── Errors ── */\n.error-hidden { display: none !important; }\n.error-show {\n  display: block !important;\n  font-size: 11px !important;\n  color: #B03A2E !important;\n  margin-top: 4px !important;\n}\n\n/* ── Submit button ── */\n#submit-btn {\n  display: block !important;\n  width: calc(100% - 64px) !important;\n  margin: 32px !important;\n  height: 52px !important;\n  background: var(--green-deep) !important;\n  color: var(--white) !important;\n  border: none !important;\n  border-radius: 0 !important;\n  font-family: 'DM Sans', sans-serif !important;\n  font-size: 12px !important;\n  font-weight: 700 !important;\n  letter-spacing: 1.5px !important;\n  text-transform: uppercase !important;\n  cursor: pointer !important;\n  transition: background 0.25s ease, transform 0.15s ease !important;\n  box-shadow: none !important;\n}\n\n#submit-btn:hover {\n  background: var(--navy) !important;\n  opacity: 1 !important;\n  transform: translateY(-1px) !important;\n}\n\n#submit-btn:active { transform: translateY(0) !important; }\n#submit-btn:disabled { opacity: 0.5 !important; cursor: not-allowed !important; }\n\n/* ── Confirmation screen ── */\n#submitted-form { padding: 64px 48px !important; text-align: center !important; }\n#submitted-form h1 {\n  font-family: 'Playfair Display', serif !important;\n  font-size: 22px !important;\n  color: var(--green-deep) !important;\n  font-weight: 600 !important;\n}\n\n/* ── Discreet n8n footer ── */\n.n8n-link {\n  padding: 20px 0 16px !important;\n  text-align: center !important;\n}\n.n8n-link a {\n  color: var(--border) !important;\n  font-size: 10px !important;\n  text-decoration: none !important;\n}\n.n8n-link svg path { fill: var(--border) !important; }\n\n/* ── Mobile ── */\n@media (max-width: 900px) {\n  .container { width: 100% !important; padding: 0 !important; }\n  .card { border: none !important; }\n  .inputs-wrapper { grid-template-columns: 1fr !important; }\n  .form-group:not(.html):not(.hiddenField) { border-right: none !important; padding: 10px 20px !important; }\n  #submit-btn { width: calc(100% - 40px) !important; margin: 20px !important; }\n}"
+        }
+      },
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 2.5,
+      "position": [
+        3872,
+        2392
+      ],
+      "id": "a3d58636-ce7e-4e66-b051-92c12efa9234",
+      "name": "Interactive Subscription Form",
+      "webhookId": "6e7e1899-3dab-4498-8047-b5f93c029861"
+    },
+    {
+      "parameters": {
+        "html": "{{\n(() => {\nconst FONT_MAIN = \"-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif\";\nconst FONT_STD = \"Arial,sans-serif\";\nconst COLOR_PRIMARY = \"#1B4332\";\nconst COLOR_SECONDARY = \"#1A1A2E\";\nconst COLOR_ACCENT = \"#40916C\";\nconst COLOR_MUTED = \"#868E96\";\nconst COLOR_BORDER = \"#E9ECEF\";\nconst COLOR_BG_LIGHT = \"#F8F9FA\";\nconst COLOR_SUCCESS_BG = \"#D8F3DC\";\nconst COLOR_SUCCESS_TEXT = \"#1B4332\";\nconst COLOR_DANGER_BG = \"#FAD2E1\";\nconst COLOR_DANGER_TEXT = \"#590D22\";\nconst COLOR_INFO_BG = \"#E2E8F0\";\nconst COLOR_INFO_TEXT = \"#1E293B\";\n\nconst data = $input.first().json;\n\nconst toArray = (value) => {\nif (Array.isArray(value)) return value;\nif (value === undefined || value === null) return [];\nreturn [value];\n};\n\nconst names = toArray(data.name);\nconst sourcePrimary = toArray(data.source_primary);\nconst oldSourcePrimary = toArray(data.old_source_primary);\nconst isModified = toArray(data.is_modified);\nconst isSubscribed = toArray(data.is_subscribed);\nconst oldSubscribedState = toArray(data.old_subscribed_state);\n\nconst sourceLabels = {\nMyUnisoft: \"Source A\",\nPennylane: \"Source B\"\n};\n\nconst anonymizeSource = (source) => {\nif (!source) return \"N/A\";\nreturn sourceLabels[source] || \"Source externe\";\n};\n\nconst companies = names\n.map((name, i) => {\nconst isMod = String(isModified[i] ?? \"false\") === \"true\";\nconst isSub = String(isSubscribed[i] ?? \"false\") === \"true\";\nconst oldSub = String(oldSubscribedState[i] ?? \"false\") === \"true\";\n\n```\n  return {\n    name: name || `Entreprise ${i + 1}`,\n    display_name: `Entreprise exemple ${i + 1}`,\n    source_primary: sourcePrimary[i] || \"\",\n    old_source_primary: oldSourcePrimary[i] || \"\",\n    is_subscribed: isSub,\n    old_subscribed_state: oldSub,\n    is_modified: isMod\n  };\n})\n.sort((a, b) => a.display_name.localeCompare(b.display_name));\n```\n\nconst modifiedList = companies.filter(c => c.is_modified);\nconst newlySubscribed = modifiedList.filter(c => c.is_subscribed && !c.old_subscribed_state);\nconst newlyUnsubscribed = modifiedList.filter(c => !c.is_subscribed && c.old_subscribed_state);\nconst sourceChanged = modifiedList.filter(c =>\nc.is_subscribed &&\nc.old_subscribed_state &&\nc.source_primary !== c.old_source_primary\n);\n\nconst allSubscribedList = companies.filter(c => c.is_subscribed);\n\nconst countTotal = modifiedList.length;\nconst countSub = newlySubscribed.length;\nconst countUnsub = newlyUnsubscribed.length;\nconst countAllSub = allSubscribedList.length;\n\nconst generateChangeTable = (title, list, badgeText, badgeBg, badgeColor) => {\nif (!list || list.length === 0) return \"\";\n\n```\nreturn `\n<tr>\n  <td bgcolor=\"#FFFFFF\" style=\"background-color:#FFFFFF;padding:20px 28px 0;\">\n    <p style=\"margin:0 0 12px;font-family:${FONT_STD};font-size:11px;font-weight:600;color:${COLOR_MUTED};letter-spacing:1px;text-transform:uppercase;\">${title}</p>\n    <table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" role=\"presentation\" style=\"border:1px solid ${COLOR_BORDER};border-radius:8px;overflow:hidden;\">\n      <tr>\n        <th bgcolor=\"${COLOR_BG_LIGHT}\" style=\"background-color:${COLOR_BG_LIGHT};padding:10px 16px;font-family:${FONT_STD};font-size:10px;font-weight:600;color:${COLOR_MUTED};text-align:left;text-transform:uppercase;letter-spacing:0.5px;border-bottom:1px solid ${COLOR_BORDER};\">Entreprise</th>\n        <th bgcolor=\"${COLOR_BG_LIGHT}\" style=\"background-color:${COLOR_BG_LIGHT};padding:10px 16px;font-family:${FONT_STD};font-size:10px;font-weight:600;color:${COLOR_MUTED};text-align:left;text-transform:uppercase;letter-spacing:0.5px;border-bottom:1px solid ${COLOR_BORDER};\">Source</th>\n        <th bgcolor=\"${COLOR_BG_LIGHT}\" style=\"background-color:${COLOR_BG_LIGHT};padding:10px 16px;font-family:${FONT_STD};font-size:10px;font-weight:600;color:${COLOR_MUTED};text-align:right;text-transform:uppercase;letter-spacing:0.5px;border-bottom:1px solid ${COLOR_BORDER};\">Statut</th>\n      </tr>\n      ${list.map((company, index) => {\n        const bg = index % 2 === 0 ? \"#FFFFFF\" : COLOR_BG_LIGHT;\n\n        let sourceHtml = `<strong>${anonymizeSource(company.source_primary)}</strong>`;\n\n        if (\n          company.old_source_primary &&\n          company.source_primary &&\n          company.old_source_primary !== company.source_primary\n        ) {\n          sourceHtml = `<span style=\"color:${COLOR_MUTED};text-decoration:line-through;font-size:11px;\">${anonymizeSource(company.old_source_primary)}</span> &rarr; <strong>${anonymizeSource(company.source_primary)}</strong>`;\n        }\n\n        return `\n        <tr>\n          <td bgcolor=\"${bg}\" style=\"background-color:${bg};padding:11px 16px;font-family:${FONT_STD};font-size:13px;color:${COLOR_SECONDARY};border-bottom:1px solid #F0F0F0;\">${company.display_name}</td>\n          <td bgcolor=\"${bg}\" style=\"background-color:${bg};padding:11px 16px;font-family:${FONT_STD};font-size:13px;color:${COLOR_SECONDARY};border-bottom:1px solid #F0F0F0;\">${sourceHtml}</td>\n          <td bgcolor=\"${bg}\" style=\"background-color:${bg};padding:11px 16px;text-align:right;border-bottom:1px solid #F0F0F0;\">\n            <span style=\"display:inline-block;background-color:${badgeBg};color:${badgeColor};font-family:${FONT_STD};font-size:10px;font-weight:700;padding:3px 8px;border-radius:4px;letter-spacing:0.3px;\">${badgeText}</span>\n          </td>\n        </tr>`;\n      }).join(\"\")}\n    </table>\n  </td>\n</tr>`;\n```\n\n};\n\nconst generateAllSubTable = () => {\nif (!allSubscribedList || allSubscribedList.length === 0) return \"\";\n\n```\nreturn `\n<tr>\n  <td bgcolor=\"#FFFFFF\" style=\"background-color:#FFFFFF;padding:32px 28px 0;\">\n    <p style=\"margin:0 0 12px;font-family:${FONT_STD};font-size:11px;font-weight:600;color:${COLOR_MUTED};letter-spacing:1px;text-transform:uppercase;\">Liste complète des abonnés (${countAllSub})</p>\n    <table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" role=\"presentation\" style=\"border:1px solid ${COLOR_BORDER};border-radius:8px;overflow:hidden;\">\n      <tr>\n        <th bgcolor=\"${COLOR_BG_LIGHT}\" style=\"background-color:${COLOR_BG_LIGHT};padding:10px 16px;font-family:${FONT_STD};font-size:10px;font-weight:600;color:${COLOR_MUTED};text-align:left;text-transform:uppercase;letter-spacing:0.5px;border-bottom:1px solid ${COLOR_BORDER};\">Entreprise</th>\n        <th bgcolor=\"${COLOR_BG_LIGHT}\" style=\"background-color:${COLOR_BG_LIGHT};padding:10px 16px;font-family:${FONT_STD};font-size:10px;font-weight:600;color:${COLOR_MUTED};text-align:right;text-transform:uppercase;letter-spacing:0.5px;border-bottom:1px solid ${COLOR_BORDER};\">Source active</th>\n      </tr>\n      ${allSubscribedList.map((company, index) => {\n        const bg = index % 2 === 0 ? \"#FFFFFF\" : COLOR_BG_LIGHT;\n\n        return `\n        <tr>\n          <td bgcolor=\"${bg}\" style=\"background-color:${bg};padding:11px 16px;font-family:${FONT_STD};font-size:13px;color:${COLOR_SECONDARY};border-bottom:1px solid #F0F0F0;\">${company.display_name}</td>\n          <td bgcolor=\"${bg}\" style=\"background-color:${bg};padding:11px 16px;font-family:${FONT_STD};font-size:13px;color:${COLOR_SECONDARY};text-align:right;border-bottom:1px solid #F0F0F0;\"><strong>${anonymizeSource(company.source_primary)}</strong></td>\n        </tr>`;\n      }).join(\"\")}\n    </table>\n  </td>\n</tr>`;\n```\n\n};\n\nreturn `\n\n<table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" role=\"presentation\" bgcolor=\"${COLOR_BG_LIGHT}\" style=\"background-color:${COLOR_BG_LIGHT};font-family:${FONT_STD};\">\n  <tr>\n    <td align=\"center\" style=\"padding:32px 16px;\">\n      <table width=\"560\" cellpadding=\"0\" cellspacing=\"0\" role=\"presentation\">\n\n```\n    <tr>\n      <td bgcolor=\"${COLOR_PRIMARY}\" style=\"background-color:${COLOR_PRIMARY};border-radius:16px 16px 0 0;padding:24px 28px;\">\n        <table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" role=\"presentation\">\n          <tr>\n            <td valign=\"middle\">\n              <span style=\"font-family:${FONT_MAIN};font-size:17px;font-weight:700;color:#FFFFFF;letter-spacing:-0.3px;\">Client anonymisé</span>\n            </td>\n            <td align=\"right\" valign=\"middle\">\n              <span style=\"display:inline-block;background-color:${COLOR_ACCENT};color:#FFFFFF;font-family:${FONT_STD};font-size:10px;font-weight:700;letter-spacing:1px;padding:4px 10px;border-radius:4px;\">EXEMPLE</span>\n            </td>\n          </tr>\n        </table>\n      </td>\n    </tr>\n\n    <tr>\n      <td bgcolor=\"#FFFFFF\" style=\"background-color:#FFFFFF;padding:28px 28px 0;\">\n        <p style=\"margin:0 0 6px;font-family:${FONT_STD};font-size:11px;font-weight:600;color:${COLOR_ACCENT};letter-spacing:1px;text-transform:uppercase;\">\n          Mise à jour des abonnements\n        </p>\n        <h1 style=\"margin:0 0 6px;font-family:${FONT_MAIN};font-size:22px;font-weight:700;color:${COLOR_SECONDARY};line-height:1.2;\">\n          Modifications appliquées\n        </h1>\n        <p style=\"margin:0;font-family:${FONT_STD};font-size:14px;color:${COLOR_MUTED};line-height:1.5;\">\n          Le processus a modifié les statuts ou les sources de données pour un total de <b>${countTotal} entreprises</b>.\n        </p>\n      </td>\n    </tr>\n    \n    <tr>\n      <td bgcolor=\"#FFFFFF\" style=\"background-color:#FFFFFF;padding:20px 28px 0;\">\n        <div style=\"height:1px;background-color:${COLOR_BORDER};font-size:0;line-height:0;\">&nbsp;</div>\n      </td>\n    </tr>\n\n    <tr>\n      <td bgcolor=\"#FFFFFF\" style=\"background-color:#FFFFFF;padding:20px 28px 0;\">\n        <table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" role=\"presentation\">\n          <tr>\n            <td width=\"158\" valign=\"top\" bgcolor=\"${COLOR_INFO_BG}\" style=\"background-color:${COLOR_INFO_BG};border-radius:12px;padding:18px 16px;\">\n              <p style=\"margin:0 0 4px;font-family:${FONT_STD};font-size:10px;font-weight:600;color:${COLOR_INFO_TEXT};letter-spacing:0.5px;text-transform:uppercase;\">Modifiées</p>\n              <p style=\"margin:0 0 4px;font-family:${FONT_MAIN};font-size:28px;font-weight:700;color:${COLOR_INFO_TEXT};line-height:1.0;\">${countTotal}</p>\n              <p style=\"margin:0;font-family:${FONT_STD};font-size:11px;color:#64748B;\">Total des mises à jour</p>\n            </td>\n            <td width=\"15\" style=\"font-size:0;line-height:0;\">&nbsp;</td>\n            <td width=\"158\" valign=\"top\" bgcolor=\"#FFFFFF\" style=\"background-color:#FFFFFF;border:1px solid ${COLOR_BORDER};border-radius:12px;padding:18px 16px;\">\n              <p style=\"margin:0 0 4px;font-family:${FONT_STD};font-size:10px;font-weight:600;color:${COLOR_MUTED};letter-spacing:0.5px;text-transform:uppercase;\">Abonnées</p>\n              <p style=\"margin:0 0 4px;font-family:${FONT_MAIN};font-size:28px;font-weight:700;color:${COLOR_SUCCESS_TEXT};line-height:1.0;\">${countSub}</p>\n              <p style=\"margin:0;font-family:${FONT_STD};font-size:11px;color:${COLOR_MUTED};\">Nouvellement actives</p>\n            </td>\n            <td width=\"15\" style=\"font-size:0;line-height:0;\">&nbsp;</td>\n            <td width=\"158\" valign=\"top\" bgcolor=\"#FFFFFF\" style=\"background-color:#FFFFFF;border:1px solid ${COLOR_BORDER};border-radius:12px;padding:18px 16px;\">\n              <p style=\"margin:0 0 4px;font-family:${FONT_STD};font-size:10px;font-weight:600;color:${COLOR_MUTED};letter-spacing:0.5px;text-transform:uppercase;\">Désabonnées</p>\n              <p style=\"margin:0 0 4px;font-family:${FONT_MAIN};font-size:28px;font-weight:700;color:${COLOR_DANGER_TEXT};line-height:1.0;\">${countUnsub}</p>\n              <p style=\"margin:0;font-family:${FONT_STD};font-size:11px;color:${COLOR_MUTED};\">Désactivées</p>\n            </td>\n          </tr>\n        </table>\n      </td>\n    </tr>\n\n    ${generateChangeTable(\"Abonnements confirmés\", newlySubscribed, \"Abonnée\", COLOR_SUCCESS_BG, COLOR_SUCCESS_TEXT)}\n    ${generateChangeTable(\"Changements de source\", sourceChanged, \"Modifiée\", COLOR_INFO_BG, COLOR_INFO_TEXT)}\n    ${generateChangeTable(\"Abonnements résiliés\", newlyUnsubscribed, \"Désabonnée\", COLOR_DANGER_BG, COLOR_DANGER_TEXT)}\n    ${generateAllSubTable()}\n\n    <tr>\n      <td bgcolor=\"#FFFFFF\" style=\"background-color:#FFFFFF;padding:28px 28px 0;\">\n        <table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" role=\"presentation\">\n          <tr>\n            <td bgcolor=\"${COLOR_SUCCESS_BG}\" style=\"background-color:${COLOR_SUCCESS_BG};border-left:4px solid #2D6A4F;border-radius:0 8px 8px 0;padding:12px 16px;\">\n              <p style=\"margin:0;font-family:${FONT_STD};font-size:12px;color:${COLOR_SUCCESS_TEXT};line-height:1.5;\">\n                ✓ <strong>Mise à jour enregistrée</strong> &mdash; La table de suivi et les sources ont été synchronisées avec ces paramètres.\n              </p>\n            </td>\n          </tr>\n        </table>\n      </td>\n    </tr>\n\n    <tr>\n      <td bgcolor=\"#FFFFFF\" style=\"background-color:#FFFFFF;height:32px;font-size:0;line-height:0;\">&nbsp;</td>\n    </tr>\n\n    <tr>\n      <td bgcolor=\"${COLOR_SECONDARY}\" style=\"background-color:${COLOR_SECONDARY};border-radius:0 0 16px 16px;padding:20px 28px;\">\n        <table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" role=\"presentation\">\n          <tr>\n            <td valign=\"middle\">\n              <p style=\"margin:0 0 2px;font-family:${FONT_STD};font-size:12px;font-weight:600;color:#FFFFFF;\">Client anonymisé</p>\n              <p style=\"margin:0;font-family:${FONT_STD};font-size:11px;color:${COLOR_MUTED};\">Service automatisation</p>\n            </td>\n            <td align=\"right\" valign=\"middle\">\n              <p style=\"margin:0;font-family:${FONT_STD};font-size:11px;color:#495057;\">Envoi automatique &mdash; Ne pas répondre</p>\n            </td>\n          </tr>\n        </table>\n      </td>\n    </tr>\n\n  </table>\n</td>\n```\n\n  </tr>\n</table>\n  `;\n})()\n}}\n"
+      },
+      "type": "n8n-nodes-base.html",
+      "typeVersion": 1.2,
+      "position": [
+        4320,
+        2080
+      ],
+      "id": "f7856a06-208c-486c-af1e-839c408985b6",
+      "name": "Generate Report"
+    },
+    {
+      "parameters": {
+        "toRecipients": "={{ $('Portal Entry Trigger').item.json.formQueryParameters.receiver }}",
+        "subject": "=Récapitulatif : Abonnements aux rapports mensuels {{ $('Portal Entry Trigger').item.json.formQueryParameters.source }}",
+        "bodyContent": "={{ $json.html }}",
+        "additionalFields": {
+          "bodyContentType": "html"
+        }
+      },
+      "type": "n8n-nodes-base.microsoftOutlook",
+      "typeVersion": 2,
+      "position": [
+        4544,
+        2080
+      ],
+      "id": "8ba82080-af2d-47cf-8f9b-630f5980d8ca",
+      "name": "Send Dispatch Summary",
+      "webhookId": "adebd32b-8155-4522-9ab6-2579b29f0a1c"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "dataTableId": {
+          "__rl": true,
+          "value": "pJ5eSclfktUVYhzi",
+          "mode": "list",
+          "cachedResultName": "Monthly_Report_Subscriptions",
+          "cachedResultUrl": "/projects/P12IYFJkigLfcsQb/datatables/pJ5eSclfktUVYhzi"
+        },
+        "matchType": "allConditions",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "siren",
+              "keyValue": "={{ $json.siren }}"
+            }
+          ]
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "budget_rev": "={{ $json.budget_rev }}",
+            "budget_margin": "={{ $json.budget_margin }}",
+            "budget_payroll": "={{ $json.budget_payroll }}",
+            "is_subscribed": "={{ $json.is_subscribed }}",
+            "source_primary": "={{ $json.source_primary }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "identifier_myu",
+              "displayName": "identifier_myu",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "identifier_pnl",
+              "displayName": "identifier_pnl",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "siren",
+              "displayName": "siren",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "name",
+              "displayName": "name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "is_subscribed",
+              "displayName": "is_subscribed",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "boolean",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "source_primary",
+              "displayName": "source_primary",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "budget_rev",
+              "displayName": "budget_rev",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "budget_margin",
+              "displayName": "budget_margin",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "budget_payroll",
+              "displayName": "budget_payroll",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "is_pending_review_myu",
+              "displayName": "is_pending_review_myu",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "boolean",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "is_pending_review_pnl",
+              "displayName": "is_pending_review_pnl",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "boolean",
+              "readOnly": false,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        3648,
+        2200
+      ],
+      "id": "446a54c7-5900-4218-8143-c894cbdd5fc5",
+      "name": "Apply Subs Changes"
+    },
+    {
+      "parameters": {
+        "fieldsToAggregate": {
+          "fieldToAggregate": [
+            {
+              "fieldToAggregate": "name"
+            },
+            {
+              "fieldToAggregate": "source_primary"
+            },
+            {
+              "fieldToAggregate": "is_subscribed"
+            },
+            {
+              "fieldToAggregate": "old_source_primary"
+            },
+            {
+              "fieldToAggregate": "old_subscribed_state"
+            },
+            {
+              "fieldToAggregate": "is_modified"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        4096,
+        2080
+      ],
+      "id": "f712a5b1-b564-4f87-ada9-158dc0a351db",
+      "name": "Aggregate Changes"
+    },
+    {
+      "parameters": {
+        "jsCode": "const entities = $input.all().map(item => item.json);\nconst fields = [];\n\n// --- CONFIGURATION TO BE MODIFIED HERE ---\nconst DISABLED_LABEL = \"Pas de synthèse\";\nconst HARDCODED_SOURCES = [\"MyUnisoft\", \"Pennylane\"]; \n\n// Dynamic construction of the list of options\nconst sourceOptions = HARDCODED_SOURCES.map(s => ({ option: s }));\nsourceOptions.push({ option: DISABLED_LABEL });\n\nentities.forEach(entity => {\n  const siren = entity.siren;\n  const name = entity.name;\n  const isSubscribed = entity.is_subscribed == true;\n  \n  // HTML display\n  fields.push({\n    fieldLabel: \"\", \n    fieldType: \"html\", \n    fieldName: `header_${siren}`,\n    html: `<div><strong>${name}</strong> <small>(SIREN: ${siren})</small></div>`\n  });\n\n  // Hidden fields\n  fields.push({\n    fieldLabel: `name_field_${siren}`, \n    fieldType: \"hiddenField\",\n    fieldName: `name_field_${siren}`,\n    fieldValue: name\n  });\n\n  fields.push({\n    fieldLabel: `old_source_${siren}`, \n    fieldType: \"hiddenField\",\n    fieldName: `old_source_${siren}`,\n    fieldValue: entity.source_primary || \"\"\n  });\n\n  fields.push({\n    fieldLabel: `old_sub_${siren}`, \n    fieldType: \"hiddenField\",\n    fieldName: `old_sub_${siren}`,\n    fieldValue: isSubscribed ? \"true\" : \"false\"\n  });\n\n  // Visible fields\n  \n  fields.push({\n    fieldLabel: `source_${siren}`,\n    fieldType: \"dropdown\",\n    fieldName: `source_${siren}`,\n    fieldOptions: { values: sourceOptions },\n    defaultValue: (isSubscribed && entity.source_primary) ? entity.source_primary : DISABLED_LABEL\n  });\n\n  fields.push({\n    fieldLabel: `budget_rev_${siren}`,\n    fieldType: \"number\",\n    fieldName: `budget_rev_${siren}`,\n    defaultValue: entity.budget_rev || 0\n  });\n\n  fields.push({\n    fieldLabel: `budget_margin_${siren}`,\n    fieldType: \"number\",\n    fieldName: `budget_margin_${siren}`,\n    defaultValue: entity.budget_margin || 0\n  });\n\n  fields.push({\n    fieldLabel: `budget_payroll_${siren}`,\n    fieldType: \"number\",\n    fieldName: `budget_payroll_${siren}`,\n    defaultValue: entity.budget_payroll || 0\n  });\n});\n\nreturn {\n  formConfig: JSON.stringify(fields),\n  count: entities.length,\n  disabledLabel: DISABLED_LABEL,\n  hardcodedSources: HARDCODED_SOURCES\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3648,
+        2392
+      ],
+      "id": "9d1cee84-d0e3-40ee-9b84-f471bd1cf53d",
+      "name": "Build Form Options"
+    },
+    {
+      "parameters": {
+        "sortFieldsUi": {
+          "sortField": [
+            {
+              "fieldName": "name"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.sort",
+      "typeVersion": 1,
+      "position": [
+        3200,
+        2368
+      ],
+      "id": "e089cc0d-0234-4c7f-a1a6-3d16ae4cbdf6",
+      "name": "Alphabetical Sort"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $('Portal Entry Trigger').item.json['Que voulez-vous faire ?'] }}",
+                    "rightValue": "Tout est bon",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    },
+                    "id": "04685593-0ea5-4968-835a-0114aeb229c3"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Validate"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "6fb76e73-0cad-4374-802c-11cdb4140261",
+                    "leftValue": "={{ $('Portal Entry Trigger').item.json['Que voulez-vous faire ?'] }}",
+                    "rightValue": "Modifier",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Configure"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "af616143-6c3f-43af-9b94-650d5d5ac385",
+                    "leftValue": "={{ $('Portal Entry Trigger').item.json['Que voulez-vous faire ?'] }}",
+                    "rightValue": "Annuler",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Cancel"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        2976,
+        2376
+      ],
+      "id": "666dcc0d-b206-4227-a728-79c37ea8bdd4",
+      "name": "Route by Choice"
+    },
+    {
+      "parameters": {
+        "operation": "completion",
+        "completionTitle": "Opération annulée",
+        "completionMessage": "Aucune synthèse ne sera envoyée ce mois-ci. Vous pouvez fermer cet onglet.",
+        "options": {
+          "customCss": "@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=DM+Sans:wght@300;400;500;600&display=swap');\n\n:root {\n  --green-deep: #1B4332;\n  --navy:       #1A1A2E;\n  --gold:       #E9A800;\n  --cream:      #F5F4F0;\n  --white:      #FFFFFF;\n  --border:     #E2DDD5;\n  --text-muted: #8A8A9A;\n}\n\n* {\n  font-family: 'DM Sans', sans-serif !important;\n  box-sizing: border-box !important;\n}\n\n/* ── Centered background ── */\nhtml, body {\n  min-height: 100vh !important;\n  background-color: var(--cream) !important;\n  display: flex !important;\n  align-items: center !important;\n  justify-content: center !important;\n  margin: 0 !important;\n  padding: 0 !important;\n}\n\n/* ── Container: pure centering ── */\n.container {\n  width: 100% !important;\n  max-width: 540px !important;\n  padding: 40px 20px !important;\n  margin: 0 auto !important;\n  background: transparent !important;\n  border: none !important;\n  box-shadow: none !important;\n  text-align: center !important;\n}\n\n/* ── Section: invisible ── */\nsection {\n  background: transparent !important;\n  border: none !important;\n  box-shadow: none !important;\n  padding: 0 !important;\n  margin: 0 !important;\n}\n\n/* ── Card ── */\n.card {\n  background: var(--white) !important;\n  border: 1px solid var(--border) !important;\n  border-top: none !important;\n  border-radius: 0 !important;\n  box-shadow: 0 0 0 1px var(--border), 0 8px 40px rgba(26,26,46,0.08) !important;\n  padding: 0 !important;\n  margin-bottom: 0 !important;\n  position: relative !important;\n  overflow: visible !important;\n}\n\n/* ── Red band at the top ── */\n.card::before {\n  content: '' !important;\n  display: block !important;\n  height: 4px !important;\n  background: linear-gradient(90deg, #7B2D2D, #C0392B, #7B2D2D) !important;\n  position: absolute !important;\n  top: 0 !important;\n  left: 0 !important;\n  right: 0 !important;\n  margin: 0 !important;\n  padding: 0 !important;\n}\n\n/* ── Header with icon ✕ ── */\n.header {\n  padding: 52px 48px 48px !important;\n  text-align: center !important;\n}\n\n.header::before {\n  content: '✕' !important;\n  display: flex !important;\n  align-items: center !important;\n  justify-content: center !important;\n  width: 56px !important;\n  height: 56px !important;\n  background: #FDF0EF !important;\n  color: #B03A2E !important;\n  font-size: 20px !important;\n  font-weight: 700 !important;\n  border: 1px solid #EBC5C1 !important;\n  margin: 0 auto 24px !important;\n}\n\n/* ── Title ── */\n.header h1 {\n  font-family: 'Playfair Display', serif !important;\n  font-size: 24px !important;\n  font-weight: 600 !important;\n  color: var(--navy) !important;\n  letter-spacing: -0.3px !important;\n  line-height: 1.3 !important;\n  padding: 0 !important;\n  margin: 0 0 14px !important;\n}\n\n/* ── Description ── */\n.header p {\n  font-size: 14px !important;\n  color: var(--text-muted) !important;\n  line-height: 1.7 !important;\n  padding: 0 !important;\n  margin: 0 !important;\n}\n\n/* ── Discreet n8n footer ── */\n.n8n-link {\n  padding: 20px 0 16px !important;\n  text-align: center !important;\n}\n.n8n-link a {\n  color: var(--border) !important;\n  font-size: 10px !important;\n  text-decoration: none !important;\n}\n.n8n-link svg path { fill: var(--border) !important; }"
+        }
+      },
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 2.5,
+      "position": [
+        3200,
+        2560
+      ],
+      "id": "752f366a-f8bd-4e96-a559-b90c598c0fe8",
+      "name": "End - Cancelled",
+      "webhookId": "2a58c688-767e-46fb-a595-2971f92f64d2"
+    },
+    {
+      "parameters": {
+        "operation": "completion",
+        "completionTitle": "Tout est enregistré",
+        "completionMessage": "=Les dossiers {{ $('Portal Entry Trigger').item.json.formQueryParameters.source }} ont bien été traités. Un récapitulatif vient de vous être envoyé à l'adresse mail {{ $('Portal Entry Trigger').item.json.formQueryParameters.receiver }}.",
+        "options": {
+          "formTitle": "Configuration terminée",
+          "customCss": "@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=DM+Sans:wght@300;400;500;600&display=swap');\n\n:root {\n  --green-deep: #1B4332;\n  --navy:       #1A1A2E;\n  --gold:       #E9A800;\n  --cream:      #F5F4F0;\n  --white:      #FFFFFF;\n  --border:     #E2DDD5;\n  --text-muted: #8A8A9A;\n}\n\n* {\n  font-family: 'DM Sans', sans-serif !important;\n  box-sizing: border-box !important;\n}\n\n/* ── Centered cream background ── */\nhtml, body {\n  min-height: 100vh !important;\n  background-color: var(--cream) !important;\n  background-image:\n    radial-gradient(ellipse at 20% 50%, rgba(27,67,50,0.05) 0%, transparent 60%),\n    radial-gradient(ellipse at 80% 20%, rgba(233,168,0,0.05) 0%, transparent 60%) !important;\n  display: flex !important;\n  align-items: center !important;\n  justify-content: center !important;\n  margin: 0 !important;\n  padding: 0 !important;\n}\n\n/* ── Container centered ── */\n.container {\n  width: 100% !important;\n  max-width: 540px !important;\n  padding: 40px 20px !important;\n  margin: 0 auto !important;\n  background: transparent !important;\n  border: none !important;\n  box-shadow: none !important;\n  text-align: center !important;\n}\n\n/* ── Invisible section ── */\nsection {\n  background: transparent !important;\n  border: none !important;\n  box-shadow: none !important;\n  padding: 0 !important;\n  margin: 0 !important;\n}\n\n/* ── Card ── */\n.card {\n  background: var(--white) !important;\n  border: 1px solid var(--border) !important;\n  border-top: none !important;\n  border-radius: 0 !important;\n  box-shadow: 0 0 0 1px var(--border), 0 8px 40px rgba(26,26,46,0.08) !important;\n  padding: 0 !important;\n  margin-bottom: 0 !important;\n  position: relative !important;\n  overflow: visible !important;\n}\n\n/* ── Green→gold gradient band at the top of the card ── */\n.card::before {\n  content: '' !important;\n  display: block !important;\n  height: 4px !important;\n  background: linear-gradient(90deg, var(--green-deep), var(--gold), var(--green-deep)) !important;\n  position: absolute !important;\n  top: 0 !important;\n  left: 0 !important;\n  right: 0 !important;\n  margin: 0 !important;\n  padding: 0 !important;\n}\n\n/* ── ✓ icon at the top of the header ── */\n.header {\n  padding: 52px 48px 48px !important;\n  text-align: center !important;\n}\n\n.header::before {\n  content: '✓' !important;\n  display: flex !important;\n  align-items: center !important;\n  justify-content: center !important;\n  width: 56px !important;\n  height: 56px !important;\n  background: #EDFAF3 !important;\n  color: var(--green-deep) !important;\n  font-size: 22px !important;\n  font-weight: 700 !important;\n  border: 1px solid #B7E4CC !important;\n  margin: 0 auto 24px !important;\n}\n\n/* ── Title ── */\n.header h1 {\n  font-family: 'Playfair Display', serif !important;\n  font-size: 24px !important;\n  font-weight: 600 !important;\n  color: var(--navy) !important;\n  letter-spacing: -0.3px !important;\n  line-height: 1.3 !important;\n  padding: 0 !important;\n  margin: 0 0 14px !important;\n}\n\n/* ── Description ── */\n.header p {\n  font-size: 14px !important;\n  color: var(--text-muted) !important;\n  line-height: 1.7 !important;\n  padding: 0 !important;\n  margin: 0 !important;\n}\n\n/* ── Gold line after text ── */\n.header p::after {\n  content: '' !important;\n  display: block !important;\n  width: 40px !important;\n  height: 2px !important;\n  background: var(--gold) !important;\n  margin: 24px auto 0 !important;\n}\n\n/* ── Discreet n8n footer ── */\n.n8n-link {\n  padding: 20px 0 16px !important;\n  text-align: center !important;\n}\n.n8n-link a {\n  color: var(--border) !important;\n  font-size: 10px !important;\n  text-decoration: none !important;\n}\n.n8n-link svg path { fill: var(--border) !important; }"
+        }
+      },
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 2.5,
+      "position": [
+        4768,
+        2080
+      ],
+      "id": "fe7e0c75-0963-46ae-ad95-0fc5f0b24488",
+      "name": "End - Success Completion",
+      "webhookId": "2a58c688-767e-46fb-a595-2971f92f64d2"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "9da5eb6e-6ac0-4f4e-a9ea-3fb9a83b8a12",
+              "leftValue": "={{ $('Portal Entry Trigger').item.json.formQueryParameters.redirect }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "e8ec951a-b97e-4f0d-8c24-3008577218ac",
+              "leftValue": "={{ $('Portal Entry Trigger').item.json.formQueryParameters.redirect }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        4992,
+        2080
+      ],
+      "id": "651ed8b0-2d55-4cbe-98f5-a253eae22aca",
+      "name": "Is Requested?"
+    },
+    {
+      "parameters": {
+        "url": "={{ $('Portal Entry Trigger').item.json.formQueryParameters.redirect }}",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "status",
+              "value": "cancel"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        3424,
+        2560
+      ],
+      "id": "3fc3f053-4f97-4bbd-a417-a1d25e16a76c",
+      "name": "Cancel - Redirection",
+      "executeOnce": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "url": "={{ $('Portal Entry Trigger').item.json.formQueryParameters.redirect }}",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "status",
+              "value": "success"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        5216,
+        2080
+      ],
+      "id": "dc6964b3-14ba-4e7c-aece-b7cd6d41d845",
+      "name": "Success - Redirection",
+      "executeOnce": true
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "040a83ef-d3da-4a73-a5e8-6951c22a6cdf",
+              "name": "name",
+              "value": "={{ $json.name }}",
+              "type": "string"
+            },
+            {
+              "id": "66f4011b-ff96-4afb-af86-7132be86021e",
+              "name": "source_primary",
+              "value": "={{ $json.source_primary }}",
+              "type": "string"
+            },
+            {
+              "id": "f2ae3852-9707-4786-be04-a3f8d0500530",
+              "name": "is_subscribed",
+              "value": "={{ $json.is_subscribed }}",
+              "type": "boolean"
+            },
+            {
+              "id": "9bc70cfc-c254-401a-a495-9cf25070296d",
+              "name": "old_source_primary",
+              "value": "={{ $('Batch Processing Loop').item.json.old_source_primary }}",
+              "type": "string"
+            },
+            {
+              "id": "c9e5e900-6ae5-4231-a0c3-25685005596e",
+              "name": "old_subscribed_state",
+              "value": "={{ $('Batch Processing Loop').item.json.old_subscribed_state }}",
+              "type": "string"
+            },
+            {
+              "id": "7ee6d4a0-98ba-4350-9580-d24d1b2d114b",
+              "name": "is_modified",
+              "value": "={{ $('Batch Processing Loop').item.json.is_modified }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        3872,
+        2200
+      ],
+      "id": "ece3b755-320d-40e6-88d6-59130d602516",
+      "name": "Shape Data for Report"
+    },
+    {
+      "parameters": {
+        "jsCode": "const partFormOutput = $input.first().json;\nconst config = $('Build Form Options').first().json;\nconst disabledLabel = config.disabledLabel;\n\n// Checks if at least one key from the form is present\nconst hasFormData = Object.keys(partFormOutput).some(key => key.startsWith('name_field_'));\n\n// CASE A: The user responded\nif (hasFormData) {\n  const data = partFormOutput;\n  const companies = {};\n\n  for (const key in data) {\n    if (key.startsWith('name_field_')) {\n      const siren = key.replace('name_field_', '');\n      const name = data[`name_field_${siren}`];\n      if (!name) continue;\n\n      const newSource = data[`source_${siren}`];\n      const isSub = newSource !== disabledLabel;\n      const oldSource = data[`old_source_${siren}`];\n      const oldSub = data[`old_sub_${siren}`] === 'true';\n\n      companies[siren] = {\n        name,\n        siren,\n        source_primary: isSub ? newSource : oldSource,\n        is_subscribed: isSub,\n        budget_rev: data[`budget_rev_${siren}`] ?? 0,\n        budget_margin: data[`budget_margin_${siren}`] ?? 0,\n        budget_payroll: data[`budget_payroll_${siren}`] ?? 0,\n        old_source_primary: oldSource,\n        old_subscribed_state: oldSub,\n        is_modified: (isSub !== oldSub) || (isSub === true && newSource !== oldSource)\n      };\n    }\n  }\n  return Object.values(companies).map(company => ({ json: company }));\n}\n\n// CASE B: Timeout (Auto-confirmation)\nreturn $('Batch Processing Loop').all().map(item => {\n  const entity = item.json;\n  return {\n    json: {\n      name: entity.name,\n      siren: entity.siren,\n      source_primary: entity.source_primary,\n      is_subscribed: entity.is_subscribed == true,\n      budget_rev: entity.budget_rev || 0,\n      budget_margin: entity.budget_margin || 0,\n      budget_payroll: entity.budget_payroll || 0,\n      old_source_primary: entity.source_primary,\n      old_subscribed_state: entity.is_subscribed == true,\n      is_modified: false\n    }\n  };\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        4096,
+        2416
+      ],
+      "id": "83fe5c9e-dc61-4344-bb67-e2bc8402c537",
+      "name": "Parse User Response"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "dataTableId": {
+          "__rl": true,
+          "value": "pJ5eSclfktUVYhzi",
+          "mode": "list",
+          "cachedResultName": "Monthly_Report_Subscriptions",
+          "cachedResultUrl": "/projects/P12IYFJkigLfcsQb/datatables/pJ5eSclfktUVYhzi"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "is_pending_review_pnl",
+              "condition": "isTrue"
+            }
+          ]
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "is_pending_review_pnl": false
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "identifier_myu",
+              "displayName": "identifier_myu",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "identifier_pnl",
+              "displayName": "identifier_pnl",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "siren",
+              "displayName": "siren",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "name",
+              "displayName": "name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "is_subscribed",
+              "displayName": "is_subscribed",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "boolean",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "source_primary",
+              "displayName": "source_primary",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "budget_rev",
+              "displayName": "budget_rev",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "budget_margin",
+              "displayName": "budget_margin",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "budget_payroll",
+              "displayName": "budget_payroll",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "is_pending_review_myu",
+              "displayName": "is_pending_review_myu",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "boolean",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "is_pending_review_pnl",
+              "displayName": "is_pending_review_pnl",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "boolean",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        2752,
+        2392
+      ],
+      "id": "f8be6622-9a6e-4731-b829-1dcc95c9b146",
+      "name": "Reset Flags"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Portal Entry Trigger": {
+      "main": [
+        [
+          {
+            "node": "Reset Flags",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Batch Processing Loop": {
+      "main": [
+        [
+          {
+            "node": "Apply Subs Changes",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Build Form Options",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Interactive Subscription Form": {
+      "main": [
+        [
+          {
+            "node": "Parse User Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Report": {
+      "main": [
+        [
+          {
+            "node": "Send Dispatch Summary",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Apply Subs Changes": {
+      "main": [
+        [
+          {
+            "node": "Shape Data for Report",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate Changes": {
+      "main": [
+        [
+          {
+            "node": "Generate Report",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Form Options": {
+      "main": [
+        [
+          {
+            "node": "Interactive Subscription Form",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Alphabetical Sort": {
+      "main": [
+        [
+          {
+            "node": "Batch Processing Loop",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Route by Choice": {
+      "main": [
+        [
+          {
+            "node": "Aggregate Changes",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Alphabetical Sort",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "End - Cancelled",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Dispatch Summary": {
+      "main": [
+        [
+          {
+            "node": "End - Success Completion",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Is Requested?": {
+      "main": [
+        [
+          {
+            "node": "Success - Redirection",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Shape Data for Report": {
+      "main": [
+        [
+          {
+            "node": "Aggregate Changes",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "End - Cancelled": {
+      "main": [
+        [
+          {
+            "node": "Cancel - Redirection",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "End - Success Completion": {
+      "main": [
+        [
+          {
+            "node": "Is Requested?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse User Response": {
+      "main": [
+        [
+          {
+            "node": "Batch Processing Loop",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Reset Flags": {
+      "main": [
+        [
+          {
+            "node": "Route by Choice",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "785f0b0b-a51b-4590-a94e-c9936e5f10b2",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "6c558c414da21e3a3de7a733b22e8d1f3995630ab97eb345fcacecab82fb2a58"
+  },
+  "id": "oDYaYkRHhkD0iAsE",
+  "tags": []
+}

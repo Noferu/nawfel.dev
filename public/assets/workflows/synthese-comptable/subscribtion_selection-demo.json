@@ -1,0 +1,1433 @@
+{
+  "name": "[SUB] Sélection d'Abonnement",
+  "nodes": [
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "pJ5eSclfktUVYhzi",
+          "mode": "list",
+          "cachedResultName": "Monthly_Report_Subscriptions",
+          "cachedResultUrl": "/projects/P12IYFJkigLfcsQb/datatables/pJ5eSclfktUVYhzi"
+        },
+        "matchType": "allConditions",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "siren",
+              "keyValue": "={{ $json.siren }}"
+            }
+          ]
+        },
+        "returnAll": true
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        2528,
+        1376
+      ],
+      "id": "beecae18-59f8-448a-8f58-616cf0c0f34c",
+      "name": "Get Subscription State"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "fieldsToMatchString": "siren",
+        "joinMode": "keepEverything",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        2976,
+        1472
+      ],
+      "id": "339b1073-8aa9-4ec5-aab0-ff6d4347bf26",
+      "name": "Consolidate Societies"
+    },
+    {
+      "parameters": {
+        "operation": "rowNotExists",
+        "dataTableId": {
+          "__rl": true,
+          "value": "pJ5eSclfktUVYhzi",
+          "mode": "list",
+          "cachedResultName": "Monthly_Report_Subscriptions",
+          "cachedResultUrl": "/projects/P12IYFJkigLfcsQb/datatables/pJ5eSclfktUVYhzi"
+        },
+        "matchType": "allConditions",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "siren",
+              "keyValue": "={{ $json.siren }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        2528,
+        1568
+      ],
+      "id": "35bfbdcd-082f-44ce-bd26-4afd7fb83bce",
+      "name": "Check if Society is New"
+    },
+    {
+      "parameters": {
+        "operation": "rowExists",
+        "dataTableId": {
+          "__rl": true,
+          "value": "pJ5eSclfktUVYhzi",
+          "mode": "list",
+          "cachedResultName": "Monthly_Report_Subscriptions",
+          "cachedResultUrl": "/projects/P12IYFJkigLfcsQb/datatables/pJ5eSclfktUVYhzi"
+        },
+        "matchType": "allConditions",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "siren",
+              "keyValue": "={{ $json.siren }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        2304,
+        1376
+      ],
+      "id": "10a5ddd6-7263-4ab3-8bb5-afb1d3ad9956",
+      "name": "Check if Society Exists"
+    },
+    {
+      "parameters": {
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "identifier"
+            },
+            {
+              "name": "source_primary"
+            },
+            {
+              "name": "name"
+            },
+            {
+              "name": "siren"
+            },
+            {
+              "name": "receiver"
+            }
+          ]
+        }
+      },
+      "id": "06975c2c-a995-43dc-8595-43901f5b36d8",
+      "typeVersion": 1.1,
+      "name": "Start",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "position": [
+        2080,
+        1472
+      ]
+    },
+    {
+      "parameters": {
+        "html": "{{\n(() => {\nconst FONT_MAIN = \"-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif\";\nconst FONT_STD = \"Arial,sans-serif\";\nconst COLOR_PRIMARY = \"#1B4332\";\nconst COLOR_SECONDARY = \"#1A1A2E\";\nconst COLOR_WARNING = \"#E9A800\";\nconst COLOR_MUTED = \"#868E96\";\nconst COLOR_BG_LIGHT = \"#F8F9FA\";\nconst COLOR_ALERT_BG = \"#FFF3CD\";\nconst COLOR_ALERT_TEXT = \"#856404\";\nconst COLOR_BORDER = \"#E9ECEF\";\n\nconst receiverEmail = \"[example@outlook.fr](mailto:example@outlook.fr)\";\nconst triggerSource = $json.source_primary || \"Système automatisé\";\nconst limit = $json.limitTime;\n\nconst formUrl = `https://example.com/form/subscription-management-portal?receiver=${receiverEmail}&redirect=example_redirect_url&source=${triggerSource}`;\n\nconst count = ($json.siren || []).length;\nconst timeStr = $now.setZone('Europe/Paris').plus({ hours: limit }).setLocale('fr').toFormat(\"EEEE d MMMM 'à' HH:mm\");\nconst plural = count > 1 ? 's' : '';\n\nreturn `\n\n<table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" role=\"presentation\" bgcolor=\"${COLOR_BG_LIGHT}\" style=\"background-color:${COLOR_BG_LIGHT};\">\n   <tr>\n      <td align=\"center\" style=\"padding:24px 16px;\">\n         <table width=\"560\" cellpadding=\"0\" cellspacing=\"0\" role=\"presentation\">\n\n```\n        <tr>\n           <td bgcolor=\"${COLOR_PRIMARY}\" style=\"background-color:${COLOR_PRIMARY};border-radius:16px 16px 0 0;padding:24px 28px;\">\n              <table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" role=\"presentation\">\n                 <tr>\n                    <td valign=\"middle\">\n                       <span style=\"font-family:${FONT_MAIN};font-size:17px;font-weight:700;color:#FFFFFF;letter-spacing:-0.3px;\">\n                          Client anonymisé\n                       </span>\n                    </td>\n                    <td align=\"right\" valign=\"middle\">\n                       <span style=\"display:inline-block;background-color:${COLOR_WARNING};color:${COLOR_SECONDARY};font-family:${FONT_STD};font-size:10px;font-weight:700;letter-spacing:1px;padding:4px 10px;border-radius:4px;\">\n                          ACTION REQUISE\n                       </span>\n                    </td>\n                 </tr>\n              </table>\n           </td>\n        </tr>\n\n        <tr>\n           <td bgcolor=\"#FFFFFF\" style=\"background-color:#FFFFFF;padding:24px 28px 0;\">\n              <table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" role=\"presentation\">\n                 <tr>\n                    <td bgcolor=\"${COLOR_ALERT_BG}\" style=\"background-color:${COLOR_ALERT_BG};border-left:4px solid ${COLOR_WARNING};border-radius:0 8px 8px 0;padding:14px 18px;\">\n                       <p style=\"margin:0 0 4px;font-family:${FONT_STD};font-size:13px;font-weight:700;color:${COLOR_ALERT_TEXT};\">\n                          ⚡ Console de pilotage mutualisée\n                       </p>\n                       <p style=\"margin:0;font-family:${FONT_STD};font-size:13px;color:${COLOR_ALERT_TEXT};line-height:1.5;\">\n                          Ce formulaire centralise la gestion des abonnements. Toute modification sera automatiquement répercutée sur l'ensemble des sources de données connectées.\n                       </p>\n                    </td>\n                 </tr>\n              </table>\n           </td>\n        </tr>\n\n        <tr>\n           <td bgcolor=\"#FFFFFF\" style=\"background-color:#FFFFFF;padding:20px 28px;\">\n              <p style=\"margin:0 0 14px;font-family:${FONT_STD};font-size:14px;color:#495057;line-height:1.7;\">\n                 Bonjour,\n              </p>\n              <p style=\"margin:0 0 14px;font-family:${FONT_STD};font-size:14px;color:#495057;line-height:1.7;\">\n                 Le système de synthèses déclenché par le workflow <b>${triggerSource}</b> a identifié <b style=\"color:${COLOR_SECONDARY};\">${count} entreprise${plural}</b> éligible${plural} pour la période en cours.\n              </p>\n              <p style=\"margin:0 0 14px;font-family:${FONT_STD};font-size:14px;color:#495057;line-height:1.7;\">\n                 Veuillez valider les entités devant recevoir leur synthèse et renseigner les budgets associés via le bouton ci-dessous.\n              </p>\n\n              <div style=\"text-align:center;margin:24px 0;\">\n                 <a href=\"${formUrl}\" style=\"background-color:${COLOR_WARNING};color:${COLOR_BG_LIGHT};font-family:${FONT_MAIN};font-size:15px;font-weight:700;text-decoration:none;padding:12px 24px;border-radius:6px;display:inline-block;\">Accéder à la console</a>\n              </div>\n\n              <p style=\"margin:0;font-family:${FONT_STD};font-size:14px;color:#495057;line-height:1.7;\">\n                 <b>Attention :</b> l'envoi des synthèses est suspendu à la validation de ce formulaire, manuelle ou automatique.\n              </p>\n           </td>\n        </tr>\n\n        <tr>\n           <td bgcolor=\"#FFFFFF\" style=\"background-color:#FFFFFF;padding:0 28px;\">\n              <div style=\"height:1px;background-color:${COLOR_BORDER};font-size:0;line-height:0;\">&nbsp;</div>\n           </td>\n        </tr>\n\n        <tr>\n           <td bgcolor=\"#FFFFFF\" style=\"background-color:#FFFFFF;padding:20px 28px 0;\">\n              <table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" role=\"presentation\">\n                 <tr>\n                    <td width=\"50%\" valign=\"top\" bgcolor=\"${COLOR_BG_LIGHT}\" style=\"background-color:${COLOR_BG_LIGHT};border-radius:8px;padding:14px 16px;\">\n                       <p style=\"margin:0 0 2px;font-family:${FONT_STD};font-size:10px;font-weight:600;color:${COLOR_MUTED};text-transform:uppercase;letter-spacing:0.5px;\">Déclencheur</p>\n                       <p style=\"margin:0;font-family:${FONT_STD};font-size:14px;font-weight:700;color:${COLOR_SECONDARY};\">${triggerSource}</p>\n                    </td>\n                    <td width=\"16\" style=\"font-size:0;line-height:0;\">&nbsp;</td>\n                    <td width=\"50%\" valign=\"top\" bgcolor=\"${COLOR_BG_LIGHT}\" style=\"background-color:${COLOR_BG_LIGHT};border-radius:8px;padding:14px 16px;\">\n                       <p style=\"margin:0 0 2px;font-family:${FONT_STD};font-size:10px;font-weight:600;color:${COLOR_MUTED};text-transform:uppercase;letter-spacing:0.5px;\">Validation auto à</p>\n                       <p style=\"margin:0;font-family:${FONT_STD};font-size:14px;font-weight:700;color:${COLOR_WARNING};\">\n                          ${timeStr} (dans ${limit}h)\n                       </p>\n                    </td>\n                 </tr>\n              </table>\n           </td>\n        </tr>\n\n        <tr>\n           <td bgcolor=\"#FFFFFF\" style=\"background-color:#FFFFFF;height:28px;font-size:0;line-height:0;\">&nbsp;</td>\n        </tr>\n\n        <tr>\n           <td bgcolor=\"${COLOR_SECONDARY}\" style=\"background-color:${COLOR_SECONDARY};border-radius:0 0 16px 16px;padding:18px 28px;\">\n              <table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" role=\"presentation\">\n                 <tr>\n                    <td valign=\"middle\">\n                       <p style=\"margin:0 0 2px;font-family:${FONT_STD};font-size:12px;font-weight:600;color:#FFFFFF;\">Client anonymisé</p>\n                       <p style=\"margin:0;font-family:${FONT_STD};font-size:11px;color:${COLOR_MUTED};\">Service automatisation</p>\n                    </td>\n                    <td align=\"right\" valign=\"middle\">\n                       <p style=\"margin:0;font-family:${FONT_STD};font-size:11px;color:#495057;\">Envoi automatique</p>\n                    </td>\n                 </tr>\n              </table>\n           </td>\n        </tr>\n     </table>\n  </td>\n```\n\n   </tr>\n</table>\n  `;\n})()\n}}\n"
+      },
+      "type": "n8n-nodes-base.html",
+      "typeVersion": 1.2,
+      "position": [
+        3648,
+        1472
+      ],
+      "id": "e95221bf-a001-4bdd-92d3-2515b645f13c",
+      "name": "Generate Form Preamble"
+    },
+    {
+      "parameters": {
+        "toRecipients": "={{ $('Start').first().json.receiver }}",
+        "subject": "=Action requise : Mise à jour des abonnements aux rapports mensuels {{ $('Start').first().json.source_primary }}",
+        "bodyContent": "={{ $json.html }}",
+        "additionalFields": {
+          "bodyContentType": "html"
+        }
+      },
+      "type": "n8n-nodes-base.microsoftOutlook",
+      "typeVersion": 2,
+      "position": [
+        3872,
+        1472
+      ],
+      "id": "92bfe539-d832-4d1b-a400-24f93c615418",
+      "name": "Manage Subscriptions Form",
+      "webhookId": "efc6ba46-e7ac-4878-afc6-697d090f6b52"
+    },
+    {
+      "parameters": {
+        "resume": "webhook",
+        "limitWaitTime": true,
+        "resumeAmount": "={{ $('Set Variables').item.json.limitTime }}",
+        "options": {
+          "noResponseBody": true
+        }
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        4096,
+        1472
+      ],
+      "id": "bfe592af-e88b-4060-8cd4-690bea63d92b",
+      "name": "Wait Form Response",
+      "webhookId": "4c1a058c-c438-4850-97be-2067a497fd27"
+    },
+    {
+      "parameters": {
+        "fieldsToAggregate": {
+          "fieldToAggregate": [
+            {
+              "fieldToAggregate": "siren"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        3200,
+        1472
+      ],
+      "id": "21b65175-a155-41ee-a1eb-d6a0883152fa",
+      "name": "List SIREN"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "ab000d26-2d89-456e-8e78-423a15973712",
+              "name": "limitTime",
+              "value": 48,
+              "type": "number"
+            },
+            {
+              "id": "9bbd5c2d-46a1-4d2d-9f9d-7c3f4d0f265d",
+              "name": "siren",
+              "value": "={{ $json.siren }}",
+              "type": "array"
+            },
+            {
+              "id": "d5f60b77-62f0-47de-b740-43f8dff71d19",
+              "name": "source_primary",
+              "value": "={{ $('Start').first().json.source_primary }}",
+              "type": "string"
+            },
+            {
+              "id": "1c651c69-64f9-45b5-882d-1847f5c35bfb",
+              "name": "receiver",
+              "value": "={{ $('Start').first().json.receiver }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        3424,
+        1472
+      ],
+      "id": "8a7c422d-33b6-4c94-907c-3f31bffee77d",
+      "name": "Set Variables"
+    },
+    {
+      "parameters": {
+        "url": "https://n8n.srvXXXXXX.hstgr.cloud/api/v1/executions",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "status",
+              "value": "waiting"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        4544,
+        1472
+      ],
+      "id": "6442c43e-ea9a-4c81-8955-8099fba20181",
+      "name": "Get Waiting Workflows"
+    },
+    {
+      "parameters": {
+        "method": "DELETE",
+        "url": "=https://n8n.srvXXXXXX.hstgr.cloud/api/v1/executions/{{ $json.id }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        5216,
+        1280
+      ],
+      "id": "173ee7e9-65d9-44b8-9e72-faa310fda379",
+      "name": "Stop Workflow",
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "data",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        4768,
+        1280
+      ],
+      "id": "2d28fc4f-a07a-462a-8de5-76d86f08c790",
+      "name": "Split Workflows",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "b823fb89-c4fc-416b-8d28-f87bc78fcefa",
+              "leftValue": "={{ $json.status }}",
+              "rightValue": "waiting",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            },
+            {
+              "id": "c00a34f9-1a6f-4db5-82fa-5d8ad4d76bf5",
+              "leftValue": "={{ $json.workflowId }}",
+              "rightValue": "YyLKyNh0BOQEDlCe",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        4992,
+        1280
+      ],
+      "id": "b5c62932-0bf7-4f61-9f79-0b352721ab96",
+      "name": "Is Still Waiting?"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "siren",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        4992,
+        1568
+      ],
+      "id": "72ff7970-c253-4695-8f1b-1dde6a6ced96",
+      "name": "Split Identifiers"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "8c4ea9af-301f-45b8-ba2a-223c1f083f29",
+              "leftValue": "={{ $json.query.status }}",
+              "rightValue": "cancel",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        4320,
+        1472
+      ],
+      "id": "3c8f95cb-1dea-44cd-80eb-d49785e85cbb",
+      "name": "Is Successful?"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $('Start').first().json.source_primary }}",
+                    "rightValue": "MyUnisoft",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "33735937-534e-40ec-a1d2-ca4e18e862d9"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "MyUnisoft"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "6932375f-d019-40e2-9ca6-6d5b63d142e0",
+                    "leftValue": "={{ $('Start').first().json.source_primary }}",
+                    "rightValue": "Pennylane",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Pennylane"
+            }
+          ]
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        5216,
+        1472
+      ],
+      "id": "1ed88e2b-7191-41a8-972a-0cc968fb1afc",
+      "name": "Route by Source"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "dataTableId": {
+          "__rl": true,
+          "value": "pJ5eSclfktUVYhzi",
+          "mode": "list",
+          "cachedResultName": "Monthly_Report_Subscriptions",
+          "cachedResultUrl": "/projects/P12IYFJkigLfcsQb/datatables/pJ5eSclfktUVYhzi"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "is_pending_review_myu",
+              "condition": "isTrue"
+            }
+          ]
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "is_pending_review_myu": false
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "identifier_myu",
+              "displayName": "identifier_myu",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "identifier_pnl",
+              "displayName": "identifier_pnl",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "siren",
+              "displayName": "siren",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "name",
+              "displayName": "name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "is_subscribed",
+              "displayName": "is_subscribed",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "boolean",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "source_primary",
+              "displayName": "source_primary",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "budget_rev",
+              "displayName": "budget_rev",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "budget_margin",
+              "displayName": "budget_margin",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "budget_payroll",
+              "displayName": "budget_payroll",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "is_pending_review_myu",
+              "displayName": "is_pending_review_myu",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "boolean",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "is_pending_review_pnl",
+              "displayName": "is_pending_review_pnl",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "boolean",
+              "readOnly": false,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        5440,
+        1376
+      ],
+      "id": "f922974f-7236-4e99-a469-3a1f47f3eab6",
+      "name": "Reset Pending Flag (MYU)",
+      "executeOnce": false,
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "dataTableId": {
+          "__rl": true,
+          "value": "pJ5eSclfktUVYhzi",
+          "mode": "list",
+          "cachedResultName": "Monthly_Report_Subscriptions",
+          "cachedResultUrl": "/projects/P12IYFJkigLfcsQb/datatables/pJ5eSclfktUVYhzi"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "is_pending_review_pnl",
+              "condition": "isTrue"
+            }
+          ]
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "is_pending_review_pnl": false
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "identifier_myu",
+              "displayName": "identifier_myu",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "identifier_pnl",
+              "displayName": "identifier_pnl",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "siren",
+              "displayName": "siren",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "name",
+              "displayName": "name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "is_subscribed",
+              "displayName": "is_subscribed",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "boolean",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "source_primary",
+              "displayName": "source_primary",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "budget_rev",
+              "displayName": "budget_rev",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "budget_margin",
+              "displayName": "budget_margin",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "budget_payroll",
+              "displayName": "budget_payroll",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "is_pending_review_myu",
+              "displayName": "is_pending_review_myu",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "boolean",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "is_pending_review_pnl",
+              "displayName": "is_pending_review_pnl",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "boolean",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        5440,
+        1568
+      ],
+      "id": "4f800a07-4f32-4055-87a5-bc29e0aacf67",
+      "name": "Reset Pending Flag (PNL)",
+      "executeOnce": false,
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "90b3cab9-391c-4c61-ac70-bd246ca072fb",
+              "name": "siren",
+              "value": "={{ $('List SIREN').item.json.siren }}",
+              "type": "array"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        4768,
+        1568
+      ],
+      "id": "101867dc-5916-4cd0-bf54-34a97d4fdb82",
+      "name": "Retrieve Count"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "dataTableId": {
+          "__rl": true,
+          "value": "pJ5eSclfktUVYhzi",
+          "mode": "list",
+          "cachedResultName": "Monthly_Report_Subscriptions",
+          "cachedResultUrl": "/projects/P12IYFJkigLfcsQb/datatables/pJ5eSclfktUVYhzi"
+        },
+        "matchType": "allConditions",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "siren",
+              "keyValue": "={{ $('Start').item.json.siren }}"
+            }
+          ]
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "siren": "={{ $('Start').item.json.siren }}",
+            "name": "={{ $('Start').item.json.name }}",
+            "identifier_pnl": "={{ $('Start').item.json.source_primary === 'Pennylane' ? $('Start').item.json.identifier : $json.identifier_pnl }}",
+            "identifier_myu": "={{ $('Start').item.json.source_primary === 'MyUnisoft' ? $('Start').item.json.identifier : $json.identifier_myu }}",
+            "is_pending_review_myu": "={{ $('Start').item.json.source_primary === 'MyUnisoft' ? true : $json.is_pending_review_myu }}",
+            "is_pending_review_pnl": "={{ $('Start').item.json.source_primary === 'Pennylane' ? true : $json.is_pending_review_pnl }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "identifier_myu",
+              "displayName": "identifier_myu",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "identifier_pnl",
+              "displayName": "identifier_pnl",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "siren",
+              "displayName": "siren",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "name",
+              "displayName": "name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "is_subscribed",
+              "displayName": "is_subscribed",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "boolean",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "source_primary",
+              "displayName": "source_primary",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "budget_rev",
+              "displayName": "budget_rev",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "budget_margin",
+              "displayName": "budget_margin",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "budget_payroll",
+              "displayName": "budget_payroll",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "is_pending_review_myu",
+              "displayName": "is_pending_review_myu",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "boolean",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "is_pending_review_pnl",
+              "displayName": "is_pending_review_pnl",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "boolean",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        2752,
+        1376
+      ],
+      "id": "d475ff80-78fa-46cc-acfe-8c7c89380d5a",
+      "name": "Select & Update Society"
+    },
+    {
+      "parameters": {
+        "dataTableId": {
+          "__rl": true,
+          "value": "pJ5eSclfktUVYhzi",
+          "mode": "list",
+          "cachedResultName": "Monthly_Report_Subscriptions",
+          "cachedResultUrl": "/projects/P12IYFJkigLfcsQb/datatables/pJ5eSclfktUVYhzi"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "name": "={{ $json.name }}",
+            "siren": "={{ $json.siren }}",
+            "is_subscribed": true,
+            "source_primary": "={{ $json.source_primary }}",
+            "budget_rev": 0,
+            "budget_payroll": 0,
+            "budget_margin": 0,
+            "identifier_pnl": "={{ $('Start').first().json.source_primary === 'Pennylane' ? $('Start').item.json.identifier : 0 }}",
+            "identifier_myu": "={{ $('Start').first().json.source_primary === 'MyUnisoft' ? $('Start').item.json.identifier : 0 }}",
+            "is_pending_review_myu": "={{ $('Start').item.json.source_primary === 'MyUnisoft' }}",
+            "is_pending_review_pnl": "={{ $('Start').item.json.source_primary === 'Pennylane' }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "identifier_myu",
+              "displayName": "identifier_myu",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "identifier_pnl",
+              "displayName": "identifier_pnl",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "siren",
+              "displayName": "siren",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "name",
+              "displayName": "name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "is_subscribed",
+              "displayName": "is_subscribed",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "boolean",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "source_primary",
+              "displayName": "source_primary",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "budget_rev",
+              "displayName": "budget_rev",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "budget_margin",
+              "displayName": "budget_margin",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "budget_payroll",
+              "displayName": "budget_payroll",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "is_pending_review_myu",
+              "displayName": "is_pending_review_myu",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "boolean",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "is_pending_review_pnl",
+              "displayName": "is_pending_review_pnl",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "boolean",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        2752,
+        1568
+      ],
+      "id": "66b4d943-4436-46c4-9e8b-d33413a42156",
+      "name": "Select & Register New Society"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "94e4c0ef-ad65-4263-955f-f13b45607ce2",
+              "name": "identifier",
+              "value": "={{ $('Start').first().json.source_primary === 'MyUnisoft' ? $json.identifier_myu : $json.identifier_pnl }}",
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        5440,
+        1760
+      ],
+      "id": "a9eb1ed7-6b91-44df-b34c-c4cb425d658a",
+      "name": "Select & Shape Return"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "pJ5eSclfktUVYhzi",
+          "mode": "list",
+          "cachedResultName": "Monthly_Report_Subscriptions",
+          "cachedResultUrl": "/projects/P12IYFJkigLfcsQb/datatables/pJ5eSclfktUVYhzi"
+        },
+        "matchType": "allConditions",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "is_subscribed",
+              "condition": "isTrue"
+            },
+            {
+              "keyName": "source_primary",
+              "keyValue": "={{ $('Start').first().json.source_primary }}"
+            },
+            {
+              "keyName": "siren",
+              "keyValue": "={{ $json.siren }}"
+            }
+          ]
+        },
+        "returnAll": true
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        5216,
+        1760
+      ],
+      "id": "b7203081-6f34-4e3e-bc9f-6f8da2397c86",
+      "name": "Fetch Subbed",
+      "executeOnce": false
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Get Subscription State": {
+      "main": [
+        [
+          {
+            "node": "Select & Update Society",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Consolidate Societies": {
+      "main": [
+        [
+          {
+            "node": "List SIREN",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check if Society is New": {
+      "main": [
+        [
+          {
+            "node": "Select & Register New Society",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check if Society Exists": {
+      "main": [
+        [
+          {
+            "node": "Get Subscription State",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Start": {
+      "main": [
+        [
+          {
+            "node": "Check if Society Exists",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Check if Society is New",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Form Preamble": {
+      "main": [
+        [
+          {
+            "node": "Manage Subscriptions Form",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Manage Subscriptions Form": {
+      "main": [
+        [
+          {
+            "node": "Wait Form Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait Form Response": {
+      "main": [
+        [
+          {
+            "node": "Is Successful?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "List SIREN": {
+      "main": [
+        [
+          {
+            "node": "Set Variables",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Variables": {
+      "main": [
+        [
+          {
+            "node": "Generate Form Preamble",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Waiting Workflows": {
+      "main": [
+        [
+          {
+            "node": "Retrieve Count",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Split Workflows",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Workflows": {
+      "main": [
+        [
+          {
+            "node": "Is Still Waiting?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Is Still Waiting?": {
+      "main": [
+        [
+          {
+            "node": "Stop Workflow",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Identifiers": {
+      "main": [
+        [
+          {
+            "node": "Route by Source",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Fetch Subbed",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Is Successful?": {
+      "main": [
+        [
+          {
+            "node": "Get Waiting Workflows",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Route by Source": {
+      "main": [
+        [
+          {
+            "node": "Reset Pending Flag (MYU)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Reset Pending Flag (PNL)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Retrieve Count": {
+      "main": [
+        [
+          {
+            "node": "Split Identifiers",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Select & Update Society": {
+      "main": [
+        [
+          {
+            "node": "Consolidate Societies",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Select & Register New Society": {
+      "main": [
+        [
+          {
+            "node": "Consolidate Societies",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Fetch Subbed": {
+      "main": [
+        [
+          {
+            "node": "Select & Shape Return",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "341196ef-aba4-46c0-8a50-797951c5a6de",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "6c558c414da21e3a3de7a733b22e8d1f3995630ab97eb345fcacecab82fb2a58"
+  },
+  "id": "oDYaYkRHhkD0iAsE",
+  "tags": []
+}

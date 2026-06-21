@@ -24,20 +24,15 @@ function useInfiniteSlider(direction = "left", speed = 0.5) {
   const resumeTimer   = useRef(null);
   const hasDragged    = useRef(false);
 
-  // Pour le calcul de vélocité
   const lastX         = useRef(0);
   const lastT         = useRef(0);
   const velocityRef   = useRef(0);
-
-  // ── helpers ────────────────────────────────────────────────────────────────
 
   const clampPos = useCallback((p, segment) => {
     if (p > 0)        p -= segment;
     if (p < -segment) p += segment;
     return p;
   }, []);
-
-  // ── animation loop ─────────────────────────────────────────────────────────
 
   const startAnimation = useCallback(() => {
     if (rafRef.current) cancelAnimationFrame(rafRef.current);
@@ -75,10 +70,8 @@ function useInfiniteSlider(direction = "left", speed = 0.5) {
     resumeTimer.current = setTimeout(startAnimation, 5000);
   }, [startAnimation]);
 
-  // ── inertie ────────────────────────────────────────────────────────────────
-
-  const FRICTION   = 0.88;  // décélération par frame (0–1, plus bas = frein plus fort)
-  const MIN_VEL    = 0.3;   // en dessous : on arrête l'inertie
+  const FRICTION   = 0.88;
+  const MIN_VEL    = 0.3;
 
   const runInertia = useCallback(() => {
     if (rafRef.current) cancelAnimationFrame(rafRef.current);
@@ -104,17 +97,13 @@ function useInfiniteSlider(direction = "left", speed = 0.5) {
     rafRef.current = requestAnimationFrame(tick);
   }, [clampPos, scheduleResume]);
 
-  // ── lifecycle ──────────────────────────────────────────────────────────────
-
   useEffect(() => {
     startAnimation();
     return () => {
       stopAnimation();
       if (resumeTimer.current) clearTimeout(resumeTimer.current);
     };
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
-  // ── drag – mouse ───────────────────────────────────────────────────────────
+  }, []);
 
   const onMouseDown = useCallback(
     (e) => {
@@ -138,7 +127,6 @@ function useInfiniteSlider(direction = "left", speed = 0.5) {
     const delta = e.clientX - dragStartX.current;
     if (Math.abs(delta) > 5) hasDragged.current = true;
 
-    // Vélocité instantanée (px/frame ≈ px/ms * 16)
     const now = performance.now();
     const dt  = now - lastT.current;
     if (dt > 0) velocityRef.current = ((e.clientX - lastX.current) / dt) * 16;
@@ -153,7 +141,6 @@ function useInfiniteSlider(direction = "left", speed = 0.5) {
   const onMouseUp = useCallback(() => {
     if (!dragging.current) return;
     dragging.current = false;
-    // Lance l'inertie seulement si on avait une vélocité significative
     if (Math.abs(velocityRef.current) > MIN_VEL) {
       runInertia();
     } else {
@@ -249,7 +236,6 @@ export default function Projects() {
         </div>
       </div>
 
-      {/* Ligne 1 : featured → gauche */}
       <div
         className="projects-slider-wrapper"
         style={{ userSelect: "none", touchAction: "pan-y" }}
@@ -268,7 +254,6 @@ export default function Projects() {
         </div>
       </div>
 
-      {/* Ligne 2 : non-featured → droite */}
       <div
         className="projects-slider-wrapper"
         style={{ marginTop: "1rem", userSelect: "none", touchAction: "pan-y" }}
