@@ -5,6 +5,51 @@ import { projects } from "../data/projects";
 import "../styles/project-page.css";
 import N8nWorkflow from "../components/N8nWorkflow";
 
+const MONTHS_FR = [
+  "Janvier",
+  "Février",
+  "Mars",
+  "Avril",
+  "Mai",
+  "Juin",
+  "Juillet",
+  "Août",
+  "Septembre",
+  "Octobre",
+  "Novembre",
+  "Décembre",
+];
+
+function formatProjectDate(value) {
+  if (!value) return "";
+
+  const str = String(value).trim();
+
+  const monthYear = str.match(/^(\d{1,2})\/(\d{4})$/);
+
+  if (monthYear) {
+    const month = Number(monthYear[1]);
+    const year = monthYear[2];
+
+    if (month >= 1 && month <= 12) {
+      return `${MONTHS_FR[month - 1]} ${year}`;
+    }
+  }
+
+  const yearMonth = str.match(/^(\d{4})-(\d{1,2})$/);
+
+  if (yearMonth) {
+    const year = yearMonth[1];
+    const month = Number(yearMonth[2]);
+
+    if (month >= 1 && month <= 12) {
+      return `${MONTHS_FR[month - 1]} ${year}`;
+    }
+  }
+
+  return str;
+}
+
 export default function Project() {
   const { slug } = useParams();
   const navigate = useNavigate();
@@ -39,14 +84,15 @@ export default function Project() {
       ]
     : [];
 
-  // Index borné : si l'index dépasse (changement de projet), il est ramené
-  // dans les limites sans avoir besoin d'un effet de réinitialisation.
   const safeIdx = Math.min(mediaIdx, Math.max(0, allMedia.length - 1));
   const currentMedia = allMedia[safeIdx];
+  const projectDate = project ? formatProjectDate(project.period) : "";
 
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: "instant" });
+    window.scrollTo({ top: 0, behavior: "auto" });
+
     if (!pageRef.current) return;
+
     gsap.fromTo(
       pageRef.current,
       { opacity: 0, filter: "blur(12px)", y: 20 },
@@ -63,11 +109,20 @@ export default function Project() {
 
   useEffect(() => {
     const handler = (e) => {
-      if (e.key === "ArrowLeft" && prev) navigate(`/project/${prev.slug}`);
-      if (e.key === "ArrowRight" && next) navigate(`/project/${next.slug}`);
+      if (e.key === "ArrowLeft" && prev) {
+        navigate(`/project/${prev.slug}`);
+      }
+
+      if (e.key === "ArrowRight" && next) {
+        navigate(`/project/${next.slug}`);
+      }
     };
+
     window.addEventListener("keydown", handler);
-    return () => window.removeEventListener("keydown", handler);
+
+    return () => {
+      window.removeEventListener("keydown", handler);
+    };
   }, [prev, next, navigate]);
 
   if (!project) {
@@ -89,6 +144,7 @@ export default function Project() {
           <button className="proj-back-btn" onClick={() => navigate("/")}>
             ← Retour
           </button>
+
           <div className="proj-siblings">
             {prev && (
               <button
@@ -98,6 +154,7 @@ export default function Project() {
                 ← {prev.title}
               </button>
             )}
+
             {next && (
               <button
                 className="proj-sib-btn"
@@ -111,17 +168,21 @@ export default function Project() {
 
         <header className="proj-header">
           <div className="proj-meta">
-            <span className="proj-year">{project.year}</span>
+            {projectDate && <span className="proj-year">{projectDate}</span>}
+
             {project.featured && (
               <span className="proj-featured-badge">★ Featured</span>
             )}
+
             <span className="proj-category">
               {project.category === "bonus"
                 ? "Projet créatif"
                 : "Projet technique"}
             </span>
           </div>
+
           <h1 className="proj-title">{project.title}</h1>
+
           <div className="proj-tags">
             {project.tags.map((tag) => (
               <span key={tag} className="proj-tag">
@@ -131,7 +192,7 @@ export default function Project() {
           </div>
         </header>
 
-        {allMedia.length > 0 && (
+        {allMedia.length > 0 && currentMedia && (
           <div className="proj-carousel">
             <div className="proj-carousel-inner">
               {currentMedia.type === "image" ? (
@@ -155,9 +216,9 @@ export default function Project() {
                   title={project.title}
                   className="proj-carousel-iframe"
                   allow="autoplay; fullscreen"
-                  frameBorder="0"
                 />
               )}
+
               {allMedia.length > 1 && (
                 <>
                   <button
@@ -168,6 +229,7 @@ export default function Project() {
                   >
                     ←
                   </button>
+
                   <button
                     className="proj-carousel-btn proj-carousel-btn--next"
                     onClick={() =>
@@ -181,6 +243,7 @@ export default function Project() {
                 </>
               )}
             </div>
+
             {allMedia.length > 1 && (
               <div className="proj-progress" role="tablist">
                 {allMedia.map((_, i) => (
@@ -188,7 +251,9 @@ export default function Project() {
                     key={i}
                     role="tab"
                     aria-selected={i === safeIdx}
-                    className={`proj-progress-segment ${i === safeIdx ? "proj-progress-segment--active" : ""}`}
+                    className={`proj-progress-segment ${
+                      i === safeIdx ? "proj-progress-segment--active" : ""
+                    }`}
                     onClick={() => setMediaIdx(i)}
                   />
                 ))}
@@ -202,29 +267,41 @@ export default function Project() {
             <p className="section-label">
               {project.workflows.length > 1 ? "Workflows" : "Workflow"}
             </p>
+
             <N8nWorkflow workflows={project.workflows} />
           </div>
         )}
 
         <div className="proj-body">
-          <div className="proj-section">
+          <section className="proj-section proj-section--intro">
             <p className="section-label">Présentation</p>
+
             <p className="proj-long-desc">{project.longDesc}</p>
+
             <div className="proj-info-grid">
+              {projectDate && (
+                <div className="proj-info-card">
+                  <span className="proj-info-key">Date</span>
+                  <span className="proj-info-val">{projectDate}</span>
+                </div>
+              )}
+
               {project.context && (
-                <div className="proj-info-row">
+                <div className="proj-info-card">
                   <span className="proj-info-key">Contexte</span>
                   <span className="proj-info-val">{project.context}</span>
                 </div>
               )}
+
               {project.role && (
-                <div className="proj-info-row">
+                <div className="proj-info-card">
                   <span className="proj-info-key">Rôle</span>
                   <span className="proj-info-val">{project.role}</span>
                 </div>
               )}
+
               {project.stack && (
-                <div className="proj-info-row">
+                <div className="proj-info-card proj-info-card--wide">
                   <span className="proj-info-key">Stack</span>
                   <span className="proj-info-val">
                     {project.stack.join(" · ")}
@@ -232,20 +309,22 @@ export default function Project() {
                 </div>
               )}
             </div>
-          </div>
+          </section>
 
           {project.codeSnippet && (
-            <div className="proj-section">
+            <section className="proj-section">
               <p className="section-label">Extrait</p>
+
               <pre className="proj-pre">
                 <code className="proj-code">{project.codeSnippet.code}</code>
               </pre>
-            </div>
+            </section>
           )}
 
           {(project.demo || project.links?.length > 0) && (
-            <div className="proj-section">
+            <section className="proj-section">
               <p className="section-label">Liens</p>
+
               <div className="proj-links-row">
                 {project.demo && (
                   <a
@@ -257,6 +336,7 @@ export default function Project() {
                     Voir la démo ↗
                   </a>
                 )}
+
                 {project.links?.map((link, i) => (
                   <a
                     key={i}
@@ -269,7 +349,7 @@ export default function Project() {
                   </a>
                 ))}
               </div>
-            </div>
+            </section>
           )}
         </div>
       </div>

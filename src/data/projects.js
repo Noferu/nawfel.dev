@@ -1,12 +1,8 @@
 export const projects = [
-  // ═══════════════════════════════════════════
-  // CRITIQUE - projets phares
-  // ═══════════════════════════════════════════
-
   {
     slug: "usine-chocolat",
     title: "Usine Chocolat",
-    year: 2026,
+    period: "01/2026",
     featured: true,
     category: "info",
     tags: ["Laravel", "React", "WebSocket", "MySQL", "CI/CD", "PHP"],
@@ -51,7 +47,7 @@ export const projects = [
   {
     slug: "yasuragi",
     title: "Yasuragi",
-    year: 2025,
+    period: "11/2025",
     featured: true,
     category: "info",
     tags: ["Laravel", "PHP", "JavaScript", "MySQL", "UX"],
@@ -90,7 +86,7 @@ export const projects = [
   {
     slug: "di5-festival",
     title: "DI5 Festival",
-    year: 2026,
+    period: "12/2026",
     featured: true,
     category: "info",
     tags: ["Flutter", "Firebase", "Mobile", "Dart"],
@@ -131,7 +127,7 @@ export const projects = [
   {
     slug: "pipeline-synthese-comptable",
     title: "Pipeline Synthèse Comptable",
-    year: 2026,
+    period: "03/2026",
     featured: true,
     category: "info",
     tags: ["n8n", "Automatisation", "API", "JavaScript", "IA"],
@@ -184,7 +180,7 @@ export const projects = [
   {
     slug: "plateforme-onboarding",
     title: "Plateforme Onboarding Client",
-    year: 2026,
+    period: "05/2026",
     featured: true,
     category: "info",
     tags: ["n8n", "Automatisation", "API", "PDF", "IA"],
@@ -218,14 +214,10 @@ export const projects = [
     thumbnail: "/assets/img/projects/onboarding-thumb.png",
   },
 
-  // ═══════════════════════════════════════════
-  // HAUTE - projets secondaires solides
-  // ═══════════════════════════════════════════
-
   {
     slug: "mutualmap",
     title: "MutualMap",
-    year: 2025,
+    period: "07/2025",
     featured: false,
     category: "info",
     tags: ["Python", "JavaScript", "API", "Visualisation"],
@@ -260,7 +252,7 @@ export const projects = [
   {
     slug: "discord-riot-bot",
     title: "Discord Riot Bot",
-    year: 2026,
+    period: "04/2026",
     featured: false,
     category: "info",
     tags: ["Python", "API", "IA", "Automatisation"],
@@ -295,7 +287,7 @@ export const projects = [
   {
     slug: "blind-test",
     title: "Blind Test Multijoueur",
-    year: 2025,
+    period: "03/2025",
     featured: false,
     category: "info",
     tags: ["Node.js", "WebSocket", "PHP", "MySQL", "JavaScript"],
@@ -327,14 +319,10 @@ export const projects = [
     thumbnail: "/assets/img/projects/blindt_test.webp",
   },
 
-  // ═══════════════════════════════════════════
-  // MOYENNE - projets académiques solides
-  // ═══════════════════════════════════════════
-
   {
     slug: "era-explorer",
     title: "Era Explorer",
-    year: 2024,
+    period: "06/2024",
     featured: false,
     category: "info",
     tags: ["PHP", "MySQL", "AJAX", "Twig", "MVC"],
@@ -371,7 +359,7 @@ export const projects = [
   {
     slug: "luma",
     title: "LUMA",
-    year: 2025,
+    period: "02/2025",
     featured: false,
     category: "info",
     tags: ["JavaScript", "Chart.js", "CSS", "HTML5", "Data viz"],
@@ -398,7 +386,7 @@ export const projects = [
   {
     slug: "generosus",
     title: "Generosus",
-    year: 2025,
+    period: "06/2025",
     featured: false,
     category: "bonus",
     tags: ["JavaScript", "Canvas API", "Pixel Art", "Game Dev", "Aseprite"],
@@ -432,7 +420,7 @@ export const projects = [
   {
     slug: "sae401",
     title: "SAE401 - Symfony",
-    year: 2025,
+    period: "06/2025",
     featured: false,
     category: "info",
     tags: ["Symfony", "PHP", "MySQL", "Twig", "MVC"],
@@ -459,7 +447,7 @@ export const projects = [
   {
     slug: "mastermind-flutter",
     title: "Mastermind Flutter",
-    year: 2025,
+    period: "01/2026",
     featured: false,
     category: "info",
     tags: ["Flutter", "Dart", "Mobile"],
@@ -487,7 +475,7 @@ export const projects = [
   {
     slug: "ranker",
     title: "Ranker",
-    year: 2026,
+    period: "05/2026",
     featured: false,
     category: "bonus",
     tags: ["JavaScript", "HTML", "Algorithme", "Elo", "Outil"],
@@ -513,7 +501,7 @@ export const projects = [
   {
     slug: "yuumi",
     title: "Yuumi - Compagnon Airtable",
-    year: 2025,
+    period: "05/2025",
     featured: false,
     category: "info",
     tags: ["Chrome Extension", "JavaScript", "Manifest V3", "Airtable", "DOM"],
