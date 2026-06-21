@@ -151,7 +151,8 @@ export default function Project() {
                 className="proj-sib-btn"
                 onClick={() => navigate(`/project/${prev.slug}`)}
               >
-                ← {prev.title}
+                <span className="proj-sib-kicker">Précédent</span>
+                <span className="proj-sib-title">{prev.title}</span>
               </button>
             )}
 
@@ -160,7 +161,8 @@ export default function Project() {
                 className="proj-sib-btn"
                 onClick={() => navigate(`/project/${next.slug}`)}
               >
-                {next.title} →
+                <span className="proj-sib-kicker">Suivant</span>
+                <span className="proj-sib-title">{next.title}</span>
               </button>
             )}
           </div>
@@ -182,6 +184,10 @@ export default function Project() {
           </div>
 
           <h1 className="proj-title">{project.title}</h1>
+
+          {project.shortDesc && (
+            <p className="proj-short-desc">{project.shortDesc}</p>
+          )}
 
           <div className="proj-tags">
             {project.tags.map((tag) => (
