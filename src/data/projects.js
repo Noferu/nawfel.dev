@@ -1,6 +1,6 @@
 export const projects = [
   // ═══════════════════════════════════════════
-  // CRITIQUE — projets phares
+  // CRITIQUE - projets phares
   // ═══════════════════════════════════════════
 
   {
@@ -14,7 +14,7 @@ export const projects = [
       "Application full-stack de gestion de production en temps réel avec dashboard Kanban, WebSocket, CI/CD et suite de tests PHPUnit.",
     longDesc:
       "Projet individuel développé dans le cadre de la SAE 501 (BUT MMI 3). L'application simule une chaîne de production de sachets de chocolat pour les Journées Portes Ouvertes du département QLIO. Les visiteurs commandent via QR code tandis que les superviseurs gèrent la production en temps réel via un dashboard Kanban WebSocket. Le projet inclut une gestion complète des stocks avec alertes de rupture, un système de contrôle qualité avec déclaration de non-conformités, un pipeline CI/CD GitLab avec tests PHPUnit automatisés (20+ tests), ainsi qu'une architecture orientée domaine avec des services spécialisés.",
-    context: "Projet académique individuel — SAE 501, BUT MMI 3",
+    context: "Projet académique individuel - SAE 501, BUT MMI 3",
     role: "Développement full-stack complet",
     stack: [
       "Laravel 12",
@@ -59,7 +59,7 @@ export const projects = [
       "Outil de gestion de projet collaboratif (Scrum + Kanban) avec drag & drop natif, notifications, politiques d'accès et design system complet.",
     longDesc:
       "Projet individuel complet développé dans le cadre de la SAE 501 (BUT MMI 3). Yasuragi est une alternative légère à Trello/Jira combinant Scrum (sprints, backlog, roadmap) et Kanban. L'application comprend un système de rôles (Owner, Manager, Member, Viewer), un board Kanban avec drag & drop HTML5 natif et mise à jour optimiste via AJAX, une roadmap timeline, un moteur de recherche global, un système de notifications in-app, et un design system complet avec support light/dark mode.",
-    context: "Projet académique individuel — SAE 501, BUT MMI 3",
+    context: "Projet académique individuel - SAE 501, BUT MMI 3",
     role: "Développement full-stack complet",
     stack: [
       "Laravel 12",
@@ -98,7 +98,7 @@ export const projects = [
       "Application mobile cross-platform pour un festival de cinéma : authentification, cartographie Mapbox, vote QR, achat de pass et notifications push.",
     longDesc:
       "Projet académique de développement mobile réalisé en groupe de 3 pour le Festival Européen du Film Fantastique de Strasbourg. L'application Flutter/Firebase couvre l'ensemble du parcours festivalier : consultation de la programmation avec streams Firestore temps réel, système de vote via QR code, achat de pass en 3 étapes avec paiement, réservation d'événements avec export calendrier natif, préférences personnalisées avec carte Mapbox interactive, et notifications push via Firebase Cloud Messaging. Score pédagogique estimé 22/22.",
-    context: "Projet académique — groupe de 3, BUT MMI S5",
+    context: "Projet académique - groupe de 3, BUT MMI S5",
     role: "Développement mobile, intégration Firebase et Mapbox",
     stack: [
       "Flutter 3",
@@ -139,7 +139,7 @@ export const projects = [
       "Système automatisé de synthèse financière mensuelle multi-logiciels générant des rapports KPI personnalisés par client et les envoyant par mail.",
     longDesc:
       "Système d'automatisation développé en stage dans un cabinet comptable. Deux workflows PROD (MyUnisoft et Pennylane) se déclenchent le 26 de chaque mois, s'authentifient sur les APIs respectives, récupèrent les sociétés clientes et collectent trois niveaux de données financières. Les données sont normalisées, enrichies des budgets, avant d'être passées à un sous-workflow qui produit des KPIs financiers, un graphique d'évolution de trésorerie généré en code et un rapport HTML envoyé via Outlook. Le système inclut gestion des rate limits API, meta-orchestration via l'API n8n elle-même et parsing de dates non-standards via Gemini.",
-    context: "Stage — Cabinet Comptable Doucy Consilium, Sélestat",
+    context: "Stage - Cabinet Comptable Doucy Consilium, Sélestat",
     role: "Conception et développement complet",
     stack: [
       "n8n",
@@ -174,7 +174,7 @@ export const projects = [
       "Système complet d'onboarding de prospects : pipeline de tâches séquentielles, génération de lettres de mission PDF multi-pages et suivi des réponses.",
     longDesc:
       "Plateforme d'automatisation métier développée en stage, constituée d'une vingtaine de workflows n8n interconnectés couvrant l'intégralité du cycle d'onboarding d'un nouveau client. Le système repose sur un routeur central Airtable qui dispatche vers des handlers spécialisés. Le pipeline gère les prospects via des phases et tâches séquentielles avec système de dépendances. Un sous-workflow génère des PDFs multi-pages via Gotenberg. Le système de communication planifiée génère des emails MJML personnalisés et un workflow de polling Outlook classe les réponses via Gemini pour mettre à jour automatiquement les statuts.",
-    context: "Stage — Cabinet Comptable Doucy Consilium, Sélestat",
+    context: "Stage - Cabinet Comptable Doucy Consilium, Sélestat",
     role: "Conception et développement complet",
     stack: [
       "n8n",
@@ -201,7 +201,7 @@ export const projects = [
   },
 
   // ═══════════════════════════════════════════
-  // HAUTE — projets secondaires solides
+  // HAUTE - projets secondaires solides
   // ═══════════════════════════════════════════
 
   {
@@ -310,7 +310,7 @@ export const projects = [
   },
 
   // ═══════════════════════════════════════════
-  // MOYENNE — projets académiques solides
+  // MOYENNE - projets académiques solides
   // ═══════════════════════════════════════════
 
   {
@@ -324,7 +324,7 @@ export const projects = [
       "Site e-commerce immersif avec navigation temporelle à travers des époques historiques, système de notation, panier/favoris et architecture MVC.",
     longDesc:
       "Projet individuel développé dans le cadre de la SAE 203 (BUT MMI S2). Era Explorer est un site e-commerce thématique permettant de voyager à travers différentes époques historiques. L'application implémente une architecture MVC complète, un système d'authentification avec hachage de mots de passe, un panier et des favoris persistants, un système de notation et commentaires, des filtres dynamiques via AJAX, une frise chronologique interactive et des musiques d'ambiance par époque.",
-    context: "Projet académique individuel — SAE 203, BUT MMI S2",
+    context: "Projet académique individuel - SAE 203, BUT MMI S2",
     role: "Développement full-stack complet",
     stack: [
       "PHP",
@@ -361,7 +361,7 @@ export const projects = [
       "Site one-page interactif sur la sobriété énergétique numérique avec visualisations de données et animations immersives.",
     longDesc:
       "Projet collectif réalisé dans le cadre de la SAE 303 (équipe de 5). LUMA est un site de sensibilisation à l'impact énergétique des loisirs numériques. Il combine des visualisations de données dynamiques via Chart.js, des animations CSS immersives, des effets sonores interactifs et des vidéos motion design pour transmettre un message engagé. Chaque membre de l'équipe a réalisé ses propres graphiques JavaScript intégrés dans une page cohérente.",
-    context: "Projet académique — groupe de 5, SAE 303",
+    context: "Projet académique - groupe de 5, SAE 303",
     role: "Développement frontend et data visualisation",
     stack: ["HTML5", "CSS3", "JavaScript", "Chart.js", "Web Animations API"],
     hero: {
@@ -413,7 +413,7 @@ export const projects = [
 
   {
     slug: "sae401",
-    title: "SAE401 — Symfony",
+    title: "SAE401 - Symfony",
     year: 2025,
     featured: false,
     category: "info",
@@ -422,7 +422,7 @@ export const projects = [
       "Application Symfony avec gestion de données, migrations et architecture MVC.",
     longDesc:
       "Projet académique développé dans le cadre de la SAE 401 (BUT MMI). Application web construite avec Symfony, mettant en œuvre une architecture MVC structurée avec gestion des entités Doctrine, migrations de base de données, routing, controllers et templates Twig. Le projet couvre les fondamentaux du développement backend PHP moderne.",
-    context: "Projet académique — SAE 401, BUT MMI",
+    context: "Projet académique - SAE 401, BUT MMI",
     role: "Développement backend",
     stack: ["Symfony", "PHP", "Doctrine ORM", "Twig", "MySQL", "Composer"],
     hero: {
@@ -449,7 +449,7 @@ export const projects = [
       "Implémentation mobile du jeu Mastermind en Flutter, avec logique de jeu complète et interface Material Design.",
     longDesc:
       "Projet académique de développement mobile (BUT MMI) implémentant le jeu de logique Mastermind. Le joueur doit deviner une combinaison secrète de 4 couleurs en 10 tentatives maximum. Le jeu fournit un retour visuel via des pions colorés, propose une sélection des couleurs par rotation, un historique des tentatives, une détection victoire/défaite et une option de rejeu.",
-    context: "Projet académique — BUT MMI",
+    context: "Projet académique - BUT MMI",
     role: "Développement mobile complet",
     stack: ["Flutter", "Dart", "Material Design"],
     hero: {
@@ -483,7 +483,7 @@ export const projects = [
     hero: {
       type: "image",
       url: "/assets/img/projects/ranker.webp",
-      alt: "Ranker — Classement par duels",
+      alt: "Ranker - Classement par duels",
       poster: null,
     },
     demo: "/assets/website/ranker.html",
@@ -491,5 +491,42 @@ export const projects = [
     media: null,
     links: [{ label: "GitHub", url: "https://github.com/Noferu/ranker" }],
     thumbnail: "/assets/img/projects/ranker.webp",
+  },
+  {
+    slug: "yuumi",
+    title: "Yuumi - Compagnon Airtable",
+    year: 2025,
+    featured: false,
+    category: "info",
+    tags: ["Chrome Extension", "JavaScript", "Manifest V3", "Airtable", "DOM"],
+    shortDesc:
+      "Extension Chrome qui greffe des raccourcis, du filtrage de tables et des formulaires flottants directement dans l'interface Airtable, configurable sans toucher au code.",
+    longDesc:
+      "Extension navigateur conçue pendant mon stage pour fluidifier le travail quotidien sur Airtable, dont l'interface ne permet ni de masquer des groupes de tables ni d'ajouter des raccourcis métier. Yuumi injecte ses fonctionnalités directement dans la page via des content scripts : une barre de navigation enrichie de liens rapides, un système de filtrage qui affiche ou masque des groupes de tables selon des configurations nommées (Onboarding, Comptabilité, Juridique…), des tables épinglées toujours visibles, et des formulaires flottants de création rapide qui envoient leurs données via webhook. Tout est paramétrable depuis le popup, sans modifier le code, grâce à une config par défaut surchargeable stockée dans le navigateur. L'architecture sépare service worker, content scripts et popup, avec gestion des changements de page d'une SPA via MutationObserver.",
+    context: "Stage - Cabinet Comptable Doucy Consilium, Sélestat",
+    role: "Conception et développement complet",
+    stack: [
+      "JavaScript",
+      "Chrome Extension API",
+      "Manifest V3",
+      "Service Worker",
+      "Content Scripts",
+      "MutationObserver",
+      "chrome.storage",
+      "Airtable Webhooks",
+    ],
+    hero: {
+      type: "image",
+      url: "/assets/img/projects/yuumi-hero.png",
+      alt: "Extension Yuumi pour Airtable",
+      poster: null,
+    },
+    demo: null,
+    codeSnippet: null,
+    media: null,
+    links: [
+      { label: "GitHub", url: "https://github.com/Noferu/yuumi-for-airtable" },
+    ],
+    thumbnail: "/assets/img/projects/yuumi-thumb.png",
   },
 ];
