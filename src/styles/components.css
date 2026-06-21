@@ -559,6 +559,24 @@
   transform: translateY(-2px);
 }
 
+.proj-card--featured {
+  width: 360px;
+}
+
+.proj-card--secondary {
+  width: 280px;
+}
+
+.proj-card--featured {
+  border-color: rgba(251, 195, 115, 0.35);
+  box-shadow: 0 0 24px rgba(251, 195, 115, 0.12);
+}
+
+.proj-card--featured:hover {
+  border-color: rgba(251, 195, 115, 0.5);
+  box-shadow: 0 0 32px rgba(251, 195, 115, 0.12);
+}
+
 .proj-card-thumb {
   position: relative;
   height: 135px;

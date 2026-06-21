@@ -215,19 +215,15 @@ export default function Hero() {
             >
               Voir mes projets
             </a>
-            <a
-              href="https://0xnawfel.vercel.app/"
-              target="_blank"
-              rel="noreferrer"
-              className="btn-creative"
+            <span
+              className="btn-creative btn-creative--disabled"
+              aria-disabled="true"
             >
               <span className="btn-creative__default">✦ Version créative</span>
-              <span className="btn-creative__pixel">
-                <PixelStar />
-                <span>Mode pixel</span>
+              <span className="btn-creative__construction">
+                🚧 En construction
               </span>
-              <span className="btn-creative__shine" aria-hidden="true" />
-            </a>
+            </span>
           </div>
 
           <div className="hero-pills-row" data-intro="pills">

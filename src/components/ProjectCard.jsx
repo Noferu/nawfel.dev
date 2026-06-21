@@ -60,7 +60,9 @@ export default function ProjectCard({ project, compact = false }) {
   return (
     <div
       ref={cardRef}
-      className={`proj-card glow-card ${compact ? "proj-card--compact" : ""}`}
+      className={`proj-card glow-card ${
+        project.featured ? "proj-card--featured" : "proj-card--secondary"
+      } ${compact ? "proj-card--compact" : ""}`}
       onClick={() => navigate(`/project/${project.slug}`)}
       onMouseEnter={handleEnter}
       onMouseLeave={handleLeave}
@@ -100,7 +102,9 @@ export default function ProjectCard({ project, compact = false }) {
           </div>
         </div>
         <h3 className="proj-card-title">{project.title}</h3>
-        {!compact && <p className="proj-card-desc">{project.shortDesc}</p>}
+        {!compact && project.featured && (
+          <p className="proj-card-desc">{project.shortDesc}</p>
+        )}
         <div className="proj-card-footer">
           <span className="proj-card-cta">Voir le projet →</span>
           {project.links?.[0] && (
