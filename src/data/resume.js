@@ -1,5 +1,5 @@
 export const resume = {
-  // ── Identité ──
+  // Identité
   name: "Nawfel Ida-Ali",
   title: "Ingénierie logicielle, automatisation & systèmes interactifs",
   location: "Strasbourg, France",
@@ -10,33 +10,34 @@ export const resume = {
     github: "https://github.com/Noferu",
   },
 
-  // ── Langues ──
+  // Langues
   langues: [
     { langue: "Français", niveau: "Maternelle" },
     { langue: "Anglais", niveau: "B2+/C1" },
   ],
 
-  // ── Formations ──
+  // Formations
   formations: [
     {
-      title: "Master Informatique",
-      specialization: "À déterminer...",
-      institution: "Hauts-de-France / Bretagne",
+      title: "Poursuite d’études en informatique",
+      specialization: "Formation Bac + 5 en alternance à définir",
+      institution: "France",
       location: "France",
       period: ["07/09/2026", "07/07/2028"],
 
       points: [
-        "Formation spécialisée en informatique orientée conception, développement et ingénierie de systèmes logiciels avancés.",
-        "Approfondissement de problématiques liées à l’architecture logicielle, aux données, aux systèmes intelligents, à l’automatisation et aux infrastructures numériques.",
-        "Formation réalisée en alternance dans un environnement professionnel avec mise en pratique sur des projets techniques concrets.",
+        "Projet de poursuite d’études vers une formation supérieure en informatique, avec une orientation développement, ingénierie logicielle, systèmes numériques ou technologies web avancées.",
+        "Volonté d’approfondir les compétences liées à la conception logicielle, à l’architecture applicative, aux données, à l’automatisation et aux infrastructures numériques.",
+        "Recherche d’un parcours en alternance permettant de continuer à progresser dans un cadre professionnel, avec une mise en pratique sur des projets techniques concrets.",
       ],
 
       tags: [
         "Informatique",
+        "Développement",
         "Ingénierie logicielle",
         "Architecture",
-        "Systèmes intelligents",
         "Alternance",
+        "Bac+5",
       ],
     },
     {
@@ -80,7 +81,7 @@ export const resume = {
     },
   ],
 
-  // ── Expériences ──
+  // Expériences
   experiences: [
     {
       position:
@@ -220,7 +221,7 @@ export const resume = {
     },
   ],
 
-  // ── Compétences ──
+  // Compétences
   competences: [
     {
       category: "Langages",
@@ -314,7 +315,7 @@ export const resume = {
     },
   ],
 
-  // ── Qualités ──
+  // Qualités
   qualities: [
     "Autonomie et apprentissage autodidacte",
     "Esprit d’analyse et réflexion systémique",
@@ -326,7 +327,7 @@ export const resume = {
     "Communication technique et vulgarisation",
   ],
 
-  // ── Centres d'intérêt ──
+  // Centres d'intérêt
   interests: [
     "Cinéma et narration",
     "Jeux vidéo",
