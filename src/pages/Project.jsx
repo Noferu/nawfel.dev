@@ -4,6 +4,7 @@ import gsap from "gsap";
 import { projects } from "../data/projects";
 import "../styles/project-page.css";
 import N8nWorkflow from "../components/N8nWorkflow";
+import NotFound from "./NotFound";
 const IconArrowLeft = ({ className = "" }) => (
   <svg
     className={className}
@@ -194,15 +195,7 @@ export default function Project() {
   }, [prev, next, navigate]);
 
   if (!project) {
-    return (
-      <div className="page proj-not-found">
-        <p className="proj-nf-code">404</p>
-        <p className="proj-nf-msg">Projet introuvable.</p>
-        <button className="btn-secondary" onClick={() => navigate("/")}>
-          <IconArrowLeft className="proj-btn-icon" /> Retour
-        </button>
-      </div>
-    );
+    return <NotFound subtitle="Ce projet n'existe pas, ou n'existe plus." />;
   }
 
   return (

@@ -1,33 +1,34 @@
-import { useState, useEffect } from 'react'
-import { Routes, Route, useParams } from 'react-router-dom'
+import { useState, useEffect } from "react";
+import { Routes, Route, useParams } from "react-router-dom";
 
-import Header     from './components/Header'
-import MobileNav from './components/MobileNav'
-import Background from './components/Background'
-import CommandK   from './components/CommandK'
+import Header from "./components/Header";
+import MobileNav from "./components/MobileNav";
+import Background from "./components/Background";
+import CommandK from "./components/CommandK";
 
-import Home    from './pages/Home'
-import CV      from './pages/CV'
-import Project from './pages/Project'
+import Home from "./pages/Home";
+import CV from "./pages/CV";
+import Project from "./pages/Project";
+import NotFound from "./pages/NotFound";
 
 function ProjectWrapper() {
-  const { slug } = useParams()
-  return <Project key={slug} />
+  const { slug } = useParams();
+  return <Project key={slug} />;
 }
 
 function App() {
-  const [cmdOpen, setCmdOpen] = useState(false)
+  const [cmdOpen, setCmdOpen] = useState(false);
 
   useEffect(() => {
     const handler = (e) => {
-      if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
-        e.preventDefault()
-        setCmdOpen(prev => !prev)
+      if ((e.ctrlKey || e.metaKey) && e.key === "k") {
+        e.preventDefault();
+        setCmdOpen((prev) => !prev);
       }
-    }
-    window.addEventListener('keydown', handler)
-    return () => window.removeEventListener('keydown', handler)
-  }, [])
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, []);
 
   return (
     <>
@@ -37,12 +38,13 @@ function App() {
       <CommandK open={cmdOpen} onClose={() => setCmdOpen(false)} />
 
       <Routes>
-        <Route path="/"              element={<Home />}           />
-        <Route path="/cv"            element={<CV />}             />
+        <Route path="/" element={<Home />} />
+        <Route path="/cv" element={<CV />} />
         <Route path="/project/:slug" element={<ProjectWrapper />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
