@@ -4,6 +4,75 @@ import gsap from "gsap";
 import { projects } from "../data/projects";
 import "../styles/project-page.css";
 import N8nWorkflow from "../components/N8nWorkflow";
+const IconArrowLeft = ({ className = "" }) => (
+  <svg
+    className={className}
+    width="16"
+    height="16"
+    viewBox="0 0 16 16"
+    fill="currentColor"
+    aria-hidden="true"
+    focusable="false"
+  >
+    <path
+      fillRule="evenodd"
+      d="M15 8a.5.5 0 0 0-.5-.5H2.707l5.147-5.146a.5.5 0 1 0-.708-.708l-6 6a.5.5 0 0 0 0 .708l6 6a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"
+    />
+  </svg>
+);
+
+const IconArrowRight = ({ className = "" }) => (
+  <svg
+    className={className}
+    width="16"
+    height="16"
+    viewBox="0 0 16 16"
+    fill="currentColor"
+    aria-hidden="true"
+    focusable="false"
+  >
+    <path
+      fillRule="evenodd"
+      d="M1 8a.5.5 0 0 1 .5-.5h11.793L8.146 2.354a.5.5 0 1 1 .708-.708l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"
+    />
+  </svg>
+);
+
+const IconExternalLink = ({ className = "" }) => (
+  <svg
+    className={className}
+    width="16"
+    height="16"
+    viewBox="0 0 16 16"
+    fill="currentColor"
+    aria-hidden="true"
+    focusable="false"
+  >
+    <path
+      fillRule="evenodd"
+      d="M8.636 3.5a.5.5 0 0 0 0 1h2.657L6.146 9.646a.5.5 0 1 0 .708.708L12 5.207v2.657a.5.5 0 0 0 1 0V4a.5.5 0 0 0-.5-.5H8.636z"
+    />
+    <path
+      fillRule="evenodd"
+      d="M2.5 2A1.5 1.5 0 0 0 1 3.5v10A1.5 1.5 0 0 0 2.5 15h10a1.5 1.5 0 0 0 1.5-1.5V10a.5.5 0 0 0-1 0v3.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5H6a.5.5 0 0 0 0-1H2.5z"
+    />
+  </svg>
+);
+
+const IconStarFill = ({ className = "" }) => (
+  <svg
+    className={className}
+    width="16"
+    height="16"
+    viewBox="0 0 16 16"
+    fill="currentColor"
+    aria-hidden="true"
+    focusable="false"
+  >
+    <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z" />
+  </svg>
+);
+
 
 const MONTHS_FR = [
   "Janvier",
@@ -131,7 +200,7 @@ export default function Project() {
         <p className="proj-nf-code">404</p>
         <p className="proj-nf-msg">Projet introuvable.</p>
         <button className="btn-secondary" onClick={() => navigate("/")}>
-          ← Retour
+          <IconArrowLeft className="proj-btn-icon" /> Retour
         </button>
       </div>
     );
@@ -142,7 +211,7 @@ export default function Project() {
       <div className="container">
         <div className="proj-nav">
           <button className="proj-back-btn" onClick={() => navigate("/")}>
-            ← Retour
+            <IconArrowLeft className="proj-btn-icon" /> Retour
           </button>
 
           <div className="proj-siblings">
@@ -173,7 +242,7 @@ export default function Project() {
             {projectDate && <span className="proj-year">{projectDate}</span>}
 
             {project.featured && (
-              <span className="proj-featured-badge">★ Featured</span>
+              <span className="proj-featured-badge"><IconStarFill className="proj-featured-icon" /> Featured</span>
             )}
 
             <span className="proj-category">
@@ -233,7 +302,7 @@ export default function Project() {
                     disabled={safeIdx === 0}
                     aria-label="Média précédent"
                   >
-                    ←
+                    <IconArrowLeft className="proj-carousel-icon" />
                   </button>
 
                   <button
@@ -244,7 +313,7 @@ export default function Project() {
                     disabled={safeIdx === allMedia.length - 1}
                     aria-label="Média suivant"
                   >
-                    →
+                    <IconArrowRight className="proj-carousel-icon" />
                   </button>
                 </>
               )}
@@ -310,7 +379,7 @@ export default function Project() {
                 <div className="proj-info-card proj-info-card--wide">
                   <span className="proj-info-key">Stack</span>
                   <span className="proj-info-val">
-                    {project.stack.join(" · ")}
+                    {project.stack.join(" - ")}
                   </span>
                 </div>
               )}
@@ -339,7 +408,7 @@ export default function Project() {
                     rel="noreferrer"
                     className="btn-primary"
                   >
-                    Voir la démo ↗
+                    Voir la démo <IconExternalLink className="proj-link-icon" />
                   </a>
                 )}
 
@@ -351,7 +420,7 @@ export default function Project() {
                     rel="noreferrer"
                     className="btn-secondary"
                   >
-                    {link.label} ↗
+                    {link.label} <IconExternalLink className="proj-link-icon" />
                   </a>
                 ))}
               </div>

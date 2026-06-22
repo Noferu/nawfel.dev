@@ -4,10 +4,10 @@ import { useNavigate, useLocation } from 'react-router-dom'
 /**
  * MobileNav.jsx
  *
- * Navigation mobile autonome (≤640px). Le header desktop reste masqué via CSS
+ * Navigation mobile autonome (<=640px). Le header desktop reste masqué via CSS
  * (`header { display: none }`) ; ce composant prend le relais sur petit écran.
  * - Masqué en desktop par `.mobile-nav { display: none }` (cf. components.css).
- * - Cibles identiques à la palette ⌘K : scroll vers les sections de la home,
+ * - Cibles identiques à la palette Ctrl+K : scroll vers les sections de la home,
  *   route vers /cv, liens externes.
  * - Si on n'est pas sur la home, un scroll route d'abord vers "/" puis défile.
  * - Verrou du scroll body à l'ouverture, fermeture via X / backdrop / Échap.

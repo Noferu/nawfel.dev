@@ -268,3 +268,20 @@ h4 {
     padding: 0 1rem;
   }
 }
+
+/* Inline SVG baseline guard */
+svg[aria-hidden="true"] {
+  vertical-align: middle;
+}
+
+.btn-primary,
+.btn-secondary {
+  line-height: 1;
+}
+
+.btn-primary svg,
+.btn-secondary svg {
+  display: block;
+  flex: 0 0 auto;
+}
+

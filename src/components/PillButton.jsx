@@ -1,5 +1,5 @@
 /**
- * PillButton — bouton outline réutilisable
+ * PillButton - bouton outline réutilisable
  * Style cohérent avec les boutons de section (Voir les projets, Voir le CV, Télécharger le CV)
  *
  * Props :

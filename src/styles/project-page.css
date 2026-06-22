@@ -639,3 +639,75 @@
     font-size: 0.72rem;
   }
 }
+
+/* SVG icon alignment fixes */
+.proj-back-btn,
+.proj-featured-badge,
+.proj-carousel-btn,
+.proj-links-row .btn-primary,
+.proj-links-row .btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.proj-back-btn,
+.proj-links-row .btn-primary,
+.proj-links-row .btn-secondary {
+  gap: 0.45rem;
+}
+
+.proj-featured-badge {
+  gap: 0.35rem;
+  min-height: 22px;
+}
+
+.proj-btn-icon,
+.proj-featured-icon,
+.proj-carousel-icon,
+.proj-link-icon {
+  display: block;
+  flex: 0 0 auto;
+  width: 1em;
+  height: 1em;
+  line-height: 1;
+  pointer-events: none;
+}
+
+.proj-btn-icon {
+  width: 0.9rem;
+  height: 0.9rem;
+  transition: transform var(--t-fast);
+}
+
+.proj-back-btn:hover .proj-btn-icon,
+.btn-secondary:hover .proj-btn-icon {
+  transform: translateX(-2px);
+}
+
+.proj-featured-icon {
+  width: 0.72rem;
+  height: 0.72rem;
+}
+
+.proj-carousel-icon {
+  width: 1rem;
+  height: 1rem;
+}
+
+.proj-carousel-btn {
+  padding: 0;
+  line-height: 1;
+}
+
+.proj-link-icon {
+  width: 0.9rem;
+  height: 0.9rem;
+  transition: transform var(--t-fast);
+}
+
+.proj-links-row a:hover .proj-link-icon {
+  transform: translate(2px, -2px);
+}
+

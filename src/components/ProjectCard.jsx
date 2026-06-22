@@ -1,6 +1,44 @@
 import { useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import gsap from "gsap";
+const IconArrowRight = ({ className = "" }) => (
+  <svg
+    className={className}
+    width="16"
+    height="16"
+    viewBox="0 0 16 16"
+    fill="currentColor"
+    aria-hidden="true"
+    focusable="false"
+  >
+    <path
+      fillRule="evenodd"
+      d="M1 8a.5.5 0 0 1 .5-.5h11.793L8.146 2.354a.5.5 0 1 1 .708-.708l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"
+    />
+  </svg>
+);
+
+const IconExternalLink = ({ className = "" }) => (
+  <svg
+    className={className}
+    width="16"
+    height="16"
+    viewBox="0 0 16 16"
+    fill="currentColor"
+    aria-hidden="true"
+    focusable="false"
+  >
+    <path
+      fillRule="evenodd"
+      d="M8.636 3.5a.5.5 0 0 0 0 1h2.657L6.146 9.646a.5.5 0 1 0 .708.708L12 5.207v2.657a.5.5 0 0 0 1 0V4a.5.5 0 0 0-.5-.5H8.636z"
+    />
+    <path
+      fillRule="evenodd"
+      d="M2.5 2A1.5 1.5 0 0 0 1 3.5v10A1.5 1.5 0 0 0 2.5 15h10a1.5 1.5 0 0 0 1.5-1.5V10a.5.5 0 0 0-1 0v3.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5H6a.5.5 0 0 0 0-1H2.5z"
+    />
+  </svg>
+);
+
 
 const DisneyStarSvg = () => (
   <svg
@@ -131,7 +169,7 @@ export default function ProjectCard({ project, compact = false }) {
         )}
 
         <div className="proj-card-footer">
-          <span className="proj-card-cta">Voir le projet →</span>
+          <span className="proj-card-cta">Voir le projet <IconArrowRight className="proj-card-cta-icon" /></span>
 
           {project.links?.[0] && (
             <a
@@ -141,7 +179,7 @@ export default function ProjectCard({ project, compact = false }) {
               className="proj-card-gh"
               onClick={(e) => e.stopPropagation()}
             >
-              GitHub ↗
+              GitHub <IconExternalLink className="proj-card-gh-icon" />
             </a>
           )}
         </div>

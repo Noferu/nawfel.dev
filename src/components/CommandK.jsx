@@ -1,6 +1,37 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { projects } from "../data/projects";
+const IconSearch = ({ className = "" }) => (
+  <svg
+    className={className}
+    width="16"
+    height="16"
+    viewBox="0 0 16 16"
+    fill="currentColor"
+    aria-hidden="true"
+    focusable="false"
+  >
+    <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
+  </svg>
+);
+
+const IconArrowRight = ({ className = "" }) => (
+  <svg
+    className={className}
+    width="16"
+    height="16"
+    viewBox="0 0 16 16"
+    fill="currentColor"
+    aria-hidden="true"
+    focusable="false"
+  >
+    <path
+      fillRule="evenodd"
+      d="M1 8a.5.5 0 0 1 .5-.5h11.793L8.146 2.354a.5.5 0 1 1 .708-.708l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"
+    />
+  </svg>
+);
+
 
 const SECTIONS = [
   { label: "Accueil", action: "scroll", target: "hero" },
@@ -124,7 +155,7 @@ export default function CommandK({ open, onClose }) {
     <div className="cmdk-overlay" onClick={onClose}>
       <div className="cmdk-panel" onClick={(e) => e.stopPropagation()}>
         <div className="cmdk-input-row">
-          <span className="cmdk-search-icon">⌕</span>
+          <IconSearch className="cmdk-search-icon" />
           <input
             ref={inputRef}
             value={query}
@@ -158,23 +189,23 @@ export default function CommandK({ open, onClose }) {
                     {item.sublabel && (
                       <span className="cmdk-item-sub">{item.sublabel}</span>
                     )}
-                    <span className="cmdk-item-arrow">→</span>
+                    <IconArrowRight className="cmdk-item-arrow" />
                   </button>
                 );
               })}
             </div>
           ))}
           {filtered.length === 0 && (
-            <p className="cmdk-empty">Aucun résultat pour « {query} »</p>
+            <p className="cmdk-empty">Aucun résultat pour "{query}"</p>
           )}
         </div>
 
         <div className="cmdk-footer">
           <span className="cmdk-footer-hint">
-            <kbd className="cmdk-kbd">↑↓</kbd> naviguer
+            <kbd className="cmdk-kbd">Haut/Bas</kbd> naviguer
           </span>
           <span className="cmdk-footer-hint">
-            <kbd className="cmdk-kbd">↵</kbd> ouvrir
+            <kbd className="cmdk-kbd">Entrée</kbd> ouvrir
           </span>
           <span className="cmdk-footer-hint">
             <kbd className="cmdk-kbd">Esc</kbd> fermer

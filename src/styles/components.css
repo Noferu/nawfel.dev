@@ -815,3 +815,135 @@
     width: 240px;
   }
 }
+
+/* Icon alignment fixes for the SVG replacement pass */
+.header-cmd-btn {
+  min-height: 28px;
+  align-items: center;
+  gap: 0.25rem;
+  line-height: 1;
+}
+
+.header-cmd-icon,
+.header-cmd-k {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.header-cmd-icon {
+  height: 18px;
+  padding: 0 0.22rem;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.055);
+  border: 1px solid rgba(255, 255, 255, 0.075);
+  font-size: 0.55rem;
+  font-weight: 700;
+  letter-spacing: 0.045em;
+  text-transform: uppercase;
+}
+
+.header-cmd-k {
+  height: 18px;
+  font-size: 0.62rem;
+}
+
+.cmdk-search-icon,
+.cmdk-item-arrow,
+.pill-btn-icon,
+.proj-card-cta-icon,
+.proj-card-gh-icon {
+  display: block;
+  flex: 0 0 auto;
+  width: 1em;
+  height: 1em;
+  line-height: 1;
+  pointer-events: none;
+}
+
+.cmdk-search-icon {
+  width: 1rem;
+  height: 1rem;
+  opacity: 0.72;
+}
+
+.cmdk-input-row {
+  min-height: 56px;
+}
+
+.cmdk-item {
+  min-height: 40px;
+}
+
+.cmdk-item-label {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cmdk-item-sub {
+  max-width: 42%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cmdk-item-arrow {
+  width: 0.85rem;
+  height: 0.85rem;
+  margin-left: auto;
+  transform: translateX(-2px);
+}
+
+.cmdk-item--selected .cmdk-item-arrow {
+  transform: translateX(0);
+}
+
+.pill-btn {
+  justify-content: center;
+  line-height: 1;
+  min-height: 38px;
+}
+
+.pill-btn-icon {
+  width: 0.95rem;
+  height: 0.95rem;
+  margin-left: 0.05rem;
+  transition: transform var(--t-fast);
+}
+
+.pill-btn:hover .pill-btn-icon {
+  transform: translateX(2px);
+}
+
+.proj-card-footer {
+  gap: 0.75rem;
+  min-width: 0;
+}
+
+.proj-card-cta,
+.proj-card-gh {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.proj-card-cta-icon,
+.proj-card-gh-icon {
+  width: 0.8rem;
+  height: 0.8rem;
+  transition: transform var(--t-fast);
+}
+
+.proj-card:hover .proj-card-cta-icon {
+  transform: translateX(2px);
+}
+
+.proj-card-gh:hover .proj-card-gh-icon {
+  transform: translate(1px, -1px);
+}
+

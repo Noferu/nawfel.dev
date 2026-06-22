@@ -2,6 +2,21 @@ import { useEffect, useState } from "react";
 import { useTypewriter } from "../hooks/useTypewriter";
 import { projects } from "../data/projects";
 import { resume } from "../data/resume";
+const IconConstruction = ({ className = "" }) => (
+  <svg
+    className={className}
+    width="16"
+    height="16"
+    viewBox="0 0 16 16"
+    fill="currentColor"
+    aria-hidden="true"
+    focusable="false"
+  >
+    <path d="M7.999 1.5 1.5 14h13L7.999 1.5zm0 2.25L12.1 12H3.898l4.1-8.25z" />
+    <path d="M7.5 6h1v3.5h-1V6zm0 5h1v1h-1v-1z" />
+  </svg>
+);
+
 
 const WORDS = [
   "Full-Stack",
@@ -115,7 +130,7 @@ function useStats() {
     return y < min ? y : min;
   }, 9999);
   const expYears =
-    firstYear < 9999 ? `${new Date().getFullYear() - firstYear}+` : "—";
+    firstYear < 9999 ? `${new Date().getFullYear() - firstYear}+` : "N/A";
 
   const [commits, setCommits] = useState("500+");
   useEffect(() => {
@@ -188,7 +203,7 @@ export default function Hero() {
             data-intro="badge"
           >
             <span className="hero-status-dot" aria-hidden="true" />
-            Disponible pour une alternance · Septembre 2026
+            Disponible pour une alternance - Septembre 2026
           </a>
 
           <h1 className="hero-h1">
@@ -219,9 +234,9 @@ export default function Hero() {
               className="btn-creative btn-creative--disabled"
               aria-disabled="true"
             >
-              <span className="btn-creative__default">✦ Version créative</span>
+              <span className="btn-creative__default"><PixelStar /> Version créative</span>
               <span className="btn-creative__construction">
-                🚧 En construction
+                <IconConstruction className="btn-creative__icon" /> En construction
               </span>
             </span>
           </div>

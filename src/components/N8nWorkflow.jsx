@@ -109,7 +109,7 @@ export default function N8nWorkflow({ workflows = [] }) {
       <div className="proj-workflow-panel">
         {isLoading && (
           <div className="proj-workflow-state">
-            Chargement du workflow…
+            Chargement du workflow...
           </div>
         )}
 

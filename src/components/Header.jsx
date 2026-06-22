@@ -46,10 +46,10 @@ export default function Header({ onOpenCmd }) {
   }
 
   return (
-    /* data-intro="header" → ciblé par usePageIntro */
+    /* data-intro="header" cible par usePageIntro */
     <header className="header-wrapper" data-intro="header">
 
-      {/* ── Gauche : pill Last Project ── */}
+      {/* Gauche : pill Last Project */}
       <div className="header-left">
         <Link to={`/project/${lastProject.slug}`} className="header-last-proj">
           <span className="header-last-proj-label">Dernier</span>
@@ -58,7 +58,7 @@ export default function Header({ onOpenCmd }) {
         </Link>
       </div>
 
-      {/* ── Centre : Dynamic Island ── */}
+      {/* Centre : Dynamic Island */}
       <div className="header-center">
         <nav className={`header-island ${scrolled ? 'header-island--scrolled' : ''}`}>
           {NAV.map((item) => (
@@ -83,19 +83,19 @@ export default function Header({ onOpenCmd }) {
             className="header-cmd-btn"
             title="Ouvrir la palette (Ctrl+K)"
           >
-            <span className="header-cmd-icon">⌘</span>
+            <span className="header-cmd-icon">Ctrl</span>
             <span className="header-cmd-k">K</span>
           </button>
         </nav>
       </div>
 
-      {/* ── Droite : pill Open To Work ── */}
+      {/* Droite : pill Open To Work */}
       <div className="header-right">
         <div className="header-otw-wrapper">
           <div className="header-otw">
             <span className="header-otw-dot" />
             <span className="header-otw-text">Open To Work</span>
-            <span className="header-otw-date">· Sep 2026</span>
+            <span className="header-otw-date">Sep 2026</span>
           </div>
         </div>
       </div>

@@ -1,10 +1,48 @@
 import { useRef, useEffect, useState } from 'react'
+const IconExternalLink = ({ className = "" }) => (
+  <svg
+    className={className}
+    width="16"
+    height="16"
+    viewBox="0 0 16 16"
+    fill="currentColor"
+    aria-hidden="true"
+    focusable="false"
+  >
+    <path
+      fillRule="evenodd"
+      d="M8.636 3.5a.5.5 0 0 0 0 1h2.657L6.146 9.646a.5.5 0 1 0 .708.708L12 5.207v2.657a.5.5 0 0 0 1 0V4a.5.5 0 0 0-.5-.5H8.636z"
+    />
+    <path
+      fillRule="evenodd"
+      d="M2.5 2A1.5 1.5 0 0 0 1 3.5v10A1.5 1.5 0 0 0 2.5 15h10a1.5 1.5 0 0 0 1.5-1.5V10a.5.5 0 0 0-1 0v3.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5H6a.5.5 0 0 0 0-1H2.5z"
+    />
+  </svg>
+);
+
+const IconArrowUp = ({ className = "" }) => (
+  <svg
+    className={className}
+    width="16"
+    height="16"
+    viewBox="0 0 16 16"
+    fill="currentColor"
+    aria-hidden="true"
+    focusable="false"
+  >
+    <path
+      fillRule="evenodd"
+      d="M8 15a.5.5 0 0 0 .5-.5V2.707l5.146 5.147a.5.5 0 0 0 .708-.708l-6-6a.5.5 0 0 0-.708 0l-6 6a.5.5 0 1 0 .708.708L7.5 2.707V14.5A.5.5 0 0 0 8 15z"
+    />
+  </svg>
+);
+
 
 /**
  * Contact.jsx
  *
  * Section contact avec formulaire contrôlé et validation côté client.
- * - Validation : nom (≥2), e-mail (regex), message (≥10) — au submit, l'erreur
+ * - Validation : nom (>=2), e-mail (regex), message (>=10) - au submit, l'erreur
  *   d'un champ se nettoie dès qu'on le modifie.
  * - Envoi : Web3Forms (gratuit, sans backend). Renseigner WEB3FORMS_ACCESS_KEY.
  *   En cas d'échec réseau / clé manquante, fallback mailto proposé.
@@ -12,7 +50,7 @@ import { useRef, useEffect, useState } from 'react'
  * - L'orb au curseur de la card est conservé.
  */
 
-// → https://web3forms.com (créer une clé gratuite, 2 min). Sans backend.
+// Voir https://web3forms.com (créer une clé gratuite, 2 min). Sans backend.
 const WEB3FORMS_ACCESS_KEY = '71c0aeab-2d9a-4bcb-83be-7582efbd3812'
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -25,7 +63,7 @@ export default function Contact() {
   const [errors, setErrors] = useState({})
   const [status, setStatus] = useState('idle') // idle | sending | success | error
 
-  /* ── Orb au curseur (inchangé) ── */
+  /* Orb au curseur (inchangé) */
   useEffect(() => {
     const card = cardRef.current
     const orb  = orbRef.current
@@ -45,7 +83,7 @@ export default function Contact() {
     }
   }, [])
 
-  /* ── Validation ── */
+  /* Validation */
   const validate = (v) => {
     const next = {}
     if (v.name.trim().length < 2)        next.name    = 'Indiquez votre nom.'
@@ -83,7 +121,7 @@ export default function Contact() {
           name:    values.name,
           email:   values.email,
           message: values.message,
-          subject: `Portfolio — message de ${values.name}`,
+          subject: `Portfolio - message de ${values.name}`,
         }),
       })
       const data = await res.json()
@@ -159,7 +197,7 @@ export default function Contact() {
                   id="contact-message"
                   name="message"
                   className="contact-textarea"
-                  placeholder="Quelques mots sur votre projet ou votre proposition…"
+                  placeholder="Quelques mots sur votre projet ou votre proposition..."
                   rows={5}
                   value={values.message}
                   onChange={handleChange}
@@ -177,7 +215,7 @@ export default function Contact() {
                   className="btn-primary contact-submit"
                   disabled={status === 'sending'}
                 >
-                  {status === 'sending' ? 'Envoi…' : 'Envoyer le message'}
+                  {status === 'sending' ? 'Envoi...' : 'Envoyer le message'}
                 </button>
 
                 <p className="contact-status" aria-live="polite">
@@ -202,20 +240,20 @@ export default function Contact() {
             <div className="contact-links">
               <a href="mailto:nawfel.idaali.pro@gmail.com" className="contact-mail">
                 nawfel.idaali.pro@gmail.com
-                <span className="contact-arrow">↗</span>
+                <IconExternalLink className="contact-arrow" />
               </a>
             </div>
           </div>
         </div>
 
-        {/* Flèche scroll-to-top — sous la card */}
+        {/* Scroll-to-top sous la card */}
         <div className="contact-scroll-top">
           <button
             className="scroll-top-btn"
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
             aria-label="Retour en haut de la page"
           >
-            ↑
+            <IconArrowUp className="scroll-top-icon" />
           </button>
         </div>
       </div>

@@ -1,6 +1,23 @@
 import { useNavigate } from 'react-router-dom'
 import { resume } from '../data/resume'
 import PillButton from './PillButton'
+const IconArrowRight = ({ className = "" }) => (
+  <svg
+    className={className}
+    width="16"
+    height="16"
+    viewBox="0 0 16 16"
+    fill="currentColor"
+    aria-hidden="true"
+    focusable="false"
+  >
+    <path
+      fillRule="evenodd"
+      d="M1 8a.5.5 0 0 1 .5-.5h11.793L8.146 2.354a.5.5 0 1 1 .708-.708l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"
+    />
+  </svg>
+);
+
 
 export default function CVSnippet() {
   const navigate = useNavigate()
@@ -12,7 +29,7 @@ export default function CVSnippet() {
   const formatPeriod = (period) => {
     const [start, end] = period
     const toYear = (dateStr) => dateStr.split('/')[2]
-    return `${toYear(start)} – ${toYear(end)}`
+    return `${toYear(start)} - ${toYear(end)}`
   }
 
   return (
@@ -28,7 +45,7 @@ export default function CVSnippet() {
                   <div className="cv-snippet-dot" />
                   <div>
                     <p className="cv-snippet-item-title">{exp.position}</p>
-                    <p className="cv-snippet-item-meta">{exp.location} · {formatPeriod(exp.period)}</p>
+                    <p className="cv-snippet-item-meta">{exp.location} - {formatPeriod(exp.period)}</p>
                   </div>
                 </div>
               ))}
@@ -43,7 +60,7 @@ export default function CVSnippet() {
                   <div className="cv-snippet-dot" />
                   <div>
                     <p className="cv-snippet-item-title">{f.title}</p>
-                    <p className="cv-snippet-item-meta">{f.institution} · {formatPeriod(f.period)}</p>
+                    <p className="cv-snippet-item-meta">{f.institution} - {formatPeriod(f.period)}</p>
                   </div>
                 </div>
               ))}
@@ -67,7 +84,7 @@ export default function CVSnippet() {
         {/* CTA sans divider au-dessus */}
         <div className="cv-snippet-cta">
           <PillButton onClick={() => navigate('/cv')}>
-            Voir le CV →
+            Voir le CV <IconArrowRight className="pill-btn-icon" />
           </PillButton>
         </div>
       </div>

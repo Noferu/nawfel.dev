@@ -10,7 +10,7 @@ export default function Home() {
   const nameRef    = useRef(null)
   const fillSvgRef = useRef(null)
 
-  // ── Animation d'entrée cinématographique ──
+  // Animation d'entrée cinématographique
   usePageIntro()
 
   useEffect(() => {
@@ -66,7 +66,7 @@ export default function Home() {
       <footer className="home-footer" data-intro="section">
         <div className="container home-footer-inner">
           <div className="home-footer-top">
-            <span className="home-footer-copy">© 2026 Nawfel Ida-Ali</span>
+            <span className="home-footer-copy">Copyright 2026 Nawfel Ida-Ali</span>
             <div className="home-footer-links">
               {[
                 { label: 'GitHub',   href: 'https://github.com/Noferu' },

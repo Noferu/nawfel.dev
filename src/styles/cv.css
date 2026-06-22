@@ -483,3 +483,35 @@
     gap: 1.25rem;
   }
 }
+
+/* SVG icon alignment fixes */
+.cv-sidebar .pill-btn {
+  line-height: 1;
+}
+
+.cv-sidebar .pill-btn-icon,
+.cv-expand-icon {
+  display: block;
+  flex: 0 0 auto;
+  width: 1em;
+  height: 1em;
+  line-height: 1;
+  pointer-events: none;
+}
+
+.cv-sidebar .pill-btn-icon {
+  width: 0.95rem;
+  height: 0.95rem;
+}
+
+.cv-expand-icon {
+  width: 1rem;
+  height: 1rem;
+  margin-top: 0.15rem;
+  transform-origin: center;
+}
+
+.cv-expand-icon--open {
+  transform: rotate(45deg);
+}
+

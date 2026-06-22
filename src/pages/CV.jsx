@@ -4,6 +4,21 @@ import { resume } from "../data/resume";
 import { deviconMap } from "../data/deviconMap";
 import PillButton from "../components/PillButton";
 import "../styles/cv.css";
+const IconDownload = ({ className = "" }) => (
+  <svg
+    className={className}
+    width="16"
+    height="16"
+    viewBox="0 0 16 16"
+    fill="currentColor"
+    aria-hidden="true"
+    focusable="false"
+  >
+    <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5A1.5 1.5 0 0 0 2.5 14h11a1.5 1.5 0 0 0 1.5-1.5v-2.5a.5.5 0 0 1 1 0v2.5A2.5 2.5 0 0 1 13.5 15h-11A2.5 2.5 0 0 1 0 12.5v-2.5a.5.5 0 0 1 .5-.5z" />
+    <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z" />
+  </svg>
+);
+
 
 const SECTIONS = [
   { id: "exp",      label: "Expériences" },
@@ -14,7 +29,7 @@ const SECTIONS = [
   { id: "interests",label: "Intérêts" },
 ];
 
-/* ── Formatage de date : "DD/MM/YYYY" → "Mois YYYY" ── */
+/* Formatage de date : "DD/MM/YYYY" vers "Mois YYYY" */
 const MONTHS_FR = [
   "Jan.", "Fév.", "Mar.", "Avr.", "Mai", "Juin",
   "Juil.", "Août", "Sep.", "Oct.", "Nov.", "Déc.",
@@ -32,14 +47,14 @@ function formatPeriod(period) {
   if (!period || period.length < 2) return "";
   const start = parseDate(period[0]);
   const end   = parseDate(period[1]);
-  if (!start || !end) return period.join(" – ");
+  if (!start || !end) return period.join(" - ");
 
   const startStr = `${MONTHS_FR[start.month - 1]} ${start.year}`;
   const endStr   = start.year === end.year
     ? MONTHS_FR[end.month - 1]
     : `${MONTHS_FR[end.month - 1]} ${end.year}`;
 
-  return `${startStr} – ${endStr}`;
+  return `${startStr} - ${endStr}`;
 }
 
 export default function CV() {
@@ -48,7 +63,7 @@ export default function CV() {
   const pageRef      = useRef(null);
   const sectionRefs  = useRef({});
 
-  /* ── Entrée GSAP ── */
+  /* Entrée GSAP */
   useEffect(() => {
     if (!pageRef.current) return;
     gsap.fromTo(
@@ -58,7 +73,7 @@ export default function CV() {
     );
   }, []);
 
-  /* ── IntersectionObserver ── */
+  /* IntersectionObserver */
   useEffect(() => {
     const observers = SECTIONS.map(({ id }) => {
       const el = sectionRefs.current[id];
@@ -85,7 +100,7 @@ export default function CV() {
     <div className="page cv-page" ref={pageRef}>
       <div className="container cv-layout">
 
-        {/* ── Sidebar ── */}
+        {/* Sidebar */}
         <aside className="cv-sidebar">
           <div className="cv-sidebar-sticky">
             <div className="cv-sidebar-photo">
@@ -105,12 +120,12 @@ export default function CV() {
               ))}
             </nav>
             <PillButton href="/assets/cv-nawfel-ida-ali.pdf" download target="_blank">
-              Télécharger le CV en PDF ↓
+              Télécharger le CV en PDF <IconDownload className="pill-btn-icon" />
             </PillButton>
           </div>
         </aside>
 
-        {/* ── Contenu ── */}
+        {/* Contenu */}
         <main className="cv-content">
           <div className="cv-page-header">
             <p className="section-label">Curriculum Vitæ</p>
@@ -118,7 +133,7 @@ export default function CV() {
             <p className="cv-page-subtitle">{resume.title}</p>
           </div>
 
-          {/* ── Expériences ── */}
+          {/* Expériences */}
           <div ref={(el) => { sectionRefs.current.exp = el; }} id="exp" className="cv-block">
             <h2 className="cv-block-title">Expériences</h2>
             <div className="cv-timeline">
@@ -140,7 +155,7 @@ export default function CV() {
                             {exp.employmentType && <span className="cv-exp-type">{exp.employmentType}</span>}
                           </p>
                           <p className="cv-exp-meta">
-                            {exp.location} · {formatPeriod(exp.period)}
+                            {exp.location} - {formatPeriod(exp.period)}
                           </p>
                         </div>
                         <span className={`cv-expand-icon ${isOpen ? "cv-expand-icon--open" : ""}`}>+</span>
@@ -168,7 +183,7 @@ export default function CV() {
             </div>
           </div>
 
-          {/* ── Formations ── */}
+          {/* Formations */}
           <div ref={(el) => { sectionRefs.current.form = el; }} id="form" className="cv-block">
             <h2 className="cv-block-title">Formations</h2>
             <div className="cv-timeline">
@@ -189,7 +204,7 @@ export default function CV() {
                             <p className="cv-exp-company">{f.specialization}</p>
                           )}
                           <p className="cv-exp-meta">
-                            {f.institution} · {formatPeriod(f.period)}
+                            {f.institution} - {formatPeriod(f.period)}
                           </p>
                         </div>
                         <span className={`cv-expand-icon ${isOpen ? "cv-expand-icon--open" : ""}`}>+</span>
@@ -219,7 +234,7 @@ export default function CV() {
             </div>
           </div>
 
-          {/* ── Compétences ── */}
+          {/* Compétences */}
           <div ref={(el) => { sectionRefs.current.comp = el; }} id="comp" className="cv-block">
             <h2 className="cv-block-title">Compétences</h2>
             <div className="cv-comp-grid">
@@ -242,7 +257,7 @@ export default function CV() {
             </div>
           </div>
 
-          {/* ── Langues ── */}
+          {/* Langues */}
           <div ref={(el) => { sectionRefs.current.lang = el; }} id="lang" className="cv-block">
             <h2 className="cv-block-title">Langues</h2>
             <div className="cv-lang-row">
@@ -255,7 +270,7 @@ export default function CV() {
             </div>
           </div>
 
-          {/* ── Qualités ── */}
+          {/* Qualités */}
           <div ref={(el) => { sectionRefs.current.qual = el; }} id="qual" className="cv-block">
             <h2 className="cv-block-title">Qualités</h2>
             <ul className="cv-qual-list">
@@ -268,7 +283,7 @@ export default function CV() {
             </ul>
           </div>
 
-          {/* ── Centres d'intérêt ── */}
+          {/* Centres d'intérêt */}
           <div ref={(el) => { sectionRefs.current.interests = el; }} id="interests" className="cv-block">
             <h2 className="cv-block-title">Centres d'intérêt</h2>
             <ul className="cv-qual-list">
