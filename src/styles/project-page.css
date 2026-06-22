@@ -1,3 +1,4 @@
+/* --- PAGE --- */
 .proj-page {
   padding-bottom: 6rem;
 }
@@ -16,7 +17,7 @@
   font-family: var(--font-display);
   font-size: 4rem;
   font-weight: 800;
-  color: rgba(251, 195, 115, 0.15);
+  color: rgba(var(--gold-rgb), 0.15);
   letter-spacing: -0.04em;
 }
 
@@ -26,6 +27,8 @@
   color: var(--text-muted);
 }
 
+
+/* --- NAV --- */
 .proj-nav {
   display: flex;
   align-items: center;
@@ -40,7 +43,7 @@
   font-size: 0.75rem;
   font-weight: 500;
   color: var(--text-muted);
-  background: rgba(251, 195, 115, 0.035);
+  background: rgba(var(--gold-rgb), 0.035);
   border: 1px solid var(--border);
   padding: 0.45rem 0.95rem;
   border-radius: 999px;
@@ -52,7 +55,7 @@
 .proj-back-btn:hover {
   border-color: var(--border-2);
   color: var(--gold-light);
-  background: rgba(251, 195, 115, 0.065);
+  background: rgba(var(--gold-rgb), 0.065);
 }
 
 .proj-siblings {
@@ -70,14 +73,14 @@
   max-width: 220px;
   padding: 0.55rem 0.85rem;
   border-radius: 14px;
-  background: rgba(251, 195, 115, 0.035);
-  border: 1px solid rgba(251, 195, 115, 0.12);
+  background: rgba(var(--gold-rgb), 0.035);
+  border: 1px solid rgba(var(--gold-rgb), 0.12);
   transition: all var(--t-fast);
 }
 
 .proj-sib-btn:hover {
-  border-color: rgba(251, 195, 115, 0.25);
-  background: rgba(251, 195, 115, 0.07);
+  border-color: rgba(var(--gold-rgb), 0.25);
+  background: rgba(var(--gold-rgb), 0.07);
 }
 
 .proj-sib-kicker {
@@ -106,6 +109,8 @@
   color: var(--gold-light);
 }
 
+
+/* --- HEADER --- */
 .proj-header {
   display: flex;
   flex-direction: column;
@@ -136,8 +141,8 @@
   font-family: var(--font-display);
   font-size: 0.6rem;
   color: var(--gold-light);
-  background: rgba(251, 195, 115, 0.08);
-  border: 1px solid rgba(251, 195, 115, 0.2);
+  background: rgba(var(--gold-rgb), 0.08);
+  border: 1px solid rgba(var(--gold-rgb), 0.2);
   padding: 0.15rem 0.5rem;
   border-radius: 999px;
   letter-spacing: 0.06em;
@@ -161,7 +166,7 @@
   max-width: 850px;
   font-family: var(--font-body);
   font-size: clamp(1rem, 1.25vw, 1.12rem);
-  color: rgba(245, 236, 215, 0.84);
+  color: var(--text-body);
   font-weight: 400;
   line-height: 1.75;
 }
@@ -177,13 +182,15 @@
   font-size: 0.65rem;
   font-weight: 500;
   color: var(--amber);
-  background: rgba(212, 138, 57, 0.08);
-  border: 1px solid rgba(212, 138, 57, 0.18);
+  background: rgba(var(--amber-rgb), 0.08);
+  border: 1px solid rgba(var(--amber-rgb), 0.18);
   padding: 0.2rem 0.55rem;
   border-radius: 4px;
   letter-spacing: 0.03em;
 }
 
+
+/* --- CAROUSEL --- */
 .proj-carousel {
   width: 100%;
   border-radius: var(--panel-radius);
@@ -191,10 +198,10 @@
   border: 1px solid var(--panel-border);
   margin-bottom: 0;
   position: relative;
-  background: rgba(78, 2, 1, 0.1);
+  background: rgba(var(--red-deep-rgb), 0.1);
   box-shadow:
     0 24px 80px rgba(0, 0, 0, 0.28),
-    0 0 35px rgba(251, 195, 115, 0.035);
+    0 0 35px rgba(var(--gold-rgb), 0.035);
 }
 
 .proj-carousel-inner {
@@ -235,8 +242,8 @@
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background: rgba(14, 3, 1, 0.7);
-  border: 1px solid rgba(251, 195, 115, 0.2);
+  background: rgba(var(--black-rgb), 0.7);
+  border: 1px solid rgba(var(--gold-rgb), 0.2);
   color: var(--text);
   display: flex;
   align-items: center;
@@ -249,8 +256,8 @@
 }
 
 .proj-carousel-btn:hover {
-  background: rgba(251, 195, 115, 0.12);
-  border-color: rgba(251, 195, 115, 0.35);
+  background: rgba(var(--gold-rgb), 0.12);
+  border-color: rgba(var(--gold-rgb), 0.35);
   color: var(--gold-light);
 }
 
@@ -271,7 +278,7 @@
   display: flex;
   gap: 3px;
   padding: 0.6rem 0.8rem;
-  background: rgba(14, 3, 1, 0.3);
+  background: rgba(var(--black-rgb), 0.3);
   border-top: none;
 }
 
@@ -279,19 +286,21 @@
   flex: 1;
   height: 2px;
   border-radius: 1px;
-  background: rgba(251, 195, 115, 0.15);
+  background: rgba(var(--gold-rgb), 0.15);
   cursor: pointer;
   transition: background var(--t-fast);
 }
 
 .proj-progress-segment:hover {
-  background: rgba(251, 195, 115, 0.3);
+  background: rgba(var(--gold-rgb), 0.3);
 }
 
 .proj-progress-segment--active {
   background: var(--gold-light);
 }
 
+
+/* --- WORKFLOW --- */
 .proj-workflow-wrapper {
   max-width: 100%;
   margin-top: 2.5rem;
@@ -301,7 +310,7 @@
   align-items: center;
 }
 
-.proj-workflow-wrapper > .section-label {
+.proj-workflow-wrapper>.section-label {
   width: 100%;
 }
 
@@ -323,8 +332,8 @@
   margin-inline: auto;
   padding: 0.25rem;
   border-radius: 999px;
-  border: 1px solid rgba(251, 195, 115, 0.1);
-  background: rgba(14, 3, 1, 0.32);
+  border: 1px solid var(--border);
+  background: rgba(var(--black-rgb), 0.32);
   overflow-x: auto;
   scrollbar-width: none;
 }
@@ -360,12 +369,12 @@
 
 .proj-workflow-tab:hover {
   color: var(--text);
-  background: rgba(251, 195, 115, 0.055);
+  background: rgba(var(--gold-rgb), 0.055);
 }
 
 .proj-workflow-tab:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 3px rgba(251, 195, 115, 0.08);
+  box-shadow: 0 0 0 3px rgba(var(--gold-rgb), 0.08);
 }
 
 .proj-workflow-tab--active {
@@ -404,7 +413,7 @@
 
 .proj-workflow {
   width: 100%;
-  border: 1px solid rgba(251, 195, 115, 0.15);
+  border: 1px solid rgba(var(--gold-rgb), 0.15);
   border-radius: 16px;
   overflow: hidden;
   background: #fff;
@@ -415,7 +424,7 @@
 }
 
 .proj-workflow:hover {
-  border-color: rgba(251, 195, 115, 0.22);
+  border-color: rgba(var(--gold-rgb), 0.22);
 }
 
 .proj-workflow--loading {
@@ -429,6 +438,8 @@
   min-height: 420px;
 }
 
+
+/* --- BODY --- */
 .proj-body {
   display: flex;
   flex-direction: column;
@@ -463,7 +474,7 @@
   max-width: 100%;
   font-family: var(--font-body);
   font-size: clamp(1.03rem, 1.25vw, 1.16rem);
-  color: rgba(245, 236, 215, 0.88);
+  color: var(--text-body);
   line-height: 1.82;
   font-weight: 400;
 }
@@ -504,14 +515,14 @@
 .proj-info-val {
   font-family: var(--font-body);
   font-size: 0.94rem;
-  color: rgba(245, 236, 215, 0.84);
+  color: var(--text-body);
   line-height: 1.6;
   font-weight: 400;
 }
 
 .proj-pre {
-  background: rgba(251, 195, 115, 0.03);
-  border: 1px solid rgba(251, 195, 115, 0.1);
+  background: rgba(var(--gold-rgb), 0.03);
+  border: 1px solid var(--border);
   border-radius: 8px;
   padding: 1.5rem;
   overflow-x: auto;
@@ -530,6 +541,8 @@
   flex-wrap: wrap;
 }
 
+
+/* --- RESPONSIVE --- */
 @media (max-width: 1024px) {
   .proj-body {
     max-width: 100%;
@@ -640,7 +653,7 @@
   }
 }
 
-/* SVG icon alignment fixes */
+/* --- ICON FIXES --- */
 .proj-back-btn,
 .proj-featured-badge,
 .proj-carousel-btn,
@@ -710,4 +723,3 @@
 .proj-links-row a:hover .proj-link-icon {
   transform: translate(2px, -2px);
 }
-
