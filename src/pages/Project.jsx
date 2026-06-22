@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { Fragment, useState, useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import gsap from "gsap";
 import { projects } from "../data/projects";
@@ -236,142 +236,111 @@ export default function Project() {
           </div>
         </div>
 
-        <header className="proj-header">
-          <div className="proj-meta">
-            {projectDate && <span className="proj-year">{projectDate}</span>}
+        <div className="proj-content">
+          <header className="proj-header">
+            <div className="proj-meta">
+              {projectDate && <span className="proj-year">{projectDate}</span>}
 
-            {project.featured && (
-              <span className="proj-featured-badge">
-                <IconStarFill className="proj-featured-icon" /> En vedette
-              </span>
-            )}
-
-            <span className="proj-category">
-              {project.category === "bonus"
-                ? "Projet créatif"
-                : "Projet technique"}
-            </span>
-          </div>
-
-          <h1 className="proj-title">{project.title}</h1>
-
-          {project.shortDesc && (
-            <p className="proj-short-desc">{project.shortDesc}</p>
-          )}
-
-          <div className="proj-tags">
-            {project.tags.map((tag) => (
-              <span key={tag} className="proj-tag">
-                {tag}
-              </span>
-            ))}
-          </div>
-        </header>
-
-        {allMedia.length > 0 && currentMedia && (
-          <div className="proj-carousel">
-            <div className="proj-carousel-inner">
-              {currentMedia.type === "image" ? (
-                <img
-                  src={currentMedia.url}
-                  alt={currentMedia.alt}
-                  className="proj-carousel-img"
-                />
-              ) : currentMedia.type === "video" ? (
-                <video
-                  src={currentMedia.url}
-                  className="proj-carousel-video"
-                  controls
-                  loop
-                  playsInline
-                  poster={currentMedia.poster || undefined}
-                />
-              ) : (
-                <iframe
-                  src={currentMedia.url}
-                  title={project.title}
-                  className="proj-carousel-iframe"
-                  allow="autoplay; fullscreen"
-                />
+              {project.featured && (
+                <span className="proj-featured-badge">
+                  <IconStarFill className="proj-featured-icon" /> En vedette
+                </span>
               )}
 
-              {allMedia.length > 1 && (
-                <>
-                  <button
-                    className="proj-carousel-btn proj-carousel-btn--prev"
-                    onClick={() => setMediaIdx((i) => Math.max(0, i - 1))}
-                    disabled={safeIdx === 0}
-                    aria-label="Média précédent"
-                  >
-                    <IconArrowLeft className="proj-carousel-icon" />
-                  </button>
-
-                  <button
-                    className="proj-carousel-btn proj-carousel-btn--next"
-                    onClick={() =>
-                      setMediaIdx((i) => Math.min(allMedia.length - 1, i + 1))
-                    }
-                    disabled={safeIdx === allMedia.length - 1}
-                    aria-label="Média suivant"
-                  >
-                    <IconArrowRight className="proj-carousel-icon" />
-                  </button>
-                </>
-              )}
+              <span className="proj-category">
+                {project.category === "bonus"
+                  ? "Projet créatif"
+                  : "Projet technique"}
+              </span>
             </div>
 
-            {allMedia.length > 1 && (
-              <div className="proj-progress" role="tablist">
-                {allMedia.map((_, i) => (
-                  <div
-                    key={i}
-                    role="tab"
-                    aria-selected={i === safeIdx}
-                    className={`proj-progress-segment ${
-                      i === safeIdx ? "proj-progress-segment--active" : ""
-                    }`}
-                    onClick={() => setMediaIdx(i)}
+            <h1 className="proj-title">{project.title}</h1>
+
+            {project.shortDesc && (
+              <p className="proj-short-desc">{project.shortDesc}</p>
+            )}
+
+            <div className="proj-tags">
+              {project.tags.map((tag) => (
+                <span key={tag} className="proj-tag">
+                  {tag}
+                </span>
+              ))}
+            </div>
+          </header>
+
+          {allMedia.length > 0 && currentMedia && (
+            <div className="proj-carousel">
+              <div className="proj-carousel-inner">
+                {currentMedia.type === "image" ? (
+                  <img
+                    src={currentMedia.url}
+                    alt={currentMedia.alt}
+                    className="proj-carousel-img"
                   />
-                ))}
+                ) : currentMedia.type === "video" ? (
+                  <video
+                    src={currentMedia.url}
+                    className="proj-carousel-video"
+                    controls
+                    loop
+                    playsInline
+                    poster={currentMedia.poster || undefined}
+                  />
+                ) : (
+                  <iframe
+                    src={currentMedia.url}
+                    title={project.title}
+                    className="proj-carousel-iframe"
+                    allow="autoplay; fullscreen"
+                  />
+                )}
+
+                {allMedia.length > 1 && (
+                  <>
+                    <button
+                      className="proj-carousel-btn proj-carousel-btn--prev"
+                      onClick={() => setMediaIdx((i) => Math.max(0, i - 1))}
+                      disabled={safeIdx === 0}
+                      aria-label="Média précédent"
+                    >
+                      <IconArrowLeft className="proj-carousel-icon" />
+                    </button>
+
+                    <button
+                      className="proj-carousel-btn proj-carousel-btn--next"
+                      onClick={() =>
+                        setMediaIdx((i) => Math.min(allMedia.length - 1, i + 1))
+                      }
+                      disabled={safeIdx === allMedia.length - 1}
+                      aria-label="Média suivant"
+                    >
+                      <IconArrowRight className="proj-carousel-icon" />
+                    </button>
+                  </>
+                )}
               </div>
-            )}
-          </div>
-        )}
 
-        {project.workflows?.length > 0 && (
-          <div className="proj-workflow-wrapper">
-            <p className="section-label">
-              {project.workflows.length > 1 ? "Workflows" : "Workflow"}
-            </p>
-
-            <N8nWorkflow workflows={project.workflows} />
-          </div>
-        )}
-
-        <div className="proj-body">
-          <section className="proj-section proj-section--intro">
-            <p className="section-label">Présentation</p>
-
-            {project.longDesc && (
-              <div className="proj-long-desc">
-                {project.longDesc
-                  .split(/\r?\n\s*\r?\n/)
-                  .map((paragraph) => paragraph.trim())
-                  .filter(Boolean)
-                  .map((paragraph, index) => (
-                    <p key={index}>{paragraph}</p>
+              {allMedia.length > 1 && (
+                <div className="proj-progress" role="tablist">
+                  {allMedia.map((_, i) => (
+                    <div
+                      key={i}
+                      role="tab"
+                      aria-selected={i === safeIdx}
+                      className={`proj-progress-segment ${
+                        i === safeIdx ? "proj-progress-segment--active" : ""
+                      }`}
+                      onClick={() => setMediaIdx(i)}
+                    />
                   ))}
-              </div>
-            )}
-
-            <div className="proj-info-grid">
-              {projectDate && (
-                <div className="proj-info-card">
-                  <span className="proj-info-key">Date</span>
-                  <span className="proj-info-val">{projectDate}</span>
                 </div>
               )}
+            </div>
+          )}
 
+          {(project.context || project.role || project.stack?.length > 0) && (
+            <div className="proj-info-grid">
               {project.context && (
                 <div className="proj-info-card">
                   <span className="proj-info-key">Contexte</span>
@@ -386,16 +355,49 @@ export default function Project() {
                 </div>
               )}
 
-              {project.stack && (
+              {project.stack?.length > 0 && (
                 <div className="proj-info-card proj-info-card--wide">
                   <span className="proj-info-key">Stack</span>
-                  <span className="proj-info-val">
-                    {project.stack.join(" - ")}
+                  <span className="proj-info-val proj-stack">
+                    {project.stack.map((item, i) => (
+                      <Fragment key={item}>
+                        {i > 0 && (
+                          <span className="proj-stack-dot" aria-hidden="true" />
+                        )}
+                        <span className="proj-stack-item">{item}</span>
+                      </Fragment>
+                    ))}
                   </span>
                 </div>
               )}
             </div>
+          )}
+
+          <section className="proj-section proj-section--intro">
+            <p className="section-label">Présentation</p>
+
+            {project.longDesc && (
+              <div className="proj-long-desc">
+                {project.longDesc
+                  .split(/\r?\n\s*\r?\n/)
+                  .map((paragraph) => paragraph.trim())
+                  .filter(Boolean)
+                  .map((paragraph, index) => (
+                    <p key={index}>{paragraph}</p>
+                  ))}
+              </div>
+            )}
           </section>
+
+          {project.workflows?.length > 0 && (
+            <div className="proj-workflow-wrapper">
+              <p className="section-label">
+                {project.workflows.length > 1 ? "Workflows" : "Workflow"}
+              </p>
+
+              <N8nWorkflow workflows={project.workflows} />
+            </div>
+          )}
 
           {project.codeSnippet && (
             <section className="proj-section">
