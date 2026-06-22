@@ -6,12 +6,10 @@ export const projects = [
     featured: true,
     category: "info",
     tags: ["Laravel", "React", "WebSocket", "MySQL", "CI/CD", "PHP"],
-    shortDesc:
-      "Application full-stack de gestion de production en temps réel avec dashboard Kanban, WebSocket, CI/CD et suite de tests PHPUnit.",
-    longDesc:
-      "Projet individuel développé dans le cadre de la SAE 501 (BUT MMI 3). L'application simule une chaîne de production de sachets de chocolat pour les Journées Portes Ouvertes du département QLIO. Les visiteurs commandent via QR code tandis que les superviseurs gèrent la production en temps réel via un dashboard Kanban WebSocket. Le projet inclut une gestion complète des stocks avec alertes de rupture, un système de contrôle qualité avec déclaration de non-conformités, un pipeline CI/CD GitLab avec tests PHPUnit automatisés (20+ tests), ainsi qu'une architecture orientée domaine avec des services spécialisés.",
+    shortDesc: "Application full-stack pensée pour piloter une chaîne de production de sachets de chocolat en temps réel : commandes visiteurs, dashboard opérateur, stocks, qualité, rôles et CI/CD.",
+    longDesc: "Usine Chocolat est arrivé dans le cadre d’un projet scolaire autour des Journées Portes Ouvertes de l’IUT. L’idée était de créer une interface pour accompagner une ligne de production de sachets de chocolats gérée par le département QLIO, afin de montrer concrètement comment fonctionne une chaîne de production. J’ai choisi de faire le projet seul pour garder la main sur toute l’application, avancer à mon rythme et éviter de dépendre de l’avancement de quelqu’un d’autre. Ça représentait plus de travail, mais aussi moins de coordination à gérer, ce qui me permettait d’être plus autonome.\n\nL’application permettait aux visiteurs de scanner un QR code, de renseigner leurs informations, d’indiquer d’éventuelles allergies, puis de passer une commande de sachets de chocolats. Une fois la commande envoyée, ils pouvaient suivre son avancement étape par étape, récupérer un numéro de commande et en relancer une nouvelle dans la limite prévue. De l’autre côté, les opérateurs et superviseurs disposaient d’un tableau de bord en temps réel pour suivre les commandes, les déplacer entre les postes de travail, déclarer des non-conformités, gérer les stocks et consulter des statistiques utiles sur l’avancée de la production.\n\nTechniquement, j’ai construit toute l’application : le dashboard, la gestion des commandes, les stocks, les alertes, les rôles, les sessions annuelles, la partie qualité, le modèle de données, les tests et l’architecture globale. Le projet reposait sur Laravel, React, Inertia, MySQL et un système WebSocket pour le temps réel. J’ai aussi mis en place une pipeline CI/CD sur GitLab avec des tests automatisés, ce qui m’a permis de travailler sur une base plus fiable. C’était un projet assez complet, parce qu’il ne s’agissait pas seulement de faire une interface jolie, mais de gérer un vrai flux de production avec plusieurs profils, plusieurs étapes et des données qui devaient rester cohérentes.",
     context: "Projet académique individuel - SAE 501, BUT MMI 3",
-    role: "Développement full-stack complet",
+    role: "Conception et développement full-stack complet",
     stack: [
       "Laravel 12",
       "React 18",
@@ -43,7 +41,6 @@ export const projects = [
     ],
     thumbnail: "/assets/img/projects/usine-chocolat-thumb.png",
   },
-
   {
     slug: "yasuragi",
     title: "Yasuragi",
@@ -51,12 +48,10 @@ export const projects = [
     featured: true,
     category: "info",
     tags: ["Laravel", "PHP", "JavaScript", "MySQL", "UX"],
-    shortDesc:
-      "Outil de gestion de projet collaboratif (Scrum + Kanban) avec drag & drop natif, notifications, politiques d'accès et design system complet.",
-    longDesc:
-      "Projet individuel complet développé dans le cadre de la SAE 501 (BUT MMI 3). Yasuragi est une alternative légère à Trello/Jira combinant Scrum (sprints, backlog, roadmap) et Kanban. L'application comprend un système de rôles (Owner, Manager, Member, Viewer), un board Kanban avec drag & drop HTML5 natif et mise à jour optimiste via AJAX, une roadmap timeline, un moteur de recherche global, un système de notifications in-app, et un design system complet avec support light/dark mode.",
+    shortDesc: "Outil de gestion de projet plus léger et plus calme que les plateformes classiques, avec backlog, sprints, roadmap, rôles et Kanban interactif en drag & drop.",
+    longDesc: "Yasuragi est un projet individuel réalisé dans le cadre de la SAE 501, avec l’envie de créer un outil de gestion de projet plus léger et plus agréable que les grosses plateformes classiques. L’idée n’était pas de refaire Jira ou Trello à l’identique, mais plutôt de construire un espace plus simple, plus calme, où l’on peut organiser un projet sans se sentir noyé dans les fonctionnalités. Le nom Yasuragi renvoie justement à cette idée de sérénité, ce qui correspondait bien à l’ambiance que je voulais donner à l’application.\n\nL’application permet de créer des projets, d’organiser les tâches, de gérer un backlog, des sprints, une roadmap et un board Kanban. Les utilisateurs peuvent avoir différents rôles, comme Owner, Manager, Member ou Viewer, ce qui permet d’adapter les droits selon la place de chacun dans le projet. Le board Kanban est pensé pour être fluide, avec du drag & drop, des mises à jour rapides et même des petits sons pour rendre l’expérience plus vivante. Je voulais vraiment que l’outil donne envie d’être utilisé, pas juste qu’il coche une liste de fonctionnalités.\n\nTechniquement, le projet a été construit avec Laravel et Blade, en gardant une architecture assez classique mais propre. J’ai développé la gestion des rôles, les projets, les tâches, les sprints, la roadmap, le Kanban en drag & drop natif et les mises à jour optimistes via AJAX. Le plus compliqué n’a pas seulement été la logique technique, même si le Kanban demandait pas mal de soin, mais surtout l’UX. Trouver une belle roadmap, un board agréable, une interface claire et cohérente, c’était finalement ce qui prenait le plus de réflexion. Ce projet m’a donné l’impression de construire un vrai petit outil, assez simple pour rester utilisable, mais assez complet pour ressembler à quelque chose de concret.",
     context: "Projet académique individuel - SAE 501, BUT MMI 3",
-    role: "Développement full-stack complet",
+    role: "Conception UX et développement full-stack complet",
     stack: [
       "Laravel 12",
       "PHP 8.3",
@@ -78,11 +73,13 @@ export const projects = [
     codeSnippet: null,
     media: null,
     links: [
-      { label: "GitHub", url: "https://github.com/Noferu/sae-501-yasuragi" },
+      {
+        label: "GitHub",
+        url: "https://github.com/Noferu/sae-501-yasuragi",
+      },
     ],
     thumbnail: "/assets/img/projects/yasuragi-thumb.png",
   },
-
   {
     slug: "di5-festival",
     title: "DI5 Festival",
@@ -90,12 +87,10 @@ export const projects = [
     featured: true,
     category: "info",
     tags: ["Flutter", "Firebase", "Mobile", "Dart"],
-    shortDesc:
-      "Application mobile cross-platform pour un festival de cinéma : authentification, cartographie Mapbox, vote QR, achat de pass et notifications push.",
-    longDesc:
-      "Projet académique de développement mobile réalisé en groupe de 3 pour le Festival Européen du Film Fantastique de Strasbourg. L'application Flutter/Firebase couvre l'ensemble du parcours festivalier : consultation de la programmation avec streams Firestore temps réel, système de vote via QR code, achat de pass en 3 étapes avec paiement, réservation d'événements avec export calendrier natif, préférences personnalisées avec carte Mapbox interactive, et notifications push via Firebase Cloud Messaging. Score pédagogique estimé 22/22.",
-    context: "Projet académique - groupe de 3, BUT MMI S5",
-    role: "Développement mobile, intégration Firebase et Mapbox",
+    shortDesc: "Application mobile Flutter/Firebase pour un festival de cinéma, avec programmation en temps réel, réservations, tickets, accessibilité et système de vote par QR code.",
+    longDesc: "DI5 Festival est un projet académique réalisé en équipe autour du Festival Européen du Film Fantastique de Strasbourg. L’objectif était de concevoir une application mobile qui accompagne un festivalier dans son expérience, de la consultation de la programmation jusqu’à la réservation et au vote. Nous avons choisi Flutter pour pouvoir viser Android et iOS avec une seule base, et Firebase pour gérer l’authentification, les données et les flux applicatifs. Nous avons aussi retravaillé la direction graphique avec une interface sombre, sobre et plus simple à parcourir.\n\nL’application permet à un utilisateur de consulter les films et événements du festival, d’accéder aux détails, de réserver des séances, de retrouver ses tickets, de voter pour des films via un QR code et de gérer une partie de son profil. Elle intègre aussi des fonctionnalités liées au téléphone, comme l’ajout d’événements au calendrier ou certaines notifications. Une attention particulière a été portée à l’accessibilité, notamment avec les bonnes sémantiques Flutter pour que l’application reste utilisable avec un lecteur d’écran.\n\nSur ce projet, je me suis surtout occupé du cœur applicatif. J’ai développé la page d’accueil, organisé les flux Firestore en temps réel, mis en place la pagination, le cache des films et une partie importante de la structuration des données. J’ai aussi travaillé sur les seeders pour nettoyer et réinjecter des données réalistes dans Firebase, ainsi que sur le système de votes utilisateurs. Cette partie allait jusqu’à la génération des QR codes, la page de scan, la redirection vers le formulaire de vote, l’enregistrement en base et le retour vers la page du film. C’était un projet intéressant parce qu’il demandait à la fois de penser l’expérience utilisateur, la structure des données et la coordination avec le reste de l’équipe.",
+    context: "Projet académique en groupe - BUT MMI S5",
+    role: "Cœur applicatif, structuration Firestore et système de vote QR",
     stack: [
       "Flutter 3",
       "Dart",
@@ -123,7 +118,6 @@ export const projects = [
     ],
     thumbnail: "/assets/img/projects/di5-thumb.png",
   },
-
   {
     slug: "pipeline-synthese-comptable",
     title: "Pipeline Synthèse Comptable",
@@ -131,12 +125,10 @@ export const projects = [
     featured: true,
     category: "info",
     tags: ["n8n", "Automatisation", "API", "JavaScript", "IA"],
-    shortDesc:
-      "Système automatisé de synthèse financière mensuelle multi-logiciels générant des rapports KPI personnalisés par client et les envoyant par mail.",
-    longDesc:
-      "Système d'automatisation développé en stage dans un cabinet comptable. Deux workflows PROD (MyUnisoft et Pennylane) se déclenchent le 26 de chaque mois, s'authentifient sur les APIs respectives, récupèrent les sociétés clientes et collectent trois niveaux de données financières. Les données sont normalisées, enrichies des budgets, avant d'être passées à un sous-workflow qui produit des KPIs financiers, un graphique d'évolution de trésorerie généré en code et un rapport HTML envoyé via Outlook. Le système inclut gestion des rate limits API, meta-orchestration via l'API n8n elle-même et parsing de dates non-standards via Gemini.",
-    context: "Stage - Cabinet Comptable Doucy Consilium, Sélestat",
-    role: "Conception et développement complet",
+    shortDesc: "Système automatisé de synthèse financière mensuelle multi-logiciels générant des rapports KPI personnalisés par client et les envoyant par mail.",
+    longDesc: "Pipeline Synthèse Comptable est un projet développé pendant mon stage dans un cabinet comptable. Le besoin venait d’une tâche très répétitive : produire des synthèses financières pour les clients et donner aux collaborateurs un récapitulatif clair de leurs dossiers. Avant de reconstruire le système, j’ai dû auditer une première version qui était devenue difficile à maintenir et peu pratique au quotidien. Par exemple, la sélection des clients passait par plusieurs fichiers Excel séparés, un pour inclure certains clients et un autre pour en exclure, ce qui rendait le processus lourd, fragile et pas vraiment tenable.\n\nLe système que j’ai mis en place permet de déclencher automatiquement deux workflows de production, l’un pour MyUnisoft et l’autre pour Pennylane. Chaque mois, ils récupèrent les sociétés clientes, collectent plusieurs niveaux de données financières, les normalisent, les enrichissent avec les budgets, puis génèrent des indicateurs utiles. Le résultat final comprend des KPIs, un graphique d’évolution de trésorerie et un rapport HTML envoyé par Outlook. Le gain était concret : une tâche qui pouvait prendre environ 5 heures pouvait descendre autour de 15 minutes.\n\nTechniquement, j’ai reconstruit une grande partie de la logique dans n8n. J’ai utilisé les API MyUnisoft et Pennylane, géré les limites d’appels, structuré les traitements en sous-workflows et automatisé la génération des rapports. J’ai aussi remplacé la sélection manuelle par Excel par un système beaucoup plus propre avec les data tables de n8n et un formulaire administrateur construit en bidouillant le moteur de n8n pour obtenir quelque chose de vraiment utilisable. L’administrateur pouvait simplement cocher les clients à traiter, avec leurs noms, et sauvegarder la configuration. C’est typiquement le genre de projet où le vrai travail n’était pas seulement d’automatiser, mais de rendre le processus compréhensible, maintenable et agréable à gérer.",
+    context: "Stage - Cabinet comptable Doucy Consilium, Sélestat",
+    role: "Audit, refonte et automatisation complète du processus",
     workflows: [
       {
         label: "Synthèse mensuelle Pennylane",
@@ -176,7 +168,6 @@ export const projects = [
     links: [],
     thumbnail: "/assets/img/projects/pipeline-thumb.png",
   },
-
   {
     slug: "plateforme-onboarding",
     title: "Plateforme Onboarding Client",
@@ -184,12 +175,10 @@ export const projects = [
     featured: true,
     category: "info",
     tags: ["n8n", "Automatisation", "API", "PDF", "IA"],
-    shortDesc:
-      "Système complet d'onboarding de prospects : pipeline de tâches séquentielles, génération de lettres de mission PDF multi-pages et suivi des réponses.",
-    longDesc:
-      "Plateforme d'automatisation métier développée en stage, constituée d'une vingtaine de workflows n8n interconnectés couvrant l'intégralité du cycle d'onboarding d'un nouveau client. Le système repose sur un routeur central Airtable qui dispatche vers des handlers spécialisés. Le pipeline gère les prospects via des phases et tâches séquentielles avec système de dépendances. Un sous-workflow génère des PDFs multi-pages via Gotenberg. Le système de communication planifiée génère des emails MJML personnalisés et un workflow de polling Outlook classe les réponses via Gemini pour mettre à jour automatiquement les statuts.",
-    context: "Stage - Cabinet Comptable Doucy Consilium, Sélestat",
-    role: "Conception et développement complet",
+    shortDesc: "Plateforme métier d’onboarding client construite autour d’Airtable et n8n, avec suivi des prospects, tâches dépendantes, génération PDF, emails MJML et analyse automatique des réponses.",
+    longDesc: "Plateforme Onboarding Client est un projet développé pendant mon stage, dans un contexte où le suivi des nouveaux clients était très manuel et assez dispersé. Le cabinet avait besoin d’un système plus clair pour suivre l’avancement des prospects, éviter les oublis, mieux organiser les relances et centraliser les informations importantes. Avant de construire la solution, nous avons comparé plusieurs outils comme Monday, Baserow, Airtable et d’autres plateformes no-code. Airtable a finalement été retenu comme base, mais il fallait encore construire toute la logique métier autour pour que le processus devienne vraiment exploitable au quotidien.\n\nLa plateforme permet de suivre un client depuis son arrivée jusqu’à la fin de son onboarding. Les prospects avancent à travers différentes phases, avec des tâches qui se déclenchent selon des dépendances et des statuts. Le système permet aussi de générer des documents, d’envoyer des mails personnalisés, de planifier des communications et de classer automatiquement certaines réponses. L’objectif côté direction était surtout l’automatisation, mais dans les faits, l’un des plus gros apports était aussi l’organisation : rendre le travail plus fluide entre les collaborateurs, donner une meilleure visibilité sur les dossiers et éviter que chacun doive chercher les informations à plusieurs endroits.\n\nTechniquement, j’ai construit une vingtaine de workflows n8n interconnectés, avec un routeur central basé sur Airtable qui redirigeait les actions vers des handlers spécialisés. J’ai mis en place la logique des phases, des tâches, des dépendances, la génération de PDF multi-pages via Gotenberg, ainsi que des emails personnalisés en MJML. Un workflow de polling Outlook récupérait les réponses aux mails, puis Gemini les classait pour mettre à jour automatiquement les statuts dans Airtable. Ce projet m’a surtout appris à penser une automatisation comme un vrai système métier, avec des cas particuliers, des erreurs possibles et des besoins humains derrière chaque étape.",
+    context: "Stage - Cabinet comptable Doucy Consilium, Sélestat",
+    role: "Conception du système métier et développement des workflows",
     stack: [
       "n8n",
       "Airtable API",
@@ -213,7 +202,6 @@ export const projects = [
     links: [],
     thumbnail: "/assets/img/projects/onboarding-thumb.png",
   },
-
   {
     slug: "mutualmap",
     title: "MutualMap",
@@ -221,10 +209,8 @@ export const projects = [
     featured: false,
     category: "info",
     tags: ["Python", "JavaScript", "API", "Visualisation"],
-    shortDesc:
-      "Outil de visualisation de réseaux sociaux Discord sous forme de graphe interactif avec analyse statistique.",
-    longDesc:
-      "Projet personnel visant à visualiser les réseaux d'amis Discord sous forme de graphes interactifs HTML générés localement. Un script JavaScript extrait les données via l'API Discord, un script Python génère un graphe interactif avec PyVis/Vis.js enrichi d'un panneau de statistiques (densité, clusters, diamètre, utilisateurs isolés, top connexions). Un mode \"mega graph\" permet de fusionner plusieurs exports de comptes différents pour visualiser les interconnexions cross-utilisateurs.",
+    shortDesc: "Outil de visualisation de réseaux sociaux Discord sous forme de graphe interactif avec analyse statistique.",
+    longDesc: "MutualMap est né d’une curiosité assez simple : voir à quoi ressemblent vraiment les réseaux d’amis Discord quand on les transforme en graphes. À la base, c’était un projet très “entre potes”, presque un délire de curiosité, mais je trouvais intéressant de rendre visibles des connexions qu’on ne perçoit pas forcément dans l’interface Discord. Au lieu de seulement voir une liste d’amis, je voulais comprendre les groupes, les ponts entre communautés, les personnes isolées et les liens communs entre plusieurs comptes.\n\nL’outil permet d’exporter les relations d’un compte Discord puis de générer un graphe interactif en HTML. On peut y voir les différents groupes d’amis, les clusters, les connexions importantes, les utilisateurs isolés et quelques statistiques comme la densité du réseau, le diamètre du graphe ou les top connexions. J’ai aussi ajouté un mode “mega graph” qui permet de fusionner plusieurs exports de comptes différents pour voir les interconnexions entre plusieurs réseaux. C’est le genre de projet qui n’a pas besoin d’être très sérieux pour être intéressant : il rend juste visible un truc qu’on connaît tous, mais qu’on ne voit jamais vraiment.\n\nTechniquement, le projet repose sur un script JavaScript lancé côté navigateur pour récupérer les données via Discord, puis sur un traitement Python qui génère un graphe interactif avec PyVis et Vis.js. J’ai enrichi le rendu avec un panneau de statistiques, des indicateurs sur la structure du réseau et des outils pour fusionner plusieurs exports. La partie extraction n’est pas forcément la plus “propre” au sens académique, mais elle a l’avantage d’être transparente et compréhensible pour quelqu’un qui veut générer son propre graphe localement. Ce projet m’a surtout plu parce qu’il mélangeait collecte de données, visualisation et analyse sociale d’une manière assez concrète.",
     context: "Projet personnel",
     role: "Conception et développement complet",
     stack: [
@@ -245,10 +231,14 @@ export const projects = [
     demo: null,
     codeSnippet: null,
     media: null,
-    links: [{ label: "GitHub", url: "https://github.com/Noferu/mutualmap" }],
+    links: [
+      {
+        label: "GitHub",
+        url: "https://github.com/Noferu/mutualmap",
+      },
+    ],
     thumbnail: "/assets/img/projects/mutualmap-thumb.png",
   },
-
   {
     slug: "discord-riot-bot",
     title: "Discord Riot Bot",
@@ -256,10 +246,8 @@ export const projects = [
     featured: false,
     category: "info",
     tags: ["Python", "API", "IA", "Automatisation"],
-    shortDesc:
-      "Bot Discord autonome trackant les parties League of Legends en temps réel avec persona IA via Gemini.",
-    longDesc:
-      "Bot Discord privé développé en Python pour tracker les parties League of Legends d'un groupe d'amis. Le bot interroge l'API Riot Spectator toutes les 60 secondes pour détecter les débuts et fins de parties, poste des messages Discord Components V2 avec champion, KDA, différentiel de LP et mode de jeu, attribue automatiquement des rôles Discord selon l'activité. Dispose d'une persona IA (Shaco, bouffon démoniaque) propulsée par Gemini 2.0 Flash avec contexte complet. Architecture modulaire avec séparation des responsabilités.",
+    shortDesc: "Bot Discord autonome trackant les parties League of Legends en temps réel avec persona IA via Gemini.",
+    longDesc: "Discord Riot Bot est une expérimentation avancée que j’ai développée pour suivre les parties League of Legends d’un groupe d’amis sur Discord. Le but n’était pas de faire un produit public ou un bot parfait, mais plutôt de créer un outil vivant pour notre serveur : détecter les games, poster des infos automatiquement, suivre les résultats et ajouter une petite ambiance de taquinerie entre potes. C’était aussi une bonne occasion de pousser l’intégration entre Discord, l’API Riot et une couche d’IA avec une persona bien marquée.\n\nLe bot permettait de détecter quand un joueur lançait une partie, puis de poster un message Discord avec les informations importantes : champion joué, mode de jeu, statistiques, KDA ou encore évolution de LP selon les cas. Il pouvait aussi attribuer automatiquement des rôles Discord selon l’activité des joueurs. Une persona IA inspirée de Shaco, avec un ton de bouffon démoniaque, permettait au bot de répondre avec une personnalité reconnaissable. Tout ce qui constituait le cœur du projet fonctionnait : la détection des parties, les messages Discord, l’API Riot, les rôles et les réponses IA.\n\nTechniquement, le bot était développé en Python avec une architecture modulaire pour séparer les responsabilités. Il interrogeait régulièrement l’API Riot Spectator pour repérer les débuts et fins de parties, puis construisait des messages Discord avec Components V2. La persona IA était propulsée par Gemini 2.0 Flash avec un contexte adapté au serveur. Le projet est resté une expérimentation avancée plutôt qu’un outil maintenu sur le long terme, principalement parce que l’objectif technique était atteint. J’avais réussi à prouver que l’intégration fonctionnait, y compris avec les limites de l’API et les contraintes d’usage, ce qui était le plus intéressant pour moi.",
     context: "Projet personnel",
     role: "Conception et développement complet",
     stack: [
@@ -279,11 +267,13 @@ export const projects = [
     codeSnippet: null,
     media: null,
     links: [
-      { label: "GitHub", url: "https://github.com/Noferu/discord-riot-bot" },
+      {
+        label: "GitHub",
+        url: "https://github.com/Noferu/discord-riot-bot",
+      },
     ],
     thumbnail: "/assets/img/projects/riot-bot-thumb.png",
   },
-
   {
     slug: "blind-test",
     title: "Blind Test Multijoueur",
@@ -291,10 +281,8 @@ export const projects = [
     featured: false,
     category: "info",
     tags: ["Node.js", "WebSocket", "PHP", "MySQL", "JavaScript"],
-    shortDesc:
-      "Application web multijoueur temps réel avec synchronisation Socket.IO, intégration YouTube API et gestion de sessions côté serveur.",
-    longDesc:
-      "Projet personnel explorant l'interactivité temps réel sur le web. L'application permet à plusieurs joueurs de rejoindre une partie via un code de session, d'écouter des extraits musicaux intégrés via l'API YouTube Embed, et de cumuler des points en temps réel. Architecture hybride combinant un serveur Node.js/Express/Socket.IO pour la logique temps réel et un backend PHP/MySQL pour les données persistantes. Déployé sur un serveur Plesk avec configuration Node.js.",
+    shortDesc: "Application web multijoueur temps réel avec synchronisation Socket.IO, intégration YouTube API et gestion de sessions côté serveur.",
+    longDesc: "Blind Test Multijoueur est un projet personnel que j’ai développé pour explorer l’interactivité en temps réel sur le web, tout en faisant quelque chose de fun et directement jouable. L’idée était simple : créer une partie, inviter plusieurs joueurs, lancer des extraits musicaux et faire monter les scores en direct. C’était un projet très orienté expérimentation, mais avec un vrai usage derrière, parce que le blind test est typiquement le genre de jeu qui devient intéressant seulement si tout le monde voit la même chose au même moment.\n\nL’application permettait de créer automatiquement un salon avec un code de session et un mot de passe. Les joueurs pouvaient rejoindre la partie avec un pseudo, écouter les extraits musicaux intégrés via YouTube, répondre et voir les scores évoluer pendant la session. Le projet était jouable et fonctionnait globalement bien, même s’il restait quelques soucis par moments, comme des décalages de quelques secondes ou des scores qui ne se comptabilisaient pas toujours correctement. Avec le recul, je vois clairement comment je pourrais le refaire plus proprement aujourd’hui, mais c’est aussi ce qui rend le projet intéressant : il montre une vraie première approche du temps réel.\n\nTechniquement, l’application reposait sur une architecture hybride avec un serveur Node.js, Express et Socket.IO pour gérer la logique temps réel, et un backend PHP/MySQL pour les données persistantes. Node s’occupait de la synchronisation entre les joueurs, des salons et des événements en direct, tandis que PHP/MySQL permettait de garder les informations nécessaires côté base de données. Le projet a été déployé sur un serveur Plesk avec une configuration Node.js, ce qui m’a aussi permis de toucher à une partie plus concrète du déploiement. Ce n’était pas le projet le plus parfait, mais il m’a vraiment aidé à comprendre les contraintes d’une application multijoueur en temps réel.",
     context: "Projet personnel",
     role: "Conception et développement complet",
     stack: [
@@ -315,10 +303,14 @@ export const projects = [
     demo: null,
     codeSnippet: null,
     media: null,
-    links: [{ label: "GitHub", url: "https://github.com/Noferu/blind_test" }],
+    links: [
+      {
+        label: "GitHub",
+        url: "https://github.com/Noferu/blind_test",
+      },
+    ],
     thumbnail: "/assets/img/projects/blindt_test.webp",
   },
-
   {
     slug: "era-explorer",
     title: "Era Explorer",
@@ -326,10 +318,8 @@ export const projects = [
     featured: false,
     category: "info",
     tags: ["PHP", "MySQL", "AJAX", "Twig", "MVC"],
-    shortDesc:
-      "Site e-commerce immersif avec navigation temporelle à travers des époques historiques, système de notation, panier/favoris et architecture MVC.",
-    longDesc:
-      "Projet individuel développé dans le cadre de la SAE 203 (BUT MMI S2). Era Explorer est un site e-commerce thématique permettant de voyager à travers différentes époques historiques. L'application implémente une architecture MVC complète, un système d'authentification avec hachage de mots de passe, un panier et des favoris persistants, un système de notation et commentaires, des filtres dynamiques via AJAX, une frise chronologique interactive et des musiques d'ambiance par époque.",
+    shortDesc: "Site e-commerce immersif avec navigation temporelle à travers des époques historiques, système de notation, panier/favoris et architecture MVC.",
+    longDesc: "Era Explorer est un projet individuel réalisé dans le cadre d’une SAE, avec comme point de départ la création d’un site e-commerce. J’ai choisi de partir sur un univers autour du voyage dans le temps, parce que le sujet me parlait vraiment et me donnait beaucoup d’idées. Au lieu de faire une boutique classique, je voulais construire une vraie ambiance, où chaque époque avait son identité, ses objets, ses sons et sa manière d’être explorée. C’était un projet scolaire à la base, mais j’ai rapidement accroché au concept, au point de vouloir pousser l’expérience plus loin que le simple cahier des charges.\n\nL’application permet à l’utilisateur de parcourir différentes époques historiques comme s’il visitait une boutique à travers le temps. Il peut consulter des produits liés à chaque période, les filtrer, les ajouter à son panier, les mettre en favoris, laisser des notes et des commentaires, et naviguer grâce à une frise chronologique interactive. J’avais aussi ajouté des musiques d’ambiance selon les époques pour renforcer l’immersion. L’idée était vraiment de faire sentir que l’utilisateur ne se contente pas de regarder une liste de produits, mais qu’il entre dans un petit univers.\n\nTechniquement, j’ai construit le projet avec une architecture MVC complète. J’ai mis en place l’authentification avec hachage des mots de passe, la gestion du panier, des favoris persistants, des commentaires, des notes, des filtres dynamiques en AJAX et la frise chronologique. Ce projet m’a beaucoup aidé à mieux comprendre comment organiser une application web complète, avec une vraie séparation entre les données, la logique et l’affichage. Il représente bien une période où je commençais à prendre plaisir à transformer un sujet scolaire en quelque chose de plus personnel et plus vivant.",
     context: "Projet académique individuel - SAE 203, BUT MMI S2",
     role: "Développement full-stack complet",
     stack: [
@@ -352,23 +342,25 @@ export const projects = [
     demo: null,
     codeSnippet: null,
     media: null,
-    links: [{ label: "GitHub", url: "https://github.com/Noferu/sae203" }],
+    links: [
+      {
+        label: "GitHub",
+        url: "https://github.com/Noferu/sae203",
+      },
+    ],
     thumbnail: "/assets/img/projects/era_explorer.webp",
   },
-
   {
     slug: "luma",
     title: "LUMA",
     period: "02/2025",
-    featured: false,
+    featured: true,
     category: "info",
     tags: ["JavaScript", "Chart.js", "CSS", "HTML5", "Data viz"],
-    shortDesc:
-      "Site one-page interactif sur la sobriété énergétique numérique avec visualisations de données et animations immersives.",
-    longDesc:
-      "Projet collectif réalisé dans le cadre de la SAE 303 (équipe de 5). LUMA est un site de sensibilisation à l'impact énergétique des loisirs numériques. Il combine des visualisations de données dynamiques via Chart.js, des animations CSS immersives, des effets sonores interactifs et des vidéos motion design pour transmettre un message engagé. Chaque membre de l'équipe a réalisé ses propres graphiques JavaScript intégrés dans une page cohérente.",
-    context: "Projet académique - groupe de 5, SAE 303",
-    role: "Développement frontend et data visualisation",
+    shortDesc: "Site web interactif de sensibilisation à la sobriété numérique, conçu pour parler d’un sujet sérieux avec une expérience colorée, animée et accessible aux jeunes.",
+    longDesc: "LUMA est un projet collectif réalisé autour de la sobriété numérique et de l’impact énergétique des loisirs en ligne. L’objectif était de sensibiliser les jeunes sans tomber dans un ton trop lourd ou culpabilisant. On voulait montrer qu’il est possible de parler d’un sujet sérieux avec une approche plus visuelle, colorée et accessible. La mascotte LUMA, les couleurs vives et l’univers graphique avaient justement pour but de rendre le message plus engageant, surtout pour un public habitué à consommer du contenu rapidement.\n\nLe site présente les enjeux de la consommation énergétique liée au numérique à travers des sections claires, des visuels, des animations, une vidéo explicative et des graphiques. L’expérience devait rester simple à parcourir, avec peu de texte, des informations rapides à comprendre et une ambiance assez dynamique pour garder l’attention. Une partie du site était aussi dédiée aux graphiques Chart.js, chacun ayant travaillé sur son propre graphique pour illustrer une donnée ou une comparaison liée au sujet.\n\nSur ce projet, j’ai réalisé l’intégralité du site web final. Les maquettes avaient été travaillées à plusieurs, mais toute la construction du site, l’intégration, la structure des sections, les animations et l’expérience finale côté web étaient de mon côté. J’ai aussi réalisé mon propre graphique Chart.js dans une partie plus cachée du site. Ce projet était intéressant parce qu’il ne s’agissait pas seulement de coder une page, mais de traduire une intention collective en une expérience web cohérente, agréable et assez vivante pour donner envie de s’intéresser au sujet.",
+    context: "Projet académique collectif - SAE 303, groupe de 5",
+    role: "Développement complet du site web final et intégration interactive",
     stack: ["HTML5", "CSS3", "JavaScript", "Chart.js", "Web Animations API"],
     hero: {
       type: "image",
@@ -379,10 +371,14 @@ export const projects = [
     demo: "https://luma-vert-tau.vercel.app/",
     codeSnippet: null,
     media: null,
-    links: [{ label: "GitHub", url: "https://github.com/Noferu/site_luma" }],
+    links: [
+      {
+        label: "GitHub",
+        url: "https://github.com/Noferu/site_luma",
+      },
+    ],
     thumbnail: "/assets/img/projects/luma.webp",
   },
-
   {
     slug: "generosus",
     title: "Generosus",
@@ -390,10 +386,8 @@ export const projects = [
     featured: false,
     category: "bonus",
     tags: ["JavaScript", "Canvas API", "Pixel Art", "Game Dev", "Aseprite"],
-    shortDesc:
-      "Jeu narratif 2D side-scrolling développé intégralement en JavaScript vanilla, avec moteur de jeu custom, dialogues JSON et direction artistique pixel art.",
-    longDesc:
-      "Projet personnel de jeu vidéo narratif 2D inspiré d'Undertale, Limbo et Journey. Le joueur incarne Generosus, un voyageur traversant des terres symboliques. Développé sans aucune bibliothèque externe, le jeu repose sur un moteur entièrement custom en JavaScript/Canvas API : boucle de jeu, gestion de caméra, système de dialogues ramifiés chargés depuis des fichiers JSON, effets parallax, sprite switching dynamique, animations Aseprite, gestion des collisions et ambiance sonore atmosphérique. Direction artistique (pixel art noir et blanc + accents lumineux) et écriture narrative entièrement par l'auteur.",
+    shortDesc: "Jeu narratif 2D side-scrolling développé intégralement en JavaScript vanilla, avec moteur de jeu custom, dialogues JSON et direction artistique pixel art.",
+    longDesc: "Generosus est un projet personnel de jeu vidéo narratif 2D, né d’une période plus intime et émotionnelle. Le jeu tourne autour de thèmes comme la solitude, l’espoir, l’acceptation et le besoin d’être vu par les autres. Le nom Generosus vient du latin et signifie “généreux”, en lien avec la signification de mon prénom, Nawfel. Même si le projet venait d’un contexte très personnel, j’ai choisi de le transformer en univers symbolique, avec une ambiance plus douce, mystérieuse et poétique.\n\nLe joueur incarne Generosus, un voyageur qui traverse différentes scènes et avance dans un monde en noir et blanc, avec quelques touches lumineuses. L’expérience est surtout narrative et contemplative : on se déplace, on interagit avec des personnages, on découvre des dialogues et on passe d’un lieu à l’autre dans une atmosphère assez calme, presque mélancolique. Je voulais que le joueur ressente une forme de solitude, mais pas quelque chose de totalement désespéré. Il y a aussi une idée d’espoir, de chemin à faire, même quand le monde paraît vide ou difficile à comprendre.\n\nTechniquement, j’ai développé le jeu sans bibliothèque externe, uniquement avec JavaScript et la Canvas API. J’ai construit mon propre petit moteur avec la boucle de jeu, les déplacements, la caméra, les collisions, les changements de scène, les interactions, les dialogues chargés depuis des fichiers JSON, la parallaxe, les animations et la gestion des sprites. Le projet comprenait déjà les bases jouables : déplacement, moteur, interactions, chat/dialogues, transitions entre scènes et ambiance visuelle. Ce dont je suis le plus fier, c’est surtout le pixel art et l’atmosphère générale, parce que c’est là que le projet prend vraiment son identité.",
     context: "Projet personnel",
     role: "Développement complet, direction artistique, game design, narration",
     stack: [
@@ -413,10 +407,14 @@ export const projects = [
     demo: "https://generosus.vercel.app/",
     codeSnippet: null,
     media: null,
-    links: [{ label: "GitHub", url: "https://github.com/Noferu/generosus" }],
+    links: [
+      {
+        label: "GitHub",
+        url: "https://github.com/Noferu/generosus",
+      },
+    ],
     thumbnail: "/assets/img/projects/generosus-thumb.png",
   },
-
   {
     slug: "sae401",
     title: "SAE401 - Symfony",
@@ -424,10 +422,8 @@ export const projects = [
     featured: false,
     category: "info",
     tags: ["Symfony", "PHP", "MySQL", "Twig", "MVC"],
-    shortDesc:
-      "Application Symfony avec gestion de données, migrations et architecture MVC.",
-    longDesc:
-      "Projet académique développé dans le cadre de la SAE 401 (BUT MMI). Application web construite avec Symfony, mettant en œuvre une architecture MVC structurée avec gestion des entités Doctrine, migrations de base de données, routing, controllers et templates Twig. Le projet couvre les fondamentaux du développement backend PHP moderne.",
+    shortDesc: "Application Symfony avec gestion de données, migrations et architecture MVC.",
+    longDesc: "SAE401 - Symfony est un projet académique que je garde surtout comme une étape dans mon apprentissage du backend PHP moderne. Ce n’est pas forcément le projet le plus impressionnant de mon portfolio, mais il a eu son importance parce qu’il m’a permis de travailler dans un vrai framework structuré, avec une manière plus propre d’organiser une application. L’objectif était surtout de sortir du PHP plus classique et de comprendre comment Symfony organise un projet autour des routes, des contrôleurs, des entités et des vues.\n\nL’application permettait de manipuler des données à travers une interface web, avec les fonctionnalités attendues dans ce type de projet académique : afficher des contenus, gérer des éléments, passer par des pages structurées et interagir avec une base de données. Même si le projet restait assez simple, il m’a permis de mieux comprendre la logique d’une application web construite proprement, où chaque partie a son rôle et où le code est moins dispersé.\n\nTechniquement, j’ai travaillé avec Symfony, Doctrine, les migrations de base de données, les controllers, le routing et les templates Twig. Ce projet m’a surtout servi à poser des bases solides sur l’architecture MVC dans un cadre Symfony. Je ne le présente pas comme mon projet le plus ambitieux, mais plutôt comme un passage utile dans ma progression, parce qu’il m’a permis de mieux comprendre comment construire une application backend plus maintenable.",
     context: "Projet académique - SAE 401, BUT MMI",
     role: "Développement backend",
     stack: ["Symfony", "PHP", "Doctrine ORM", "Twig", "MySQL", "Composer"],
@@ -440,10 +436,14 @@ export const projects = [
     demo: null,
     codeSnippet: null,
     media: null,
-    links: [{ label: "GitHub", url: "https://github.com/Noferu/sae401" }],
+    links: [
+      {
+        label: "GitHub",
+        url: "https://github.com/Noferu/sae401",
+      },
+    ],
     thumbnail: "/assets/img/projects/sae401-thumb.png",
   },
-
   {
     slug: "mastermind-flutter",
     title: "Mastermind Flutter",
@@ -451,10 +451,8 @@ export const projects = [
     featured: false,
     category: "info",
     tags: ["Flutter", "Dart", "Mobile"],
-    shortDesc:
-      "Implémentation mobile du jeu Mastermind en Flutter, avec logique de jeu complète et interface Material Design.",
-    longDesc:
-      "Projet académique de développement mobile (BUT MMI) implémentant le jeu de logique Mastermind. Le joueur doit deviner une combinaison secrète de 4 couleurs en 10 tentatives maximum. Le jeu fournit un retour visuel via des pions colorés, propose une sélection des couleurs par rotation, un historique des tentatives, une détection victoire/défaite et une option de rejeu.",
+    shortDesc: "Implémentation mobile du jeu Mastermind en Flutter, avec logique de jeu complète et interface Material Design.",
+    longDesc: "Mastermind Flutter est un projet académique que j’ai réalisé seul dans le cadre d’un TP noté. Le but était de recréer le jeu Mastermind en application mobile, avec une version simple mais propre. J’avais déjà touché à Flutter avant, mais ce projet représentait un contact plus officiel avec la techno dans un cadre évalué, donc l’objectif était surtout de produire quelque chose de clair, fonctionnel et fidèle au sujet.\n\nL’application permet au joueur de deviner une combinaison secrète de quatre couleurs en dix tentatives maximum. À chaque essai, il sélectionne ses couleurs, valide sa proposition, puis reçoit un retour visuel pour savoir si certains éléments sont bien placés ou présents dans la combinaison. Le jeu garde aussi l’historique des tentatives, détecte la victoire ou la défaite, et permet de relancer une partie. Je suis resté assez fidèle au sujet, sans chercher à ajouter des fonctionnalités inutiles.\n\nTechniquement, le plus intéressant était surtout la logique de jeu. Il fallait générer la combinaison secrète, gérer les tentatives, comparer les couleurs, produire les bons retours visuels et maintenir l’état de la partie jusqu’à la fin. L’interface en elle-même restait assez simple, mais il fallait que l’ensemble soit lisible et agréable à utiliser sur mobile. Ce projet n’était pas le plus difficile, mais il représente un exercice propre, bien cadré, qui m’a permis de consolider ma manière de structurer une petite application Flutter.",
     context: "Projet académique - BUT MMI",
     role: "Développement mobile complet",
     stack: ["Flutter", "Dart", "Material Design"],
@@ -468,7 +466,10 @@ export const projects = [
     codeSnippet: null,
     media: null,
     links: [
-      { label: "GitHub", url: "https://github.com/Noferu/mastermind_flutter" },
+      {
+        label: "GitHub",
+        url: "https://github.com/Noferu/mastermind_flutter",
+      },
     ],
     thumbnail: "/assets/img/projects/mastermind-thumb.png",
   },
@@ -479,10 +480,8 @@ export const projects = [
     featured: false,
     category: "bonus",
     tags: ["JavaScript", "HTML", "Algorithme", "Elo", "Outil"],
-    shortDesc:
-      "Application web autonome de classement par duels : collez une liste, répondez à des confrontations VS, obtenez un classement ordonné via un système Elo multi-passes.",
-    longDesc:
-      "Ranker est un outil personnel 100% client-side, contenu dans un unique fichier HTML sans aucune dépendance. L'algorithme combine un planning de duels en 4 passes (shuffle, voisins consécutifs, cross-band, skip-one) avec un score Elo à K variable pour produire environ 2n comparaisons pour n éléments. Le classement final est exportable en Markdown ou en JSON. L'interface inclut raccourcis clavier, barre de progression dynamique, annulation du dernier choix et support des égalités.",
+    shortDesc: "Application web autonome de classement par duels : collez une liste, répondez à des confrontations VS, obtenez un classement ordonné via un système Elo multi-passes.",
+    longDesc: "Ranker est un outil personnel que j’ai créé parce que j’avais souvent besoin de faire des classements rapidement, sans passer par des systèmes trop lourds comme les tier lists classiques. Je voulais quelque chose de simple, rapide à lancer, facile à partager et utilisable sans préparation compliquée. L’idée était aussi de pouvoir prendre des notes et obtenir un classement plus propre qu’un simple tri fait à la main, surtout quand il y a beaucoup d’éléments à comparer.\n\nL’outil fonctionne entièrement côté navigateur. On entre une liste d’éléments, puis Ranker propose des duels successifs entre eux. À chaque duel, on choisit l’élément qu’on préfère, ou on indique une égalité, et l’outil construit progressivement un classement. Une fois terminé, le résultat peut être exporté en Markdown ou en JSON. L’interface intègre aussi des raccourcis clavier, une barre de progression, la possibilité d’annuler le dernier choix et une logique pensée pour aller vite. C’est un projet simple en apparence, mais qui répond à un vrai besoin, au point que je m’en sers encore.\n\nTechniquement, Ranker tient dans un seul fichier HTML, sans dépendance externe. J’ai choisi ce format par praticité : c’est facile à ouvrir, à partager, à modifier et à garder sous la main. L’algorithme repose sur un système de duels combiné à un score Elo, en partant d’une base existante que j’ai adaptée à mon usage. J’ai ajouté une organisation des comparaisons en plusieurs passes pour limiter le nombre de choix nécessaires tout en obtenant un classement cohérent. Ce projet montre bien ma manière de faire des petits outils utiles : pas forcément gros, pas forcément impressionnants au premier regard, mais pensés pour résoudre un vrai problème de manière directe.",
     context: "Projet personnel",
     role: "Conception et développement complet",
     stack: ["JavaScript vanilla", "HTML5", "CSS3"],
@@ -495,7 +494,12 @@ export const projects = [
     demo: "/assets/website/ranker.html",
     codeSnippet: null,
     media: null,
-    links: [{ label: "GitHub", url: "https://github.com/Noferu/ranker" }],
+    links: [
+      {
+        label: "GitHub",
+        url: "https://github.com/Noferu/ranker",
+      },
+    ],
     thumbnail: "/assets/img/projects/ranker.webp",
   },
   {
@@ -505,11 +509,9 @@ export const projects = [
     featured: false,
     category: "info",
     tags: ["Chrome Extension", "JavaScript", "Manifest V3", "Airtable", "DOM"],
-    shortDesc:
-      "Extension Chrome qui greffe des raccourcis, du filtrage de tables et des formulaires flottants directement dans l'interface Airtable, configurable sans toucher au code.",
-    longDesc:
-      "Extension navigateur conçue pendant mon stage pour fluidifier le travail quotidien sur Airtable, dont l'interface ne permet ni de masquer des groupes de tables ni d'ajouter des raccourcis métier. Yuumi injecte ses fonctionnalités directement dans la page via des content scripts : une barre de navigation enrichie de liens rapides, un système de filtrage qui affiche ou masque des groupes de tables selon des configurations nommées (Onboarding, Comptabilité, Juridique…), des tables épinglées toujours visibles, et des formulaires flottants de création rapide qui envoient leurs données via webhook. Tout est paramétrable depuis le popup, sans modifier le code, grâce à une config par défaut surchargeable stockée dans le navigateur. L'architecture sépare service worker, content scripts et popup, avec gestion des changements de page d'une SPA via MutationObserver.",
-    context: "Stage - Cabinet Comptable Doucy Consilium, Sélestat",
+    shortDesc: "Extension Chrome qui greffe des raccourcis, du filtrage de tables et des formulaires flottants directement dans l'interface Airtable, configurable sans toucher au code.",
+    longDesc: "Yuumi est une extension navigateur que j’ai développée pendant mon stage pour répondre à une frustration très concrète avec Airtable. L’outil était utile pour structurer une partie du travail du cabinet, mais il avait aussi des limites assez gênantes au quotidien : trop de clics, trop de tables visibles, pas assez de raccourcis métier et pas de vraie manière de masquer ou organiser certains groupes selon les usages. Plutôt que de livrer un système incomplet en disant simplement “Airtable ne le permet pas”, j’ai préféré développer moi-même les fonctionnalités manquantes autour de l’outil.\n\nL’extension ajoute une couche pratique directement dans Airtable. Elle permet d’avoir une navigation enrichie, des liens rapides, des groupes de tables affichables ou masquables selon des configurations nommées, des tables épinglées toujours visibles et des formulaires flottants pour créer rapidement des entrées sans multiplier les allers-retours dans l’interface. Ces formulaires envoyaient ensuite les données via webhook, ce qui permettait de déclencher les bons traitements derrière. Yuumi était utilisé par l’équipe et les collaborateurs du cabinet pour rendre Airtable plus fluide dans les usages quotidiens.\n\nTechniquement, Yuumi repose sur une architecture d’extension navigateur avec un service worker, des content scripts et un popup de configuration. Les fonctionnalités sont injectées directement dans la page Airtable, sans modifier Airtable lui-même. J’ai utilisé le stockage du navigateur pour permettre de surcharger une configuration par défaut, et un MutationObserver pour suivre les changements de page dans l’interface Airtable, qui fonctionne comme une SPA. Le projet n’était pas forcément compliqué dans sa logique, mais il était très satisfaisant parce qu’il répondait à un vrai problème : améliorer un outil existant sans attendre que l’outil propose lui-même les fonctionnalités.",
+    context: "Stage - Cabinet comptable Doucy Consilium, Sélestat",
     role: "Conception et développement complet",
     stack: [
       "JavaScript",
@@ -531,7 +533,10 @@ export const projects = [
     codeSnippet: null,
     media: null,
     links: [
-      { label: "GitHub", url: "https://github.com/Noferu/yuumi-for-airtable" },
+      {
+        label: "GitHub",
+        url: "https://github.com/Noferu/yuumi-for-airtable",
+      },
     ],
     thumbnail: "/assets/img/projects/yuumi-thumb.png",
   },
