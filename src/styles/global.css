@@ -252,8 +252,6 @@ h4 {
   transform-origin: left center;
 }
 
-/* ═══ RESPONSIVE ═══ */
-
 @media (max-width: 1024px) {
   .container {
     padding: 0 1.5rem;

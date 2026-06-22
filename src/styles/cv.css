@@ -1,7 +1,3 @@
-/* ═══════════════════════════════════════════
-   PAGE CV
-   ═══════════════════════════════════════════ */
-
 .cv-page {
   min-height: 100vh;
 }
@@ -110,7 +106,7 @@
 }
 
 .cv-page-title {
-  font-size: clamp(1.8rem, 3vw, 2.8rem);
+  font-size: var(--fs-page-title);
   color: var(--text);
   letter-spacing: -0.03em;
 }
@@ -119,7 +115,7 @@
   font-family: var(--font-body);
   font-size: 0.95rem;
   color: var(--text-muted);
-  font-weight: 300;
+  font-weight: 400;
 }
 
 .cv-block {
@@ -283,7 +279,7 @@
   font-size: 0.83rem;
   color: var(--text-muted);
   line-height: 1.65;
-  font-weight: 300;
+  font-weight: 400;
   padding: 0.45rem 0.85rem;
   border-left: 1px solid rgba(251, 195, 115, 0.15);
   margin-bottom: 0.25rem;
@@ -388,7 +384,7 @@
   font-family: var(--font-body);
   font-size: 0.85rem;
   color: var(--text-muted);
-  font-weight: 300;
+  font-weight: 400;
   line-height: 1.4;
   padding: 0.3rem 0;
   transition: color var(--t-fast);
@@ -406,8 +402,6 @@
   flex-shrink: 0;
   box-shadow: 0 0 5px rgba(212, 138, 57, 0.4);
 }
-
-/* ═══ RESPONSIVE ═══ */
 
 @media (max-width: 1024px) {
   .cv-layout {
