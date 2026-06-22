@@ -73,7 +73,6 @@ const IconStarFill = ({ className = "" }) => (
   </svg>
 );
 
-
 const MONTHS_FR = [
   "Janvier",
   "Février",
@@ -242,7 +241,9 @@ export default function Project() {
             {projectDate && <span className="proj-year">{projectDate}</span>}
 
             {project.featured && (
-              <span className="proj-featured-badge"><IconStarFill className="proj-featured-icon" /> Featured</span>
+              <span className="proj-featured-badge">
+                <IconStarFill className="proj-featured-icon" /> En vedette
+              </span>
             )}
 
             <span className="proj-category">
@@ -351,7 +352,17 @@ export default function Project() {
           <section className="proj-section proj-section--intro">
             <p className="section-label">Présentation</p>
 
-            <p className="proj-long-desc">{project.longDesc}</p>
+            {project.longDesc && (
+              <div className="proj-long-desc">
+                {project.longDesc
+                  .split(/\r?\n\s*\r?\n/)
+                  .map((paragraph) => paragraph.trim())
+                  .filter(Boolean)
+                  .map((paragraph, index) => (
+                    <p key={index}>{paragraph}</p>
+                  ))}
+              </div>
+            )}
 
             <div className="proj-info-grid">
               {projectDate && (

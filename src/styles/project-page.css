@@ -472,11 +472,18 @@
 
 .proj-long-desc {
   max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.15rem;
   font-family: var(--font-body);
   font-size: clamp(1.03rem, 1.25vw, 1.16rem);
   color: var(--text-body);
   line-height: 1.82;
   font-weight: 400;
+}
+
+.proj-long-desc p {
+  margin: 0;
 }
 
 .proj-info-grid {
