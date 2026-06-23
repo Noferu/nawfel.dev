@@ -432,13 +432,55 @@ export default function Project() {
             </div>
           )}
 
-          {project.codeSnippet && (
+          {project.codeSnippet?.code && (
             <section className="proj-section">
               <p className="section-label">Extrait</p>
 
-              <pre className="proj-pre">
-                <code className="proj-code">{project.codeSnippet.code}</code>
-              </pre>
+              <div className="proj-code-window">
+                <div className="proj-code-topbar">
+                  <div className="proj-code-dots" aria-hidden="true">
+                    <span className="proj-code-dot proj-code-dot--red" />
+                    <span className="proj-code-dot proj-code-dot--yellow" />
+                    <span className="proj-code-dot proj-code-dot--green" />
+                  </div>
+
+                  {(project.codeSnippet.filename ||
+                    project.codeSnippet.language) && (
+                    <div className="proj-code-title">
+                      {project.codeSnippet.filename ||
+                        project.codeSnippet.language}
+                    </div>
+                  )}
+                </div>
+
+                <pre className="proj-code-block">
+                  <code className="proj-code">
+                    {project.codeSnippet.code.split("\n").map((line, index) => {
+                      const lineNumber = index + 1;
+                      const highlighted =
+                        project.codeSnippet.highlightLines?.includes(
+                          lineNumber,
+                        );
+
+                      return (
+                        <span
+                          key={lineNumber}
+                          className={`proj-code-line ${
+                            highlighted ? "proj-code-line--highlighted" : ""
+                          }`}
+                        >
+                          <span className="proj-code-line-number">
+                            {lineNumber}
+                          </span>
+                          <span className="proj-code-line-content">
+                            {line || " "}
+                          </span>
+                        </span>
+                      );
+                    })}
+                  </code>
+                </pre>
+              </div>
             </section>
           )}
 
