@@ -359,20 +359,16 @@ export const projects = [
     ],
     hero: {
       type: "image",
-      url: "/assets/img/projects/blind-test-hero.png",
+      url: "/assets/projects/blindtest/hero.webp",
       alt: "Blind Test Multijoueur",
       poster: null,
     },
-    demo: null,
-    codeSnippet: null,
-    media: null,
     links: [
       {
         label: "GitHub",
         url: "https://github.com/Noferu/blind_test",
       },
     ],
-    thumbnail: "/assets/img/projects/blindt_test.webp",
   },
   {
     slug: "era-explorer",
@@ -398,20 +394,16 @@ export const projects = [
     ],
     hero: {
       type: "image",
-      url: "/assets/img/projects/era-explorer-hero.png",
+      url: "/assets/projects/era_explorer/hero.webp",
       alt: "Era Explorer",
       poster: null,
     },
-    demo: null,
-    codeSnippet: null,
-    media: null,
     links: [
       {
         label: "GitHub",
         url: "https://github.com/Noferu/sae203",
       },
     ],
-    thumbnail: "/assets/img/projects/era_explorer.webp",
   },
   {
     slug: "luma",
@@ -462,51 +454,22 @@ export const projects = [
       "JSON",
       "Aseprite",
     ],
-    hero: {
-      type: "image",
-      url: "/assets/img/projects/generosus-hero.png",
-      alt: "Jeu Generosus",
-      poster: null,
-    },
     demo: "https://generosus.vercel.app/",
-    codeSnippet: null,
-    media: null,
+    media: [
+      {
+        type: "iframe",
+        url: "https://generosus.vercel.app/",
+        alt: "",
+        poster: null,
+      },
+    ],
     links: [
       {
         label: "GitHub",
         url: "https://github.com/Noferu/generosus",
       },
     ],
-    thumbnail: "/assets/img/projects/generosus-thumb.png",
-  },
-  {
-    slug: "sae401",
-    title: "SAE401 - Symfony",
-    period: "06/2025",
-    featured: false,
-    category: "info",
-    tags: ["Symfony", "PHP", "MySQL", "Twig", "MVC"],
-    shortDesc: "Application Symfony avec gestion de données, migrations et architecture MVC.",
-    longDesc: "SAE401 - Symfony est un projet académique que je garde surtout comme une étape dans mon apprentissage du backend PHP moderne. Ce n’est pas forcément le projet le plus impressionnant de mon portfolio, mais il a eu son importance parce qu’il m’a permis de travailler dans un vrai framework structuré, avec une manière plus propre d’organiser une application. L’objectif était surtout de sortir du PHP plus classique et de comprendre comment Symfony organise un projet autour des routes, des contrôleurs, des entités et des vues.\n\nL’application permettait de manipuler des données à travers une interface web, avec les fonctionnalités attendues dans ce type de projet académique : afficher des contenus, gérer des éléments, passer par des pages structurées et interagir avec une base de données. Même si le projet restait assez simple, il m’a permis de mieux comprendre la logique d’une application web construite proprement, où chaque partie a son rôle et où le code est moins dispersé.\n\nTechniquement, j’ai travaillé avec Symfony, Doctrine, les migrations de base de données, les controllers, le routing et les templates Twig. Ce projet m’a surtout servi à poser des bases solides sur l’architecture MVC dans un cadre Symfony. Je ne le présente pas comme mon projet le plus ambitieux, mais plutôt comme un passage utile dans ma progression, parce qu’il m’a permis de mieux comprendre comment construire une application backend plus maintenable.",
-    context: "Projet académique - SAE 401, BUT MMI",
-    role: "Développement backend",
-    stack: ["Symfony", "PHP", "Doctrine ORM", "Twig", "MySQL", "Composer"],
-    hero: {
-      type: "image",
-      url: "/assets/img/projects/sae401-hero.png",
-      alt: "SAE401",
-      poster: null,
-    },
-    demo: null,
-    codeSnippet: null,
-    media: null,
-    links: [
-      {
-        label: "GitHub",
-        url: "https://github.com/Noferu/sae401",
-      },
-    ],
-    thumbnail: "/assets/img/projects/sae401-thumb.png",
+    thumbnail: "/assets/projects/generosus/main.webp",
   },
   {
     slug: "mastermind-flutter",
