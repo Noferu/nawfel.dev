@@ -196,6 +196,7 @@
   height: 100%;
   object-fit: cover;
   display: block;
+  cursor: zoom-in;
   transition: opacity 300ms ease;
 }
 
@@ -212,6 +213,7 @@
   height: 100%;
   object-fit: cover;
   display: block;
+  cursor: zoom-in;
   background: #000;
 }
 
@@ -279,6 +281,59 @@
   background: var(--gold-light);
 }
 
+.proj-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: grid;
+  place-items: center;
+  padding: 2rem;
+  background: rgba(var(--black-rgb), 0.82);
+  backdrop-filter: blur(10px);
+}
+
+.proj-lightbox-content {
+  max-width: min(1200px, 96vw);
+  max-height: 90vh;
+}
+
+.proj-lightbox-img,
+.proj-lightbox-video {
+  display: block;
+  max-width: 100%;
+  max-height: 90vh;
+  object-fit: contain;
+  border-radius: var(--panel-radius);
+  box-shadow:
+    0 24px 80px rgba(0, 0, 0, 0.55),
+    0 0 35px rgba(var(--gold-rgb), 0.08);
+}
+
+.proj-lightbox-close {
+  position: fixed;
+  top: 1.5rem;
+  right: 1.5rem;
+  z-index: 10000;
+  width: 44px;
+  height: 44px;
+  border: 1px solid rgba(var(--gold-rgb), 0.22);
+  border-radius: 999px;
+  background: rgba(var(--black-rgb), 0.72);
+  color: var(--text);
+  font-size: 1.8rem;
+  line-height: 1;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  transition: all var(--t-fast);
+  backdrop-filter: blur(8px);
+}
+
+.proj-lightbox-close:hover {
+  border-color: rgba(var(--gold-rgb), 0.4);
+  background: rgba(var(--gold-rgb), 0.12);
+  color: var(--gold-light);
+}
 
 /* --- WORKFLOW --- */
 .proj-workflow-wrapper {
@@ -566,6 +621,24 @@
 
   .proj-carousel-inner {
     aspect-ratio: 4/3;
+  }
+
+  .proj-lightbox {
+    padding: 1rem;
+  }
+
+  .proj-lightbox-img,
+  .proj-lightbox-video {
+    max-height: 82vh;
+    border-radius: 16px;
+  }
+
+  .proj-lightbox-close {
+    top: 1rem;
+    right: 1rem;
+    width: 40px;
+    height: 40px;
+    font-size: 1.6rem;
   }
 
   .proj-workflow-wrapper {

@@ -124,6 +124,7 @@ export default function Project() {
   const navigate = useNavigate();
   const project = projects.find((p) => p.slug === slug);
   const [mediaIdx, setMediaIdx] = useState(0);
+  const [fullscreenMedia, setFullscreenMedia] = useState(null);
   const pageRef = useRef(null);
 
   const allIdx = projects.findIndex((p) => p.slug === slug);
@@ -157,6 +158,15 @@ export default function Project() {
   const currentMedia = allMedia[safeIdx];
   const projectDate = project ? formatProjectDate(project.period) : "";
 
+  const openFullscreen = (media) => {
+    if (!media || !["image", "video"].includes(media.type)) return;
+    setFullscreenMedia(media);
+  };
+
+  const closeFullscreen = () => {
+    setFullscreenMedia(null);
+  };
+
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
 
@@ -171,13 +181,15 @@ export default function Project() {
         y: 0,
         duration: 0.9,
         ease: "power2.out",
-        clearProps: "filter",
+        clearProps: "filter,transform",
       },
     );
   }, [slug]);
 
   useEffect(() => {
     const handler = (e) => {
+      if (fullscreenMedia) return;
+
       if (e.key === "ArrowLeft" && prev) {
         navigate(`/project/${prev.slug}`);
       }
@@ -192,7 +204,25 @@ export default function Project() {
     return () => {
       window.removeEventListener("keydown", handler);
     };
-  }, [prev, next, navigate]);
+  }, [prev, next, navigate, fullscreenMedia]);
+
+  useEffect(() => {
+    if (!fullscreenMedia) return;
+
+    const handleKeyDown = (e) => {
+      if (e.key === "Escape") {
+        setFullscreenMedia(null);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+      document.body.style.overflow = "";
+    };
+  }, [fullscreenMedia]);
 
   if (!project) {
     return <NotFound subtitle="Ce projet n'existe pas, ou n'existe plus." />;
@@ -270,6 +300,15 @@ export default function Project() {
                     src={currentMedia.url}
                     alt={currentMedia.alt}
                     className="proj-carousel-img"
+                    onClick={() => openFullscreen(currentMedia)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" || e.key === " ") {
+                        e.preventDefault();
+                        openFullscreen(currentMedia);
+                      }
+                    }}
+                    role="button"
+                    tabIndex={0}
                   />
                 ) : currentMedia.type === "video" ? (
                   <video
@@ -279,6 +318,7 @@ export default function Project() {
                     loop
                     playsInline
                     poster={currentMedia.poster || undefined}
+                    onClick={() => openFullscreen(currentMedia)}
                   />
                 ) : (
                   <iframe
@@ -434,6 +474,47 @@ export default function Project() {
           )}
         </div>
       </div>
+
+      {fullscreenMedia && (
+        <div
+          className="proj-lightbox"
+          onClick={closeFullscreen}
+          role="dialog"
+          aria-modal="true"
+        >
+          <button
+            className="proj-lightbox-close"
+            type="button"
+            onClick={closeFullscreen}
+            aria-label="Fermer le plein écran"
+          >
+            ×
+          </button>
+
+          <div
+            className="proj-lightbox-content"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {fullscreenMedia.type === "image" ? (
+              <img
+                src={fullscreenMedia.url}
+                alt={fullscreenMedia.alt}
+                className="proj-lightbox-img"
+              />
+            ) : (
+              <video
+                src={fullscreenMedia.url}
+                className="proj-lightbox-video"
+                controls
+                autoPlay
+                loop
+                playsInline
+                poster={fullscreenMedia.poster || undefined}
+              />
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
