@@ -183,7 +183,7 @@ export default function Hero() {
           <div className="hero-photo-ring">
             <div className="hero-photo-circle">
               <img
-                src="/assets/img/nawfel.webp"
+                src="/assets/site/nawfel.webp"
                 alt="Nawfel Ida-Ali"
                 className="hero-photo"
                 width="235"

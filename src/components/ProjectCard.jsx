@@ -39,7 +39,6 @@ const IconExternalLink = ({ className = "" }) => (
   </svg>
 );
 
-
 const DisneyStarSvg = () => (
   <svg
     viewBox="0 0 24 24"
@@ -72,6 +71,12 @@ export default function ProjectCard({ project, compact = false }) {
   const displayedPeriod = project.featured
     ? project.period
     : getPeriodYear(project.period);
+
+  const thumbSrc =
+    project.thumbnail ||
+    (project.hero?.type === "image" ? project.hero.url : project.hero?.poster);
+
+  const thumbAlt = project.hero?.alt || project.title;
 
   useEffect(() => {
     const card = cardRef.current;
@@ -135,16 +140,18 @@ export default function ProjectCard({ project, compact = false }) {
       )}
 
       <div className="proj-card-thumb">
-        {project.thumbnail ? (
+        {thumbSrc ? (
           <img
             loading="lazy"
-            src={project.thumbnail}
-            alt={project.title}
+            src={thumbSrc}
+            alt={thumbAlt}
             className="proj-card-thumb-img"
           />
         ) : (
           <div className="proj-card-thumb-placeholder">
-            <span className="proj-card-thumb-label">{project.tags[0]}</span>
+            <span className="proj-card-thumb-label">
+              {project.tags?.[0] || "Projet"}
+            </span>
           </div>
         )}
       </div>
@@ -169,7 +176,9 @@ export default function ProjectCard({ project, compact = false }) {
         )}
 
         <div className="proj-card-footer">
-          <span className="proj-card-cta">Voir le projet <IconArrowRight className="proj-card-cta-icon" /></span>
+          <span className="proj-card-cta">
+            Voir le projet <IconArrowRight className="proj-card-cta-icon" />
+          </span>
 
           {project.links?.[0] && (
             <a

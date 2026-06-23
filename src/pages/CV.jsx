@@ -119,7 +119,7 @@ export default function CV() {
                 </button>
               ))}
             </nav>
-            <PillButton href="/assets/cv-nawfel-ida-ali.pdf" download target="_blank">
+            <PillButton href="/assets/site/cv-nawfel-ida-ali.pdf" download target="_blank">
               Télécharger le CV en PDF <IconDownload className="pill-btn-icon" />
             </PillButton>
           </div>

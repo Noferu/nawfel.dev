@@ -1,6 +1,6 @@
 <div align="center">
 
-![Portfolio Preview](public/assets/img/homepage.webp)
+![Portfolio Preview](public/assets/site/homepage.webp)
 
 # nawfel-dev — Portfolio
 
