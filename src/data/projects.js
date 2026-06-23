@@ -549,13 +549,6 @@ export const projects = [
     context: "Projet personnel",
     role: "Conception et développement complet",
     stack: ["JavaScript vanilla", "HTML5", "CSS3"],
-    hero: {
-      type: "image",
-      url: "/assets/projects/ranker/hero.webp",
-      alt: "Ranker - Classement par duels",
-      poster: null,
-    },
-    demo: "/assets/projects/ranker/ranker.html",
     links: [
       {
         label: "GitHub",
@@ -570,6 +563,7 @@ export const projects = [
         poster: null,
       },
     ],
+    thumbnail: "/assets/projects/ranker/hero.webp",
   },
   {
     slug: "yuumi",
