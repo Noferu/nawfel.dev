@@ -552,7 +552,7 @@
 }
 
 .proj-card--secondary {
-  width: 280px;
+  width: 320px;
 }
 
 .proj-card--featured {
@@ -608,12 +608,18 @@
   width: 22px;
   height: 22px;
   color: var(--gold-light);
-  filter: drop-shadow(0 0 4px rgba(var(--gold-rgb), 0.5));
+  filter:
+    drop-shadow(0 0 4px rgba(var(--gold-rgb), 0.55))
+    drop-shadow(0 4px 10px rgba(0, 0, 0, 0.35));
   will-change: transform;
   z-index: 2;
-  transition: width var(--t-fast), height var(--t-fast), top var(--t-fast), right var(--t-fast), filter var(--t-fast);
+  transition:
+    width var(--t-fast),
+    height var(--t-fast),
+    top var(--t-fast),
+    right var(--t-fast),
+    filter var(--t-fast);
 }
-
 .proj-card:hover .proj-card-star {
   width: 28px;
   height: 28px;
