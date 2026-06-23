@@ -26,20 +26,55 @@ export const projects = [
     ],
     hero: {
       type: "image",
-      url: "/assets/img/projects/usine-chocolat-hero.png",
-      alt: "Dashboard Usine Chocolat",
+      url: "/assets/projects/usine-chocolat/usine-chocolat-hero.webp",
+      alt: "Accueil Usine Chocolat",
       poster: null,
     },
-    demo: null,
-    codeSnippet: null,
-    media: null,
     links: [
       {
         label: "GitHub",
         url: "https://github.com/Noferu/sae-501-2-usine-chocolat",
       },
     ],
-    thumbnail: "/assets/img/projects/usine-chocolat-thumb.png",
+    media: [
+      {
+        type: "image",
+        url: "/assets/projects/usine-chocolat/user-1.webp",
+        alt: "Première page du parcours visiteur",
+        poster: null,
+      },
+      {
+        type: "image",
+        url: "/assets/projects/usine-chocolat/user-2.webp",
+        alt: "Deuxième page du parcours visiteur",
+        poster: null,
+      },
+      {
+        type: "image",
+        url: "/assets/projects/usine-chocolat/user-3.webp",
+        alt: "Troisième page du parcours visiteur",
+        poster: null,
+      },
+      {
+        type: "image",
+        url: "/assets/projects/usine-chocolat/production.webp",
+        alt: "Dashboard de production d'opérateur",
+        poster: null,
+      },
+      {
+        type: "image",
+        url: "/assets/projects/usine-chocolat/statistics.webp",
+        alt: "Dashboard de statistiques d'opérateur",
+        poster: null,
+      },
+      {
+        type: "image",
+        url: "/assets/projects/usine-chocolat/stocks.webp",
+        alt: "Dashboard de stocks d'opérateur",
+        poster: null,
+      },
+    ],
+    thumbnail: "/assets/projects/usine-chocolat/thumbnail.webp",
   },
   {
     slug: "yasuragi",
@@ -65,20 +100,43 @@ export const projects = [
     ],
     hero: {
       type: "image",
-      url: "/assets/img/projects/yasuragi-hero.png",
-      alt: "Interface Yasuragi",
+      url: "/assets/projects/yasuragi/home.webp",
+      alt: "Accueil de Yasuragi",
       poster: null,
     },
-    demo: null,
-    codeSnippet: null,
-    media: null,
+    media: [
+      {
+        type: "image",
+        url: "/assets/projects/yasuragi/dashboard.webp",
+        alt: "Dashboard de Yasuragi",
+        poster: null,
+      },
+      {
+        type: "image",
+        url: "/assets/projects/yasuragi/kanban.webp",
+        alt: "Kanban d'un projet",
+        poster: null,
+      },
+      {
+        type: "image",
+        url: "/assets/projects/yasuragi/project.webp",
+        alt: "Détails d'un projet",
+        poster: null,
+      },
+      {
+        type: "image",
+        url: "/assets/projects/yasuragi/roadmap.webp",
+        alt: "Roadmap d'un projet",
+        poster: null,
+      },
+    ],
     links: [
       {
         label: "GitHub",
         url: "https://github.com/Noferu/sae-501-yasuragi",
       },
     ],
-    thumbnail: "/assets/img/projects/yasuragi-thumb.png",
+    thumbnail: "/assets/projects/yasuragi/thumbnail.webp",
   },
   {
     slug: "di5-festival",
@@ -358,26 +416,27 @@ export const projects = [
     category: "info",
     tags: ["JavaScript", "Chart.js", "CSS", "HTML5", "Data viz"],
     shortDesc: "Site web interactif de sensibilisation à la sobriété numérique, conçu pour parler d’un sujet sérieux avec une expérience colorée, animée et accessible aux jeunes.",
-    longDesc: "LUMA est un projet collectif réalisé autour de la sobriété numérique et de l’impact énergétique des loisirs en ligne. L’objectif était de sensibiliser les jeunes sans tomber dans un ton trop lourd ou culpabilisant. On voulait montrer qu’il est possible de parler d’un sujet sérieux avec une approche plus visuelle, colorée et accessible. La mascotte LUMA, les couleurs vives et l’univers graphique avaient justement pour but de rendre le message plus engageant, surtout pour un public habitué à consommer du contenu rapidement.\n\nLe site présente les enjeux de la consommation énergétique liée au numérique à travers des sections claires, des visuels, des animations, une vidéo explicative et des graphiques. L’expérience devait rester simple à parcourir, avec peu de texte, des informations rapides à comprendre et une ambiance assez dynamique pour garder l’attention. Une partie du site était aussi dédiée aux graphiques Chart.js, chacun ayant travaillé sur son propre graphique pour illustrer une donnée ou une comparaison liée au sujet.\n\nSur ce projet, j’ai réalisé l’intégralité du site web final. Les maquettes avaient été travaillées à plusieurs, mais toute la construction du site, l’intégration, la structure des sections, les animations et l’expérience finale côté web étaient de mon côté. J’ai aussi réalisé mon propre graphique Chart.js dans une partie plus cachée du site. Ce projet était intéressant parce qu’il ne s’agissait pas seulement de coder une page, mais de traduire une intention collective en une expérience web cohérente, agréable et assez vivante pour donner envie de s’intéresser au sujet.",
+    longDesc: "L.U.M.A. (Ligue pour une Utilisation Modérée et Accessible) est un projet collectif réalisé autour de la sobriété numérique et de l’impact énergétique des loisirs en ligne. L’objectif était de sensibiliser les jeunes sans tomber dans un ton trop lourd ou culpabilisant. On voulait montrer qu’il est possible de parler d’un sujet sérieux avec une approche plus visuelle, colorée et accessible. La mascotte LUMA, les couleurs vives et l’univers graphique avaient justement pour but de rendre le message plus engageant, surtout pour un public habitué à consommer du contenu rapidement.\n\nLe site présente les enjeux de la consommation énergétique liée au numérique à travers des sections claires, des visuels, des animations, une vidéo explicative et des graphiques. L’expérience devait rester simple à parcourir, avec peu de texte, des informations rapides à comprendre et une ambiance assez dynamique pour garder l’attention. Une partie du site était aussi dédiée aux graphiques Chart.js, chacun ayant travaillé sur son propre graphique pour illustrer une donnée ou une comparaison liée au sujet.\n\nSur ce projet, j’ai réalisé l’intégralité du site web final. Les maquettes avaient été travaillées à plusieurs, mais toute la construction du site, l’intégration, la structure des sections, les animations et l’expérience finale côté web étaient de mon côté. J’ai aussi réalisé mon propre graphique Chart.js dans une partie plus cachée du site. Ce projet était intéressant parce qu’il ne s’agissait pas seulement de coder une page, mais de traduire une intention collective en une expérience web cohérente, agréable et assez vivante pour donner envie de s’intéresser au sujet.",
     context: "Projet académique collectif - SAE 303, groupe de 5",
     role: "Développement complet du site web final et intégration interactive",
     stack: ["HTML5", "CSS3", "JavaScript", "Chart.js", "Web Animations API"],
-    hero: {
-      type: "image",
-      url: "/assets/img/projects/luma-hero.png",
-      alt: "LUMA",
-      poster: null,
-    },
     demo: "https://luma-vert-tau.vercel.app/",
     codeSnippet: null,
-    media: null,
+    media: [
+      {
+        type: "iframe",
+        url: "https://luma-vert-tau.vercel.app/",
+        alt: "",
+        poster: null,
+      },
+    ],
     links: [
       {
         label: "GitHub",
         url: "https://github.com/Noferu/site_luma",
       },
     ],
-    thumbnail: "/assets/img/projects/luma.webp",
+    thumbnail: "/assets/projects/luma/thumbnail.webp",
   },
   {
     slug: "generosus",
