@@ -1,54 +1,73 @@
-import { useState, useEffect } from 'react'
-import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { projects } from '../data/projects'
+import { useState, useEffect } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { projects } from "../data/projects";
 
 const NAV = [
-  { label: 'Accueil',     to: '/',    anchor: null      },
-  { label: 'À propos', to: '/cv',  anchor: null      },
-  { label: 'Projets',  to: '/',    anchor: 'projets' },
-]
+  { label: "Accueil", to: "/", anchor: null },
+  { label: "À propos", to: "/cv", anchor: null },
+  { label: "Projets", to: "/", anchor: "projets" },
+];
 
-const lastProject = [...projects].sort((a, b) => b.year - a.year)[0]
+function periodToNumber(period) {
+  if (!period) return 0;
+
+  const [month, year] = period.split("/").map(Number);
+
+  return year * 100 + month;
+}
+
+const lastProject = projects
+  .map((project, index) => ({ ...project, index }))
+  .sort((a, b) => {
+    return (
+      periodToNumber(b.period) - periodToNumber(a.period) || b.index - a.index
+    );
+  })[0];
 
 export default function Header({ onOpenCmd }) {
-  const { pathname } = useLocation()
-  const navigate     = useNavigate()
-  const [scrolled, setScrolled] = useState(false)
+  const { pathname } = useLocation();
+  const navigate = useNavigate();
+  const [scrolled, setScrolled] = useState(false);
 
-  const projectMatch   = pathname.match(/^\/project\/(.+)$/)
-  const projectSlug    = projectMatch ? projectMatch[1] : null
-  const currentProject = projectSlug ? projects.find(p => p.slug === projectSlug) : null
+  const projectMatch = pathname.match(/^\/project\/(.+)$/);
+  const projectSlug = projectMatch ? projectMatch[1] : null;
+  const currentProject = projectSlug
+    ? projects.find((p) => p.slug === projectSlug)
+    : null;
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 20)
-    window.addEventListener('scroll', onScroll)
-    return () => window.removeEventListener('scroll', onScroll)
-  }, [])
+    const onScroll = () => setScrolled(window.scrollY > 20);
+    window.addEventListener("scroll", onScroll);
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   const handleNav = (item, e) => {
     if (item.anchor) {
-      e.preventDefault()
-      if (pathname === '/') {
-        document.getElementById(item.anchor)?.scrollIntoView({ behavior: 'smooth' })
+      e.preventDefault();
+      if (pathname === "/") {
+        document
+          .getElementById(item.anchor)
+          ?.scrollIntoView({ behavior: "smooth" });
       } else {
-        navigate('/')
+        navigate("/");
         setTimeout(() => {
-          document.getElementById(item.anchor)?.scrollIntoView({ behavior: 'smooth' })
-        }, 150)
+          document
+            .getElementById(item.anchor)
+            ?.scrollIntoView({ behavior: "smooth" });
+        }, 150);
       }
     }
-  }
+  };
 
   const isActive = (item) => {
-    if (currentProject) return false
-    if (item.anchor)    return false
-    return pathname === item.to
-  }
+    if (currentProject) return false;
+    if (item.anchor) return false;
+    return pathname === item.to;
+  };
 
   return (
     /* data-intro="header" cible par usePageIntro */
     <header className="header-wrapper" data-intro="header">
-
       {/* Gauche : pill Last Project */}
       <div className="header-left">
         <Link to={`/project/${lastProject.slug}`} className="header-last-proj">
@@ -60,13 +79,15 @@ export default function Header({ onOpenCmd }) {
 
       {/* Centre : Dynamic Island */}
       <div className="header-center">
-        <nav className={`header-island ${scrolled ? 'header-island--scrolled' : ''}`}>
+        <nav
+          className={`header-island ${scrolled ? "header-island--scrolled" : ""}`}
+        >
           {NAV.map((item) => (
             <Link
               key={item.label}
               to={item.to}
               onClick={(e) => handleNav(item, e)}
-              className={`header-nav-link ${isActive(item) ? 'header-nav-link--active' : ''}`}
+              className={`header-nav-link ${isActive(item) ? "header-nav-link--active" : ""}`}
             >
               {item.label}
             </Link>
@@ -99,7 +120,6 @@ export default function Header({ onOpenCmd }) {
           </div>
         </div>
       </div>
-
     </header>
-  )
+  );
 }
