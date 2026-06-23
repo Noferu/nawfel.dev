@@ -141,7 +141,7 @@ export const projects = [
   {
     slug: "di5-festival",
     title: "DI5 Festival",
-    period: "12/2026",
+    period: "12/2022",
     featured: true,
     category: "info",
     tags: ["Flutter", "Firebase", "Mobile", "Dart"],
@@ -282,20 +282,25 @@ export const projects = [
     ],
     hero: {
       type: "image",
-      url: "/assets/img/projects/mutualmap-hero.png",
+      url: "/assets/projects/mutualmap/hero.webp",
       alt: "Graphe MutualMap",
       poster: null,
     },
-    demo: null,
-    codeSnippet: null,
-    media: null,
+    demo: "/assets/projects/mutualmap/discord_friends_marco.html",
     links: [
       {
         label: "GitHub",
         url: "https://github.com/Noferu/mutualmap",
       },
     ],
-    thumbnail: "/assets/img/projects/mutualmap-thumb.png",
+    media: [
+      {
+        type: "iframe",
+        url: "/assets/projects/mutualmap/discord_friends_marco.html",
+        alt: "Intégration du site",
+        poster: null,
+      },
+    ],
   },
   {
     slug: "discord-riot-bot",
@@ -546,25 +551,30 @@ export const projects = [
     stack: ["JavaScript vanilla", "HTML5", "CSS3"],
     hero: {
       type: "image",
-      url: "/assets/img/projects/ranker.webp",
+      url: "/assets/projects/ranker/hero.webp",
       alt: "Ranker - Classement par duels",
       poster: null,
     },
-    demo: "/assets/website/ranker.html",
-    codeSnippet: null,
-    media: null,
+    demo: "/assets/projects/ranker/ranker.html",
     links: [
       {
         label: "GitHub",
         url: "https://github.com/Noferu/ranker",
       },
     ],
-    thumbnail: "/assets/img/projects/ranker.webp",
+    media: [
+      {
+        type: "iframe",
+        url: "/assets/projects/ranker/ranker.html",
+        alt: "Intégration du site",
+        poster: null,
+      },
+    ],
   },
   {
     slug: "yuumi",
     title: "Yuumi - Compagnon Airtable",
-    period: "05/2025",
+    period: "05/2026",
     featured: false,
     category: "info",
     tags: ["Chrome Extension", "JavaScript", "Manifest V3", "Airtable", "DOM"],
@@ -582,21 +592,23 @@ export const projects = [
       "chrome.storage",
       "Airtable Webhooks",
     ],
-    hero: {
-      type: "image",
-      url: "/assets/img/projects/yuumi-hero.png",
-      alt: "Extension Yuumi pour Airtable",
-      poster: null,
-    },
-    demo: null,
-    codeSnippet: null,
-    media: null,
+    media: [
+      {
+        type: "image",
+        url: "/assets/projects/yuumi/extension.webp",
+        alt: "Fenêtres de l'extension",
+        poster: null,
+      },
+    ],
     links: [
       {
         label: "GitHub",
         url: "https://github.com/Noferu/yuumi-for-airtable",
       },
     ],
-    thumbnail: "/assets/img/projects/yuumi-thumb.png",
+    thumbnail: "/assets/projects/yuumi/splashart.webp",
+    codeSnippet: {
+      code: "{\n  \"manifest_version\": 3,\n\n  \"name\": \"Yuumi, compagnon Airtable\",\n  \"short_name\": \"Yuumi\",\n\n  \"version\": \"2.0.0\",\n  \"version_name\": \"2.0 - Refonte UI/UX\",\n\n  \"description\": \"Chevauchant son Grimoire, Yuumi bondit sur Airtable pour y greffer des boutons magiques et des portails vers d'autres dimensions.\",\n\n  \"author\": \"Nawfel\",\n\n  \"homepage_url\": \"https://github.com/Noferu/yuumi-for-airtable\",\n\n  \"minimum_chrome_version\": \"114\",\n\n  \"offline_enabled\": true,\n\n  \"incognito\": \"split\",\n\n  \"permissions\": [\n    \"storage\",\n    \"tabs\"\n  ],\n\n  \"host_permissions\": [\n    \"https://airtable.com/*\",\n    \"https://hooks.airtable.com/*\"\n  ],\n\n  \"background\": {\n    \"service_worker\": \"background/background.js\"\n  },\n\n  \"action\": {\n    \"default_title\": \"Yuumi\",\n    \"default_popup\": \"popup/popup.html\",\n    \"default_icon\": {\n      \"16\": \"assets/icon16.png\",\n      \"48\": \"assets/icon48.png\",\n      \"128\": \"assets/icon128.png\"\n    }\n  },\n\n  \"content_scripts\": [\n    {\n      \"matches\": [\"https://airtable.com/*\"],\n      \"js\": [\n        \"content/config.js\",\n        \"content/menu.js\",\n        \"content/form.js\",\n        \"content/tables.js\"\n      ],\n      \"run_at\": \"document_idle\",\n      \"all_frames\": false\n    }\n  ],\n\n  \"web_accessible_resources\": [\n    {\n      \"resources\": [\n        \"assets/icon16.png\",\n        \"assets/icon48.png\",\n        \"assets/icon128.png\"\n      ],\n      \"matches\": [\"<all_urls>\"]\n    },\n    {\n      \"resources\": [\n        \"popup/*.css\",\n        \"popup/*.js\"\n      ],\n      \"matches\": [\"https://airtable.com/*\"]\n    }\n  ],\n\n  \"content_security_policy\": {\n    \"extension_pages\": \"script-src 'self'; object-src 'self';\"\n  },\n\n  \"icons\": {\n    \"16\": \"assets/icon16.png\",\n    \"48\": \"assets/icon48.png\",\n    \"128\": \"assets/icon128.png\"\n  }\n}",
+    },
   },
 ];
