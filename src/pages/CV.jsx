@@ -104,7 +104,7 @@ export default function CV() {
         <aside className="cv-sidebar">
           <div className="cv-sidebar-sticky">
             <div className="cv-sidebar-photo">
-              <img src="/assets/img/nawfel.webp" alt="Nawfel Ida-Ali" />
+              <img src="/assets/site/nawfel.webp" alt="Nawfel Ida-Ali" />
             </div>
             <p className="cv-sidebar-title">Sommaire</p>
             <nav className="cv-nav">
