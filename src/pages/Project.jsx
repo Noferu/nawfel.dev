@@ -89,6 +89,8 @@ const LONG_DESC_BLOCKS = [
   { key: "build", label: "Réalisation" },
 ];
 
+const EMPTY_RATIOS = {};
+
 function getDescBlocks(longDesc) {
   if (!longDesc) return [];
 
@@ -198,7 +200,12 @@ const dist = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
 export default function Project() {
   const { slug } = useParams();
   const navigate = useNavigate();
-  const project = projects.find((p) => p.slug === slug);
+
+  const allIdx = projects.findIndex((p) => p.slug === slug);
+  const project = allIdx >= 0 ? projects[allIdx] : null;
+  const prev = allIdx > 0 ? projects[allIdx - 1] : null;
+  const next =
+    allIdx >= 0 && allIdx < projects.length - 1 ? projects[allIdx + 1] : null;
 
   const pageRef = useRef(null);
   const railRef = useRef(null);
@@ -207,10 +214,6 @@ export default function Project() {
   const pinch = useRef(null);
   const pan = useRef(null);
   const swipe = useRef(null);
-
-  const allIdx = projects.findIndex((p) => p.slug === slug);
-  const prev = allIdx > 0 ? projects[allIdx - 1] : null;
-  const next = allIdx < projects.length - 1 ? projects[allIdx + 1] : null;
 
   const allMedia = useMemo(() => {
     if (!project) return [];
@@ -242,23 +245,56 @@ export default function Project() {
     [allMedia],
   );
 
-  const [ratios, setRatios] = useState({});
-  const [slideIdx, setSlideIdx] = useState(0);
+  const imageKey = useMemo(() => images.map((m) => m.url).join("|"), [images]);
+
+  const [ratioState, setRatioState] = useState({
+    key: "",
+    values: EMPTY_RATIOS,
+  });
+
+  const ratios = useMemo(
+    () => (ratioState.key === imageKey ? ratioState.values : EMPTY_RATIOS),
+    [ratioState.key, ratioState.values, imageKey],
+  );
+
+  const [slideIdxState, setSlideIdxState] = useState({
+    slug,
+    value: 0,
+  });
+
+  const slideIdx = slideIdxState.slug === slug ? slideIdxState.value : 0;
+
+  const setSlideIdx = useCallback(
+    (value) => {
+      setSlideIdxState((prevState) => {
+        const currentValue = prevState.slug === slug ? prevState.value : 0;
+        const nextValue =
+          typeof value === "function" ? value(currentValue) : value;
+
+        if (prevState.slug === slug && prevState.value === nextValue) {
+          return prevState;
+        }
+
+        return {
+          slug,
+          value: nextValue,
+        };
+      });
+    },
+    [slug],
+  );
+
   const [lightboxIdx, setLightboxIdx] = useState(null);
   const [zoom, setZoom] = useState({ scale: 1, x: 0, y: 0 });
   const [isLightboxInteracting, setIsLightboxInteracting] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
-    const imgs = allMedia.filter((m) => m.type === "image");
 
-    if (!imgs.length) {
-      setRatios({});
-      return;
-    }
+    if (!images.length) return;
 
     Promise.all(
-      imgs.map(
+      images.map(
         (m) =>
           new Promise((resolve) => {
             const img = new Image();
@@ -274,13 +310,18 @@ export default function Project() {
           }),
       ),
     ).then((entries) => {
-      if (!cancelled) setRatios(Object.fromEntries(entries));
+      if (!cancelled) {
+        setRatioState({
+          key: imageKey,
+          values: Object.fromEntries(entries),
+        });
+      }
     });
 
     return () => {
       cancelled = true;
     };
-  }, [allMedia]);
+  }, [images, imageKey]);
 
   const slides = useMemo(
     () => buildSlides(allMedia, ratios),
@@ -288,8 +329,6 @@ export default function Project() {
   );
 
   useLayoutEffect(() => {
-    setSlideIdx(0);
-
     if (railRef.current) {
       railRef.current.scrollLeft = 0;
     }
@@ -315,7 +354,7 @@ export default function Project() {
     });
 
     setSlideIdx(best);
-  }, []);
+  }, [setSlideIdx]);
 
   const goToSlide = useCallback((i) => {
     const rail = railRef.current;
