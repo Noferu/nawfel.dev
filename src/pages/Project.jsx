@@ -74,6 +74,32 @@ const IconStarFill = ({ className = "" }) => (
   </svg>
 );
 
+const LONG_DESC_BLOCKS = [
+  { key: "genesis", label: "Genèse" },
+  { key: "overview", label: "En pratique" },
+  { key: "build", label: "Réalisation" },
+];
+
+// Renvoie les paragraphes de présentation sous forme de blocs { label, text }.
+// Gère le format actuel (objet { genesis, overview, build }) et, par
+// sécurité, l'ancien format (chaîne avec paragraphes séparés par des sauts).
+function getDescBlocks(longDesc) {
+  if (!longDesc) return [];
+
+  if (typeof longDesc === "string") {
+    return longDesc
+      .split(/\r?\n\s*\r?\n/)
+      .map((text) => text.trim())
+      .filter(Boolean)
+      .map((text) => ({ label: null, text }));
+  }
+
+  return LONG_DESC_BLOCKS.map(({ key, label }) => ({
+    label,
+    text: longDesc[key],
+  })).filter((block) => block.text);
+}
+
 const MONTHS_FR = [
   "Janvier",
   "Février",
@@ -157,6 +183,7 @@ export default function Project() {
   const safeIdx = Math.min(mediaIdx, Math.max(0, allMedia.length - 1));
   const currentMedia = allMedia[safeIdx];
   const projectDate = project ? formatProjectDate(project.period) : "";
+  const descBlocks = getDescBlocks(project?.longDesc);
 
   const openFullscreen = (media) => {
     if (!media || !["image", "video"].includes(media.type)) return;
@@ -409,15 +436,16 @@ export default function Project() {
           <section className="proj-section proj-section--intro">
             <p className="section-label">Présentation</p>
 
-            {project.longDesc && (
+            {descBlocks.length > 0 && (
               <div className="proj-long-desc">
-                {project.longDesc
-                  .split(/\r?\n\s*\r?\n/)
-                  .map((paragraph) => paragraph.trim())
-                  .filter(Boolean)
-                  .map((paragraph, index) => (
-                    <p key={index}>{paragraph}</p>
-                  ))}
+                {descBlocks.map((block, index) => (
+                  <div className="proj-desc-block" key={block.label || index}>
+                    {block.label && (
+                      <h3 className="proj-desc-block-title">{block.label}</h3>
+                    )}
+                    <p>{block.text}</p>
+                  </div>
+                ))}
               </div>
             )}
           </section>
