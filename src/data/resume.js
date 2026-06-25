@@ -20,13 +20,13 @@ export const resume = {
   },
 
   // Languages
-  langues: [
-    { langue: "Français", niveau: "Maternelle" },
-    { langue: "Anglais", niveau: "B2+/C1" },
+  languages: [
+    { language: "Français", level: "Maternelle" },
+    { language: "Anglais", level: "B2+/C1" },
   ],
 
   // Education
-  formations: [
+  education: [
     {
       title: "Poursuite d’études en informatique",
       specialization: "Formation Bac + 5 en alternance à définir",
@@ -231,7 +231,7 @@ export const resume = {
   ],
 
   // Skills
-  competences: [
+  skills: [
     {
       category: "Langages",
       items: [

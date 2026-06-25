@@ -37,7 +37,7 @@ const IconArrowRight = ({ className = "" }) => (
 export default function CVSnippet() {
   const navigate = useNavigate();
 
-  const sortedComp = [...resume.competences]
+  const sortedComp = [...resume.skills]
     .sort((a, b) => b.items.length - a.items.length)
     .map((category) => ({
       category: category.category,
@@ -86,7 +86,7 @@ export default function CVSnippet() {
             <p className="section-label">Formations</p>
 
             <div className="cv-snippet-list">
-              {resume.formations.map((formation, i) => (
+              {resume.education.map((formation, i) => (
                 <div key={i} className="cv-snippet-item">
                   <div className="cv-snippet-dot" />
 

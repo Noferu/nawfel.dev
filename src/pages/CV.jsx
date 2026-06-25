@@ -315,7 +315,7 @@ export default function CV() {
             <h2 className="cv-block-title">Formations</h2>
 
             <div className="cv-timeline">
-              {resume.formations.map((formation, i) => {
+              {resume.education.map((formation, i) => {
                 const key = `form-${i}`;
                 const isOpen = !!expanded[key];
 
@@ -323,7 +323,7 @@ export default function CV() {
                   <div key={i} className="cv-timeline-item">
                     <div className="cv-timeline-line">
                       <div className="cv-timeline-dot" />
-                      {i < resume.formations.length - 1 && (
+                      {i < resume.education.length - 1 && (
                         <div className="cv-timeline-bar" />
                       )}
                     </div>
@@ -399,7 +399,7 @@ export default function CV() {
             <h2 className="cv-block-title">Compétences</h2>
 
             <div className="cv-comp-grid">
-              {resume.competences.map((category) => (
+              {resume.skills.map((category) => (
                 <div key={category.category} className="cv-comp-cat">
                   <p className="cv-comp-cat-title">{category.category}</p>
 
@@ -435,10 +435,10 @@ export default function CV() {
             <h2 className="cv-block-title">Langues</h2>
 
             <div className="cv-lang-row">
-              {resume.langues.map((language) => (
-                <div key={language.langue} className="cv-lang-item">
-                  <p className="cv-lang-name">{language.langue}</p>
-                  <p className="cv-lang-level">{language.niveau}</p>
+              {resume.languages.map((language) => (
+                <div key={language.language} className="cv-lang-item">
+                  <p className="cv-lang-name">{language.language}</p>
+                  <p className="cv-lang-level">{language.level}</p>
                 </div>
               ))}
             </div>
