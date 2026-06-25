@@ -1,5 +1,14 @@
+/**
+ * Resume data used across the portfolio.
+ *
+ * This object contains identity information, education, work experience,
+ * skills, languages, qualities, and interests.
+ *
+ * It is used by the CV page, the home page resume preview, and the hero stats.
+ * Date ranges use DD/MM/YYYY strings.
+ */
 export const resume = {
-  // Identité
+  // Identity
   name: "Nawfel Ida-Ali",
   title: "Ingénierie logicielle, automatisation & systèmes interactifs",
   location: "Strasbourg, France",
@@ -10,13 +19,13 @@ export const resume = {
     github: "https://github.com/Noferu",
   },
 
-  // Langues
+  // Languages
   langues: [
     { langue: "Français", niveau: "Maternelle" },
     { langue: "Anglais", niveau: "B2+/C1" },
   ],
 
-  // Formations
+  // Education
   formations: [
     {
       title: "Poursuite d’études en informatique",
@@ -81,7 +90,7 @@ export const resume = {
     },
   ],
 
-  // Expériences
+  // Experience
   experiences: [
     {
       position:
@@ -158,7 +167,7 @@ export const resume = {
         "Création de supports de communication print et web : affiches, flyers, kakemonos, pictogrammes, formulaires et contenus institutionnels.",
         "Conception de contenus promotionnels autour du lancement d’une prestation de nettoyage par drone.",
         "Production de vidéos promotionnelles, teasers, motion design et montages événementiels sous Premiere Pro et After Effects.",
-        "Création et déclinaison d’éléments graphiques dans le respect de la charte visuelle de l’company.",
+        "Création et déclinaison d’éléments graphiques dans le respect de la charte visuelle de l’entreprise.",
         "Participation à des démonstrations drone sur le terrain avec captation photo et vidéo.",
         "Réalisation de supports destinés à des partenaires institutionnels et événements publics.",
         "Travail en autonomie avec échanges réguliers, validations progressives et nombreuses itérations de production.",
@@ -221,7 +230,7 @@ export const resume = {
     },
   ],
 
-  // Compétences
+  // Skills
   competences: [
     {
       category: "Langages",
@@ -315,7 +324,7 @@ export const resume = {
     },
   ],
 
-  // Qualités
+  // Qualities
   qualities: [
     "Autonomie et apprentissage autodidacte",
     "Esprit d’analyse et réflexion systémique",
@@ -327,7 +336,7 @@ export const resume = {
     "Communication technique et vulgarisation",
   ],
 
-  // Centres d'intérêt
+  // Interests
   interests: [
     "Cinéma et narration",
     "Jeux vidéo",

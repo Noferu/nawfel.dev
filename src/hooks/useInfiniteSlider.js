@@ -3,6 +3,16 @@ import { useEffect, useRef, useCallback } from "react";
 const FRICTION = 0.88;
 const MIN_VEL = 0.3;
 
+/**
+ * Creates an infinite horizontal slider with drag and inertia support.
+ *
+ * The track element should contain repeated content, usually three duplicated
+ * segments, so the animation can loop smoothly.
+ *
+ * @param {"left"|"right"} direction - Direction of the automatic animation.
+ * @param {number} speed - Automatic animation speed in pixels per frame.
+ * @returns {Object} Slider ref and event handlers for the wrapper element.
+ */
 export function useInfiniteSlider(direction = "left", speed = 0.5) {
   const trackRef = useRef(null);
   const posRef = useRef(null);
@@ -16,17 +26,28 @@ export function useInfiniteSlider(direction = "left", speed = 0.5) {
   const lastT = useRef(0);
   const velocityRef = useRef(0);
 
+  /**
+   * Keeps the slider position inside one repeated segment.
+   *
+   * @param {number} p - Current slider position.
+   * @param {number} segment - Width of one repeated segment.
+   * @returns {number} Normalized slider position.
+   */
   const clampPos = useCallback((p, segment) => {
     if (p > 0) p -= segment;
     if (p < -segment) p += segment;
     return p;
   }, []);
 
+  /**
+   * Starts the automatic slider animation.
+   */
   const startAnimation = useCallback(() => {
     if (rafRef.current) cancelAnimationFrame(rafRef.current);
 
     const tick = () => {
       const el = trackRef.current;
+
       if (!el) return;
 
       if (posRef.current === null) {
@@ -47,6 +68,9 @@ export function useInfiniteSlider(direction = "left", speed = 0.5) {
     rafRef.current = requestAnimationFrame(tick);
   }, [direction, speed, clampPos]);
 
+  /**
+   * Stops the current animation frame.
+   */
   const stopAnimation = useCallback(() => {
     if (!rafRef.current) return;
 
@@ -54,16 +78,24 @@ export function useInfiniteSlider(direction = "left", speed = 0.5) {
     rafRef.current = null;
   }, []);
 
+  /**
+   * Restarts automatic animation after a short delay.
+   */
   const scheduleResume = useCallback(() => {
     if (resumeTimer.current) clearTimeout(resumeTimer.current);
+
     resumeTimer.current = setTimeout(startAnimation, 5000);
   }, [startAnimation]);
 
+  /**
+   * Runs inertia after the user releases the slider.
+   */
   const runInertia = useCallback(() => {
     if (rafRef.current) cancelAnimationFrame(rafRef.current);
 
     const tick = () => {
       const el = trackRef.current;
+
       if (!el) return;
 
       velocityRef.current *= FRICTION;
@@ -75,6 +107,7 @@ export function useInfiniteSlider(direction = "left", speed = 0.5) {
       }
 
       const segment = el.scrollWidth / 3;
+
       posRef.current = clampPos(posRef.current + velocityRef.current, segment);
       el.style.transform = `translateX(${posRef.current}px)`;
       rafRef.current = requestAnimationFrame(tick);
@@ -95,6 +128,11 @@ export function useInfiniteSlider(direction = "left", speed = 0.5) {
     };
   }, [startAnimation, stopAnimation]);
 
+  /**
+   * Starts mouse dragging and pauses automatic animation.
+   *
+   * @param {MouseEvent} e - Mouse down event.
+   */
   const onMouseDown = useCallback(
     (e) => {
       dragging.current = true;
@@ -116,6 +154,11 @@ export function useInfiniteSlider(direction = "left", speed = 0.5) {
     [stopAnimation],
   );
 
+  /**
+   * Updates the slider position while the mouse is dragging.
+   *
+   * @param {MouseEvent} e - Mouse move event.
+   */
   const onMouseMove = useCallback(
     (e) => {
       if (!dragging.current || !trackRef.current) return;
@@ -137,12 +180,16 @@ export function useInfiniteSlider(direction = "left", speed = 0.5) {
       lastT.current = now;
 
       const segment = trackRef.current.scrollWidth / 3;
+
       posRef.current = clampPos(dragStartPos.current + delta, segment);
       trackRef.current.style.transform = `translateX(${posRef.current}px)`;
     },
     [clampPos],
   );
 
+  /**
+   * Ends mouse dragging and starts inertia or delayed auto resume.
+   */
   const onMouseUp = useCallback(() => {
     if (!dragging.current) return;
 
@@ -155,12 +202,20 @@ export function useInfiniteSlider(direction = "left", speed = 0.5) {
     }
   }, [runInertia, scheduleResume]);
 
+  /**
+   * Ends dragging when the cursor leaves the wrapper.
+   */
   const onMouseLeave = useCallback(() => {
     if (dragging.current) {
       onMouseUp();
     }
   }, [onMouseUp]);
 
+  /**
+   * Prevents link clicks after a drag gesture.
+   *
+   * @param {MouseEvent} e - Captured click event.
+   */
   const onClickCapture = useCallback((e) => {
     if (!hasDragged.current) return;
 
@@ -169,6 +224,11 @@ export function useInfiniteSlider(direction = "left", speed = 0.5) {
     hasDragged.current = false;
   }, []);
 
+  /**
+   * Starts touch dragging and pauses automatic animation.
+   *
+   * @param {TouchEvent} e - Touch start event.
+   */
   const onTouchStart = useCallback(
     (e) => {
       dragging.current = true;
@@ -188,6 +248,11 @@ export function useInfiniteSlider(direction = "left", speed = 0.5) {
     [stopAnimation],
   );
 
+  /**
+   * Updates the slider position while the user drags with touch.
+   *
+   * @param {TouchEvent} e - Touch move event.
+   */
   const onTouchMove = useCallback(
     (e) => {
       if (!dragging.current || !trackRef.current) return;
@@ -210,12 +275,16 @@ export function useInfiniteSlider(direction = "left", speed = 0.5) {
       lastT.current = now;
 
       const segment = trackRef.current.scrollWidth / 3;
+
       posRef.current = clampPos(dragStartPos.current + delta, segment);
       trackRef.current.style.transform = `translateX(${posRef.current}px)`;
     },
     [clampPos],
   );
 
+  /**
+   * Ends touch dragging and starts inertia or delayed auto resume.
+   */
   const onTouchEnd = useCallback(() => {
     if (!dragging.current) return;
 

@@ -2,12 +2,21 @@ import { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { projects } from "../data/projects";
 
+/**
+ * Main header navigation items.
+ */
 const NAV = [
   { label: "Accueil", to: "/", anchor: null },
   { label: "À propos", to: "/cv", anchor: null },
   { label: "Projets", to: "/", anchor: "projets" },
 ];
 
+/**
+ * Converts a MM/YYYY period into a sortable number.
+ *
+ * @param {string} period - Project period in MM/YYYY format.
+ * @returns {number} Sortable date number.
+ */
 function periodToNumber(period) {
   if (!period) return 0;
 
@@ -16,6 +25,9 @@ function periodToNumber(period) {
   return year * 100 + month;
 }
 
+/**
+ * Latest featured project displayed in the header.
+ */
 const lastProject = projects
   .map((project, index) => ({ ...project, index }))
   .filter((project) => project.featured)
@@ -25,6 +37,16 @@ const lastProject = projects
     );
   })[0];
 
+/**
+ * Displays the main desktop header.
+ *
+ * The header contains the latest featured project, main navigation links,
+ * the current project title when needed, and a button to open the command menu.
+ *
+ * @param {Object} props
+ * @param {Function} props.onOpenCmd - Opens the command palette.
+ * @returns {JSX.Element} Rendered header.
+ */
 export default function Header({ onOpenCmd }) {
   const { pathname } = useLocation();
   const navigate = useNavigate();
@@ -33,24 +55,36 @@ export default function Header({ onOpenCmd }) {
   const projectMatch = pathname.match(/^\/project\/(.+)$/);
   const projectSlug = projectMatch ? projectMatch[1] : null;
   const currentProject = projectSlug
-    ? projects.find((p) => p.slug === projectSlug)
+    ? projects.find((project) => project.slug === projectSlug)
     : null;
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 20);
+    const onScroll = () => {
+      setScrolled(window.scrollY > 20);
+    };
+
     window.addEventListener("scroll", onScroll);
+
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  /**
+   * Handles navigation links that target a section on the home page.
+   *
+   * @param {Object} item - Navigation item.
+   * @param {React.MouseEvent<HTMLAnchorElement>} e - Link click event.
+   */
   const handleNav = (item, e) => {
     if (item.anchor) {
       e.preventDefault();
+
       if (pathname === "/") {
         document
           .getElementById(item.anchor)
           ?.scrollIntoView({ behavior: "smooth" });
       } else {
         navigate("/");
+
         setTimeout(() => {
           document
             .getElementById(item.anchor)
@@ -60,15 +94,21 @@ export default function Header({ onOpenCmd }) {
     }
   };
 
+  /**
+   * Checks if a navigation item matches the current route.
+   *
+   * @param {Object} item - Navigation item.
+   * @returns {boolean} True when the item is active.
+   */
   const isActive = (item) => {
     if (currentProject) return false;
     if (item.anchor) return false;
+
     return pathname === item.to;
   };
 
   return (
     <header className="header-wrapper" data-intro="header">
-      {/* Gauche : pill Last Project */}
       <div className="header-left">
         <Link to={`/project/${lastProject.slug}`} className="header-last-proj">
           <span className="header-last-proj-label">Dernier</span>
@@ -77,17 +117,20 @@ export default function Header({ onOpenCmd }) {
         </Link>
       </div>
 
-      {/* Centre : Dynamic Island */}
       <div className="header-center">
         <nav
-          className={`header-island ${scrolled ? "header-island--scrolled" : ""}`}
+          className={`header-island ${
+            scrolled ? "header-island--scrolled" : ""
+          }`}
         >
           {NAV.map((item) => (
             <Link
               key={item.label}
               to={item.to}
               onClick={(e) => handleNav(item, e)}
-              className={`header-nav-link ${isActive(item) ? "header-nav-link--active" : ""}`}
+              className={`header-nav-link ${
+                isActive(item) ? "header-nav-link--active" : ""
+              }`}
             >
               {item.label}
             </Link>

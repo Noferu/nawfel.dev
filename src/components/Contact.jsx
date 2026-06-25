@@ -1,4 +1,12 @@
-import { useRef, useEffect, useState } from 'react'
+import { useRef, useEffect, useState } from "react";
+
+/**
+ * Displays an external link icon.
+ *
+ * @param {Object} props
+ * @param {string} props.className - Optional CSS class name.
+ * @returns {JSX.Element} Rendered SVG icon.
+ */
 const IconExternalLink = ({ className = "" }) => (
   <svg
     className={className}
@@ -20,6 +28,13 @@ const IconExternalLink = ({ className = "" }) => (
   </svg>
 );
 
+/**
+ * Displays an upward arrow icon.
+ *
+ * @param {Object} props
+ * @param {string} props.className - Optional CSS class name.
+ * @returns {JSX.Element} Rendered SVG icon.
+ */
 const IconArrowUp = ({ className = "" }) => (
   <svg
     className={className}
@@ -37,123 +52,180 @@ const IconArrowUp = ({ className = "" }) => (
   </svg>
 );
 
+const WEB3FORMS_ACCESS_KEY = "71c0aeab-2d9a-4bcb-83be-7582efbd3812";
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 /**
- * Contact.jsx
+ * Displays the contact section with a controlled form.
  *
- * Section contact avec formulaire contrôlé et validation côté client.
- * - Validation : nom (>=2), e-mail (regex), message (>=10) - au submit, l'erreur
- *   d'un champ se nettoie dès qu'on le modifie.
- * - Envoi : Web3Forms (gratuit, sans backend). Renseigner WEB3FORMS_ACCESS_KEY.
- *   En cas d'échec réseau / clé manquante, fallback mailto proposé.
- * - Accessibilité : labels liés, aria-invalid, aria-describedby, statut aria-live.
- * - L'orb au curseur de la card est conservé.
+ * The component validates the form on submit, sends the message through
+ * Web3Forms, displays accessible status feedback, and keeps a direct email
+ * fallback link available.
+ *
+ * @returns {JSX.Element} Rendered contact section.
  */
-
-// Voir https://web3forms.com (créer une clé gratuite, 2 min). Sans backend.
-const WEB3FORMS_ACCESS_KEY = '71c0aeab-2d9a-4bcb-83be-7582efbd3812'
-
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-
 export default function Contact() {
-  const cardRef = useRef(null)
-  const orbRef  = useRef(null)
+  const cardRef = useRef(null);
+  const orbRef = useRef(null);
 
-  const [values, setValues] = useState({ name: '', email: '', message: '' })
-  const [errors, setErrors] = useState({})
-  const [status, setStatus] = useState('idle') // idle | sending | success | error
+  const [values, setValues] = useState({ name: "", email: "", message: "" });
+  const [errors, setErrors] = useState({});
+  const [status, setStatus] = useState("idle");
 
-  /* Orb au curseur (inchangé) */
   useEffect(() => {
-    const card = cardRef.current
-    const orb  = orbRef.current
-    if (!card || !orb) return
+    const card = cardRef.current;
+    const orb = orbRef.current;
+
+    if (!card || !orb) return;
+
+    /**
+     * Moves the glow orb based on the cursor position inside the card.
+     *
+     * @param {MouseEvent} e - Mouse move event.
+     */
     const onMove = (e) => {
-      const rect = card.getBoundingClientRect()
-      orb.style.left    = `${e.clientX - rect.left}px`
-      orb.style.top     = `${e.clientY - rect.top}px`
-      orb.style.opacity = '1'
-    }
-    const onLeave = () => { orb.style.opacity = '0' }
-    card.addEventListener('mousemove', onMove)
-    card.addEventListener('mouseleave', onLeave)
+      const rect = card.getBoundingClientRect();
+
+      orb.style.left = `${e.clientX - rect.left}px`;
+      orb.style.top = `${e.clientY - rect.top}px`;
+      orb.style.opacity = "1";
+    };
+
+    /**
+     * Hides the glow orb when the cursor leaves the card.
+     */
+    const onLeave = () => {
+      orb.style.opacity = "0";
+    };
+
+    card.addEventListener("mousemove", onMove);
+    card.addEventListener("mouseleave", onLeave);
+
     return () => {
-      card.removeEventListener('mousemove', onMove)
-      card.removeEventListener('mouseleave', onLeave)
+      card.removeEventListener("mousemove", onMove);
+      card.removeEventListener("mouseleave", onLeave);
+    };
+  }, []);
+
+  /**
+   * Validates contact form values.
+   *
+   * @param {Object} formValues - Current form values.
+   * @param {string} formValues.name - Sender name.
+   * @param {string} formValues.email - Sender email.
+   * @param {string} formValues.message - Sender message.
+   * @returns {Object} Validation errors indexed by field name.
+   */
+  const validate = (formValues) => {
+    const next = {};
+
+    if (formValues.name.trim().length < 2) {
+      next.name = "Indiquez votre nom.";
     }
-  }, [])
 
-  /* Validation */
-  const validate = (v) => {
-    const next = {}
-    if (v.name.trim().length < 2)        next.name    = 'Indiquez votre nom.'
-    if (!EMAIL_RE.test(v.email.trim()))  next.email   = 'Adresse e-mail invalide.'
-    if (v.message.trim().length < 10)    next.message = 'Message trop court (10 caractères minimum).'
-    return next
-  }
+    if (!EMAIL_RE.test(formValues.email.trim())) {
+      next.email = "Adresse e-mail invalide.";
+    }
 
+    if (formValues.message.trim().length < 10) {
+      next.message = "Message trop court (10 caractères minimum).";
+    }
+
+    return next;
+  };
+
+  /**
+   * Updates a form field and clears its current error.
+   *
+   * @param {React.ChangeEvent<HTMLInputElement|HTMLTextAreaElement>} e - Change event.
+   */
   const handleChange = (e) => {
-    const { name, value } = e.target
-    setValues((v) => ({ ...v, [name]: value }))
-    // Nettoie l'erreur du champ en cours d'édition
-    setErrors((errs) => (errs[name] ? { ...errs, [name]: undefined } : errs))
-    if (status === 'success' || status === 'error') setStatus('idle')
-  }
+    const { name, value } = e.target;
 
+    setValues((currentValues) => ({ ...currentValues, [name]: value }));
+    setErrors((currentErrors) =>
+      currentErrors[name]
+        ? { ...currentErrors, [name]: undefined }
+        : currentErrors,
+    );
+
+    if (status === "success" || status === "error") {
+      setStatus("idle");
+    }
+  };
+
+  /**
+   * Validates and sends the contact form.
+   *
+   * @param {React.FormEvent<HTMLFormElement>} e - Submit event.
+   */
   const handleSubmit = async (e) => {
-    e.preventDefault()
-    const next = validate(values)
-    setErrors(next)
+    e.preventDefault();
+
+    const next = validate(values);
+
+    setErrors(next);
+
     if (Object.keys(next).length > 0) {
-      // Focus le premier champ en erreur
-      const firstKey = Object.keys(next)[0]
-      document.getElementById(`contact-${firstKey}`)?.focus()
-      return
+      const firstKey = Object.keys(next)[0];
+      document.getElementById(`contact-${firstKey}`)?.focus();
+      return;
     }
 
-    setStatus('sending')
+    setStatus("sending");
+
     try {
-      const res = await fetch('https://api.web3forms.com/submit', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+      const res = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
         body: JSON.stringify({
           access_key: WEB3FORMS_ACCESS_KEY,
-          name:    values.name,
-          email:   values.email,
+          name: values.name,
+          email: values.email,
           message: values.message,
           subject: `Portfolio - message de ${values.name}`,
         }),
-      })
-      const data = await res.json()
+      });
+
+      const data = await res.json();
+
       if (data.success) {
-        setStatus('success')
-        setValues({ name: '', email: '', message: '' })
+        setStatus("success");
+        setValues({ name: "", email: "", message: "" });
       } else {
-        setStatus('error')
+        setStatus("error");
       }
     } catch {
-      setStatus('error')
+      setStatus("error");
     }
-  }
+  };
 
   return (
     <section id="contact" className="contact-section">
       <div className="container">
         <div ref={cardRef} className="contact-card">
           <div ref={orbRef} className="contact-orb" />
+
           <div className="contact-inner">
             <p className="section-label">Contact</p>
             <h2 className="contact-title">Travaillons ensemble.</h2>
+
             <p className="contact-sub">
-              En recherche d'une <strong>alternance</strong> à partir de{' '}
-              <strong>septembre 2026</strong> (Strasbourg ou Lille), dans le développement,
-              l'automatisation et l'ingénierie logicielle.
+              En recherche d'une <strong>alternance</strong> à partir de{" "}
+              <strong>septembre 2026</strong> (Strasbourg ou Lille), dans le
+              développement, l'automatisation et l'ingénierie logicielle.
             </p>
 
             <form className="contact-form" onSubmit={handleSubmit} noValidate>
               <div className="contact-row">
                 <div className="contact-field">
-                  <label className="contact-label" htmlFor="contact-name">Nom</label>
+                  <label className="contact-label" htmlFor="contact-name">
+                    Nom
+                  </label>
+
                   <input
                     id="contact-name"
                     name="name"
@@ -163,16 +235,22 @@ export default function Contact() {
                     value={values.name}
                     onChange={handleChange}
                     aria-invalid={!!errors.name}
-                    aria-describedby={errors.name ? 'err-name' : undefined}
+                    aria-describedby={errors.name ? "err-name" : undefined}
                     autoComplete="name"
                   />
+
                   {errors.name && (
-                    <span id="err-name" className="contact-error">{errors.name}</span>
+                    <span id="err-name" className="contact-error">
+                      {errors.name}
+                    </span>
                   )}
                 </div>
 
                 <div className="contact-field">
-                  <label className="contact-label" htmlFor="contact-email">E-mail</label>
+                  <label className="contact-label" htmlFor="contact-email">
+                    E-mail
+                  </label>
+
                   <input
                     id="contact-email"
                     name="email"
@@ -182,17 +260,23 @@ export default function Contact() {
                     value={values.email}
                     onChange={handleChange}
                     aria-invalid={!!errors.email}
-                    aria-describedby={errors.email ? 'err-email' : undefined}
+                    aria-describedby={errors.email ? "err-email" : undefined}
                     autoComplete="email"
                   />
+
                   {errors.email && (
-                    <span id="err-email" className="contact-error">{errors.email}</span>
+                    <span id="err-email" className="contact-error">
+                      {errors.email}
+                    </span>
                   )}
                 </div>
               </div>
 
               <div className="contact-field">
-                <label className="contact-label" htmlFor="contact-message">Message</label>
+                <label className="contact-label" htmlFor="contact-message">
+                  Message
+                </label>
+
                 <textarea
                   id="contact-message"
                   name="message"
@@ -202,10 +286,13 @@ export default function Contact() {
                   value={values.message}
                   onChange={handleChange}
                   aria-invalid={!!errors.message}
-                  aria-describedby={errors.message ? 'err-message' : undefined}
+                  aria-describedby={errors.message ? "err-message" : undefined}
                 />
+
                 {errors.message && (
-                  <span id="err-message" className="contact-error">{errors.message}</span>
+                  <span id="err-message" className="contact-error">
+                    {errors.message}
+                  </span>
                 )}
               </div>
 
@@ -213,32 +300,39 @@ export default function Contact() {
                 <button
                   type="submit"
                   className="btn-primary contact-submit"
-                  disabled={status === 'sending'}
+                  disabled={status === "sending"}
                 >
-                  {status === 'sending' ? 'Envoi...' : 'Envoyer le message'}
+                  {status === "sending" ? "Envoi..." : "Envoyer le message"}
                 </button>
 
                 <p className="contact-status" aria-live="polite">
-                  {status === 'success' && (
+                  {status === "success" && (
                     <span className="contact-status--success">
                       Message envoyé, merci. Je reviens vers vous rapidement.
                     </span>
                   )}
-                  {status === 'error' && (
+
+                  {status === "error" && (
                     <span className="contact-status--error">
-                      Échec de l'envoi. Vous pouvez m'écrire directement à{' '}
-                      <a href="mailto:nawfel.idaali.pro@gmail.com" className="contact-status-link">
+                      Échec de l'envoi. Vous pouvez m'écrire directement à{" "}
+                      <a
+                        href="mailto:nawfel.idaali.pro@gmail.com"
+                        className="contact-status-link"
+                      >
                         nawfel.idaali.pro@gmail.com
-                      </a>.
+                      </a>
+                      .
                     </span>
                   )}
                 </p>
               </div>
             </form>
 
-            {/* Lien mail direct conservé sous le formulaire */}
             <div className="contact-links">
-              <a href="mailto:nawfel.idaali.pro@gmail.com" className="contact-mail">
+              <a
+                href="mailto:nawfel.idaali.pro@gmail.com"
+                className="contact-mail"
+              >
                 nawfel.idaali.pro@gmail.com
                 <IconExternalLink className="contact-arrow" />
               </a>
@@ -246,11 +340,10 @@ export default function Contact() {
           </div>
         </div>
 
-        {/* Scroll-to-top sous la card */}
         <div className="contact-scroll-top">
           <button
             className="scroll-top-btn"
-            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
             aria-label="Retour en haut de la page"
           >
             <IconArrowUp className="scroll-top-icon" />
@@ -258,5 +351,5 @@ export default function Contact() {
         </div>
       </div>
     </section>
-  )
+  );
 }

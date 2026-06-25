@@ -4,6 +4,9 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
+/**
+ * Soft light settings displayed above the animated canvas background.
+ */
 const LIGHTS = [
   { x: "12%", y: "18%", color: "rgba(78,2,1,0.45)", size: 580, dur: 18 },
   { x: "78%", y: "62%", color: "rgba(161,92,33,0.30)", size: 500, dur: 24 },
@@ -17,6 +20,15 @@ const ANGLE = (10 * Math.PI) / 180;
 const MASK_R = 16;
 const DOT_R = 1.5;
 
+/**
+ * Displays the animated background of the portfolio.
+ *
+ * The component draws a moving grid on a canvas and renders soft lights that
+ * move with the page scroll. The canvas animation is paused when the document
+ * is hidden to avoid unnecessary work.
+ *
+ * @returns {JSX.Element} Rendered background.
+ */
 export default function Background() {
   const canvasRef = useRef(null);
   const offsetRef = useRef(0);
@@ -26,13 +38,20 @@ export default function Background() {
     const canvas = canvasRef.current;
     const ctx = canvas.getContext("2d");
 
+    /**
+     * Matches the canvas size with the current viewport.
+     */
     const resize = () => {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
     };
+
     resize();
     window.addEventListener("resize", resize);
 
+    /**
+     * Draws one frame of the animated background grid.
+     */
     const draw = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -66,23 +85,27 @@ export default function Background() {
       ctx.globalCompositeOperation = "destination-out";
       ctx.fillStyle = "rgba(0,0,0,1)";
       ctx.beginPath();
+
       for (let x = startX; x < canvas.width + ext; x += GRID) {
         for (let y = startY; y < canvas.height + ext; y += GRID) {
           ctx.moveTo(x + MASK_R, y);
           ctx.arc(x, y, MASK_R, 0, Math.PI * 2);
         }
       }
+
       ctx.fill();
       ctx.globalCompositeOperation = "source-over";
 
       ctx.fillStyle = "rgba(251,195,115,0.2)";
       ctx.beginPath();
+
       for (let x = startX; x < canvas.width + ext; x += GRID) {
         for (let y = startY; y < canvas.height + ext; y += GRID) {
           ctx.moveTo(x + DOT_R, y);
           ctx.arc(x, y, DOT_R, 0, Math.PI * 2);
         }
       }
+
       ctx.fill();
 
       ctx.restore();
@@ -91,6 +114,9 @@ export default function Background() {
 
     let running = true;
 
+    /**
+     * Pauses or resumes the canvas ticker based on tab visibility.
+     */
     const onVisibility = () => {
       if (document.hidden && running) {
         gsap.ticker.remove(draw);
@@ -100,6 +126,7 @@ export default function Background() {
         running = true;
       }
     };
+
     document.addEventListener("visibilitychange", onVisibility);
 
     draw();
@@ -118,7 +145,9 @@ export default function Background() {
 
       lightsRef.current.forEach((wrapper, i) => {
         if (!wrapper) return;
+
         const amplitude = window.innerHeight * FACTORS[i];
+
         gsap.fromTo(
           wrapper,
           { y: -amplitude / 2 },
@@ -135,6 +164,7 @@ export default function Background() {
         );
       });
     });
+
     return () => ctx.revert();
   }, []);
 
@@ -142,23 +172,23 @@ export default function Background() {
     <div className="bg-wrapper" data-intro="bg">
       <canvas ref={canvasRef} className="bg-canvas" />
 
-      {LIGHTS.map((l, i) => (
+      {LIGHTS.map((light, i) => (
         <div
           key={i}
           ref={(el) => {
             lightsRef.current[i] = el;
           }}
           className="soft-light-wrapper"
-          style={{ left: l.x, top: l.y }}
+          style={{ left: light.x, top: light.y }}
         >
           <div
             className="soft-light"
             style={{
-              width: l.size,
-              height: l.size,
-              background: `radial-gradient(circle, ${l.color} 0%, transparent 68%)`,
+              width: light.size,
+              height: light.size,
+              background: `radial-gradient(circle, ${light.color} 0%, transparent 68%)`,
               filter: "blur(40px)",
-              animationDuration: `${l.dur}s`,
+              animationDuration: `${light.dur}s`,
               animationDelay: `${i * -4.5}s`,
             }}
           />

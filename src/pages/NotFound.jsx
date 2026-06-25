@@ -1,6 +1,13 @@
 import { Link } from "react-router-dom";
 import "../styles/notfound.css";
 
+/**
+ * Displays a left arrow icon.
+ *
+ * @param {Object} props
+ * @param {string} props.className - Optional CSS class name.
+ * @returns {JSX.Element} Rendered SVG icon.
+ */
 const IconArrowLeft = ({ className = "" }) => (
   <svg
     className={className}
@@ -18,6 +25,13 @@ const IconArrowLeft = ({ className = "" }) => (
   </svg>
 );
 
+/**
+ * Displays the 404 page when no route matches.
+ *
+ * @param {Object} props
+ * @param {string} props.subtitle - Message displayed under the 404 title.
+ * @returns {JSX.Element} Rendered not found page.
+ */
 export default function NotFound({
   subtitle = "Cette page n'existe pas, ou n'existe plus.",
 }) {

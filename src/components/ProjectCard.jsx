@@ -1,6 +1,14 @@
 import { useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import gsap from "gsap";
+
+/**
+ * Displays a right arrow icon.
+ *
+ * @param {Object} props
+ * @param {string} props.className - Optional CSS class name.
+ * @returns {JSX.Element} Rendered SVG icon.
+ */
 const IconArrowRight = ({ className = "" }) => (
   <svg
     className={className}
@@ -18,6 +26,13 @@ const IconArrowRight = ({ className = "" }) => (
   </svg>
 );
 
+/**
+ * Displays an external link icon.
+ *
+ * @param {Object} props
+ * @param {string} props.className - Optional CSS class name.
+ * @returns {JSX.Element} Rendered SVG icon.
+ */
 const IconExternalLink = ({ className = "" }) => (
   <svg
     className={className}
@@ -39,6 +54,7 @@ const IconExternalLink = ({ className = "" }) => (
   </svg>
 );
 
+/** Displays the rotating star used on featured project cards. */
 const DisneyStarSvg = () => (
   <svg
     viewBox="0 0 24 24"
@@ -52,6 +68,12 @@ const DisneyStarSvg = () => (
   </svg>
 );
 
+/**
+ * Extracts the year from a project period.
+ *
+ * @param {string|number} period - Project period value.
+ * @returns {string} Extracted year or original value as text.
+ */
 function getPeriodYear(period) {
   if (!period) return "";
 
@@ -61,6 +83,17 @@ function getPeriodYear(period) {
   return match ? match[0] : str;
 }
 
+/**
+ * Displays a project card with thumbnail, tags, metadata, and navigation.
+ *
+ * Featured cards show the full period, a rotating star, and the short
+ * description. Compact cards hide the description.
+ *
+ * @param {Object} props
+ * @param {Object} props.project - Project data displayed in the card.
+ * @param {boolean} [props.compact=false] - Whether to use the compact layout.
+ * @returns {JSX.Element} Rendered project card.
+ */
 export default function ProjectCard({ project, compact = false }) {
   const cardRef = useRef(null);
   const orbRef = useRef(null);
@@ -84,8 +117,14 @@ export default function ProjectCard({ project, compact = false }) {
 
     if (!card || !orb) return;
 
+    /**
+     * Moves the glow orb based on the cursor position inside the card.
+     *
+     * @param {MouseEvent} e - Mouse move event.
+     */
     const onMove = (e) => {
       const rect = card.getBoundingClientRect();
+
       orb.style.left = `${e.clientX - rect.left}px`;
       orb.style.top = `${e.clientY - rect.top}px`;
     };
@@ -113,10 +152,16 @@ export default function ProjectCard({ project, compact = false }) {
     };
   }, [project.featured]);
 
+  /**
+   * Speeds up the featured star animation on hover.
+   */
   const handleEnter = () => {
     tweenRef.current?.timeScale(12);
   };
 
+  /**
+   * Restores the featured star animation speed after hover.
+   */
   const handleLeave = () => {
     tweenRef.current?.timeScale(1);
   };

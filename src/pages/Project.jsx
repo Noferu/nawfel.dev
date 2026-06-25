@@ -14,6 +14,13 @@ import "../styles/project-page.css";
 import N8nWorkflow from "../components/N8nWorkflow";
 import NotFound from "./NotFound";
 
+/**
+ * Displays a left arrow icon.
+ *
+ * @param {Object} props
+ * @param {string} props.className - Optional CSS class name.
+ * @returns {JSX.Element} Rendered SVG icon.
+ */
 const IconArrowLeft = ({ className = "" }) => (
   <svg
     className={className}
@@ -31,6 +38,13 @@ const IconArrowLeft = ({ className = "" }) => (
   </svg>
 );
 
+/**
+ * Displays a right arrow icon.
+ *
+ * @param {Object} props
+ * @param {string} props.className - Optional CSS class name.
+ * @returns {JSX.Element} Rendered SVG icon.
+ */
 const IconArrowRight = ({ className = "" }) => (
   <svg
     className={className}
@@ -48,6 +62,13 @@ const IconArrowRight = ({ className = "" }) => (
   </svg>
 );
 
+/**
+ * Displays an external link icon.
+ *
+ * @param {Object} props
+ * @param {string} props.className - Optional CSS class name.
+ * @returns {JSX.Element} Rendered SVG icon.
+ */
 const IconExternalLink = ({ className = "" }) => (
   <svg
     className={className}
@@ -69,6 +90,13 @@ const IconExternalLink = ({ className = "" }) => (
   </svg>
 );
 
+/**
+ * Displays a filled star icon.
+ *
+ * @param {Object} props
+ * @param {string} props.className - Optional CSS class name.
+ * @returns {JSX.Element} Rendered SVG icon.
+ */
 const IconStarFill = ({ className = "" }) => (
   <svg
     className={className}
@@ -83,24 +111,28 @@ const IconStarFill = ({ className = "" }) => (
   </svg>
 );
 
+/**
+ * Ordered blocks used when a project has a structured long description.
+ */
 const LONG_DESC_BLOCKS = [
   { key: "genesis", label: "Genèse" },
   { key: "overview", label: "En pratique" },
   { key: "build", label: "Réalisation" },
 ];
 
+/**
+ * Shared empty object used before image ratios are loaded.
+ */
 const EMPTY_RATIOS = {};
 
+/**
+ * Converts a structured project long description into displayable text blocks.
+ *
+ * @param {Object} longDesc - Project description sections.
+ * @returns {{ label: string, text: string }[]} Description blocks.
+ */
 function getDescBlocks(longDesc) {
   if (!longDesc) return [];
-
-  if (typeof longDesc === "string") {
-    return longDesc
-      .split(/\r?\n\s*\r?\n/)
-      .map((text) => text.trim())
-      .filter(Boolean)
-      .map((text) => ({ label: null, text }));
-  }
 
   return LONG_DESC_BLOCKS.map(({ key, label }) => ({
     label,
@@ -108,6 +140,9 @@ function getDescBlocks(longDesc) {
   })).filter((block) => block.text);
 }
 
+/**
+ * French month labels used to format project dates.
+ */
 const MONTHS_FR = [
   "Janvier",
   "Février",
@@ -123,6 +158,14 @@ const MONTHS_FR = [
   "Décembre",
 ];
 
+/**
+ * Formats a project date into a readable French label.
+ *
+ * Supported formats are MM/YYYY and YYYY-MM.
+ *
+ * @param {string|number} value - Project date value.
+ * @returns {string} Formatted project date.
+ */
 function formatProjectDate(value) {
   if (!value) return "";
 
@@ -155,6 +198,17 @@ function formatProjectDate(value) {
 const SLIDE_ASPECT = 16 / 9;
 const COVER_MIN_RATIO = 1.2;
 
+/**
+ * Groups media items into carousel slides.
+ *
+ * Images can be grouped when their combined ratio fits the target aspect.
+ * Videos and iframes are always displayed alone.
+ *
+ * @param {Object[]} media - Project media items.
+ * @param {Object} ratios - Image ratio values indexed by URL.
+ * @param {number} target - Target slide aspect ratio.
+ * @returns {{ items: Object[] }[]} Carousel slides.
+ */
 function buildSlides(media, ratios, target = SLIDE_ASPECT) {
   const slides = [];
   let group = [];
@@ -194,9 +248,34 @@ const ZOOM_MIN = 1;
 const ZOOM_MAX = 6;
 const SWIPE_THRESHOLD = 60;
 
+/**
+ * Keeps a number between a minimum and maximum value.
+ *
+ * @param {number} v - Value to clamp.
+ * @param {number} min - Minimum allowed value.
+ * @param {number} max - Maximum allowed value.
+ * @returns {number} Clamped value.
+ */
 const clamp = (v, min, max) => Math.max(min, Math.min(max, v));
+
+/**
+ * Calculates the distance between two pointer positions.
+ *
+ * @param {{ x: number, y: number }} a - First pointer position.
+ * @param {{ x: number, y: number }} b - Second pointer position.
+ * @returns {number} Distance between both points.
+ */
 const dist = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
 
+/**
+ * Displays a detailed project page.
+ *
+ * The page renders project content from the data file, handles project
+ * navigation, displays a responsive carousel, and opens images in a zoomable
+ * lightbox.
+ *
+ * @returns {JSX.Element} Rendered project page.
+ */
 export default function Project() {
   const { slug } = useParams();
   const navigate = useNavigate();
@@ -264,6 +343,11 @@ export default function Project() {
 
   const slideIdx = slideIdxState.slug === slug ? slideIdxState.value : 0;
 
+  /**
+   * Stores the active slide index for the current project slug.
+   *
+   * @param {number|Function} value - New index or updater function.
+   */
   const setSlideIdx = useCallback(
     (value) => {
       setSlideIdxState((prevState) => {
@@ -334,6 +418,9 @@ export default function Project() {
     }
   }, [slug]);
 
+  /**
+   * Updates the active slide based on the carousel scroll position.
+   */
   const onRailScroll = useCallback(() => {
     const rail = railRef.current;
 
@@ -356,6 +443,11 @@ export default function Project() {
     setSlideIdx(best);
   }, [setSlideIdx]);
 
+  /**
+   * Scrolls the carousel to a specific slide.
+   *
+   * @param {number} i - Target slide index.
+   */
   const goToSlide = useCallback((i) => {
     const rail = railRef.current;
 
@@ -373,6 +465,9 @@ export default function Project() {
 
   const lightboxOpen = lightboxIdx != null && images[lightboxIdx];
 
+  /**
+   * Clears gesture refs and resets the lightbox zoom state.
+   */
   const resetZoom = useCallback(() => {
     pointers.current.clear();
     pinch.current = null;
@@ -383,6 +478,11 @@ export default function Project() {
     setZoom({ scale: 1, x: 0, y: 0 });
   }, []);
 
+  /**
+   * Opens the lightbox for an image media item.
+   *
+   * @param {Object} media - Image media item.
+   */
   const openLightbox = useCallback(
     (media) => {
       const idx = images.findIndex((m) => m.url === media.url);
@@ -395,11 +495,17 @@ export default function Project() {
     [images, resetZoom],
   );
 
+  /**
+   * Closes the lightbox and resets the image zoom.
+   */
   const closeLightbox = useCallback(() => {
     setLightboxIdx(null);
     resetZoom();
   }, [resetZoom]);
 
+  /**
+   * Shows the previous image in the lightbox.
+   */
   const showPrevImage = useCallback(() => {
     setLightboxIdx((i) =>
       i == null ? i : (i - 1 + images.length) % images.length,
@@ -407,6 +513,9 @@ export default function Project() {
     resetZoom();
   }, [images.length, resetZoom]);
 
+  /**
+   * Shows the next image in the lightbox.
+   */
   const showNextImage = useCallback(() => {
     setLightboxIdx((i) => (i == null ? i : (i + 1) % images.length));
     resetZoom();
@@ -496,6 +605,11 @@ export default function Project() {
     return () => el.removeEventListener("wheel", onWheel);
   }, [lightboxIdx]);
 
+  /**
+   * Starts pan, pinch, or swipe tracking in the lightbox.
+   *
+   * @param {PointerEvent} e - Pointer down event.
+   */
   const onPointerDown = (e) => {
     if (!stageRef.current) return;
 
@@ -514,6 +628,11 @@ export default function Project() {
     }
   };
 
+  /**
+   * Updates zoom or pan while the user interacts with the lightbox.
+   *
+   * @param {PointerEvent} e - Pointer move event.
+   */
   const onPointerMove = (e) => {
     if (!pointers.current.has(e.pointerId)) return;
 
@@ -546,6 +665,11 @@ export default function Project() {
     }
   };
 
+  /**
+   * Ends pointer tracking and handles swipe navigation.
+   *
+   * @param {PointerEvent} e - Pointer up or cancel event.
+   */
   const onPointerUp = (e) => {
     const wasSwipe = swipe.current;
 
@@ -578,6 +702,11 @@ export default function Project() {
     }
   };
 
+  /**
+   * Toggles the lightbox zoom on double click.
+   *
+   * @param {MouseEvent} e - Double click event.
+   */
   const onDoubleClick = (e) => {
     const el = stageRef.current;
 
@@ -609,50 +738,62 @@ export default function Project() {
   const descBlocks = getDescBlocks(project.longDesc);
   const currentImage = lightboxOpen ? images[lightboxIdx] : null;
 
-  const imgInteract = (m) => ({
-    onClick: () => openLightbox(m),
+  /**
+   * Returns keyboard and mouse handlers for clickable images.
+   *
+   * @param {Object} media - Image media item.
+   * @returns {Object} Interaction props for the media element.
+   */
+  const imgInteract = (media) => ({
+    onClick: () => openLightbox(media),
     onKeyDown: (e) => {
       if (e.key === "Enter" || e.key === " ") {
         e.preventDefault();
-        openLightbox(m);
+        openLightbox(media);
       }
     },
     role: "button",
     tabIndex: 0,
   });
 
-  const renderSingle = (m) => {
-    if (m.type === "image") {
-      const ratio = ratios[m.url];
+  /**
+   * Renders a single media item inside a carousel slide.
+   *
+   * @param {Object} media - Media item to render.
+   * @returns {JSX.Element} Rendered media element.
+   */
+  const renderSingle = (media) => {
+    if (media.type === "image") {
+      const ratio = ratios[media.url];
       const cover = ratio != null && ratio >= COVER_MIN_RATIO;
 
       return (
         <img
-          src={m.url}
-          alt={m.alt}
+          src={media.url}
+          alt={media.alt}
           className={`proj-slide-img ${cover ? "proj-slide-img--cover" : ""}`}
           loading="lazy"
-          {...imgInteract(m)}
+          {...imgInteract(media)}
         />
       );
     }
 
-    if (m.type === "video") {
+    if (media.type === "video") {
       return (
         <video
-          src={m.url}
+          src={media.url}
           className="proj-slide-video"
           controls
           loop
           playsInline
-          poster={m.poster || undefined}
+          poster={media.poster || undefined}
         />
       );
     }
 
     return (
       <iframe
-        src={m.url}
+        src={media.url}
         title={project.title}
         className="proj-slide-iframe"
         allow="autoplay; fullscreen"
@@ -660,18 +801,24 @@ export default function Project() {
     );
   };
 
-  const renderCell = (m) => (
+  /**
+   * Renders an image inside a multi-image carousel slide.
+   *
+   * @param {Object} media - Image media item.
+   * @returns {JSX.Element} Rendered image cell.
+   */
+  const renderCell = (media) => (
     <div
       className="proj-slide-cell"
-      key={m.url}
-      style={{ flex: `${ratios[m.url] || 1} 1 0` }}
+      key={media.url}
+      style={{ flex: `${ratios[media.url] || 1} 1 0` }}
     >
       <img
-        src={m.url}
-        alt={m.alt}
+        src={media.url}
+        alt={media.alt}
         className="proj-slide-cell-img"
         loading="lazy"
-        {...imgInteract(m)}
+        {...imgInteract(media)}
       />
     </div>
   );

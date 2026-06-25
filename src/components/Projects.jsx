@@ -2,6 +2,14 @@ import ProjectCard from "./ProjectCard";
 import { projects } from "../data/projects";
 import { useInfiniteSlider } from "../hooks/useInfiniteSlider";
 
+/**
+ * Converts a project period into a sortable numeric value.
+ *
+ * Supported formats include MM/YYYY, YYYY-MM, plain years, and arrays of dates.
+ *
+ * @param {string|string[]} period - Project period value.
+ * @returns {number} Sort value based on year and month.
+ */
 function getPeriodSortValue(period) {
   if (!period) return -Infinity;
 
@@ -43,15 +51,37 @@ function getPeriodSortValue(period) {
   return -Infinity;
 }
 
+/**
+ * Sorts projects from newest to oldest.
+ *
+ * @param {Object} a - First project.
+ * @param {Object} b - Second project.
+ * @returns {number} Sort comparison result.
+ */
 const sortByPeriodDesc = (a, b) =>
   getPeriodSortValue(b.period) - getPeriodSortValue(a.period);
 
-const featured = projects.filter((p) => p.featured).sort(sortByPeriodDesc);
-const secondary = projects.filter((p) => !p.featured).sort(sortByPeriodDesc);
+const featured = projects
+  .filter((project) => project.featured)
+  .sort(sortByPeriodDesc);
+const secondary = projects
+  .filter((project) => !project.featured)
+  .sort(sortByPeriodDesc);
 
+/**
+ * Repeated project lists used by the infinite slider.
+ */
 const tripledFeatured = [...featured, ...featured, ...featured];
 const tripledSecondary = [...secondary, ...secondary, ...secondary];
 
+/**
+ * Displays the projects section with two infinite sliders.
+ *
+ * Featured projects are displayed in the first row. Secondary projects are
+ * displayed in the second row. Both rows can be dragged and auto-scroll.
+ *
+ * @returns {JSX.Element} Rendered projects section.
+ */
 export default function Projects() {
   const { trackRef: topTrackRef, wrapperHandlers: topHandlers } =
     useInfiniteSlider("left", 0.5);

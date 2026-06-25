@@ -1,5 +1,17 @@
 import { useEffect, useRef, useState } from "react";
 
+/**
+ * Displays one or more n8n workflows inside the project page.
+ *
+ * The component fetches the selected workflow file, injects its text content
+ * into the n8n-demo web component, and displays loading or error states.
+ *
+ * @param {Object} props
+ * @param {Object[]} props.workflows - Workflow entries to display.
+ * @param {string} props.workflows[].src - Path to the workflow file.
+ * @param {string} [props.workflows[].label] - Optional tab label.
+ * @returns {JSX.Element|null} Rendered workflow block or null when empty.
+ */
 export default function N8nWorkflow({ workflows = [] }) {
   const [activeIdx, setActiveIdx] = useState(0);
   const [workflowResult, setWorkflowResult] = useState({
@@ -21,9 +33,7 @@ export default function N8nWorkflow({ workflows = [] }) {
   const hasError = Boolean(isCurrentWorkflowLoaded && workflowResult.error);
 
   const workflowText =
-    isCurrentWorkflowLoaded && !workflowResult.error
-      ? workflowResult.text
-      : "";
+    isCurrentWorkflowLoaded && !workflowResult.error ? workflowResult.text : "";
 
   useEffect(() => {
     if (!active?.src) return;
@@ -31,24 +41,24 @@ export default function N8nWorkflow({ workflows = [] }) {
     const controller = new AbortController();
 
     fetch(active.src, { signal: controller.signal })
-      .then((r) => {
-        if (!r.ok) {
-          throw new Error(`Workflow introuvable: ${active.src}`);
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`Workflow not found: ${active.src}`);
         }
 
-        return r.text();
+        return response.text();
       })
-      .then((txt) => {
+      .then((text) => {
         setWorkflowResult({
           src: active.src,
-          text: txt,
+          text,
           error: false,
         });
       })
-      .catch((err) => {
-        if (err.name === "AbortError") return;
+      .catch((error) => {
+        if (error.name === "AbortError") return;
 
-        console.error(err);
+        console.error(error);
 
         setWorkflowResult({
           src: active.src,
@@ -82,12 +92,12 @@ export default function N8nWorkflow({ workflows = [] }) {
           role="tablist"
           aria-label="Workflows"
         >
-          {workflows.map((wf, i) => {
+          {workflows.map((workflow, i) => {
             const isActive = i === safeActiveIdx;
 
             return (
               <button
-                key={wf.src || i}
+                key={workflow.src || i}
                 type="button"
                 role="tab"
                 aria-selected={isActive}
@@ -98,7 +108,7 @@ export default function N8nWorkflow({ workflows = [] }) {
               >
                 <span className="proj-workflow-tab-dot" />
                 <span className="proj-workflow-tab-label">
-                  {wf.label || `Workflow ${i + 1}`}
+                  {workflow.label || `Workflow ${i + 1}`}
                 </span>
               </button>
             );
@@ -108,9 +118,7 @@ export default function N8nWorkflow({ workflows = [] }) {
 
       <div className="proj-workflow-panel">
         {isLoading && (
-          <div className="proj-workflow-state">
-            Chargement du workflow...
-          </div>
+          <div className="proj-workflow-state">Chargement du workflow...</div>
         )}
 
         {hasError && (
