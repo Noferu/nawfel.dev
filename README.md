@@ -8,7 +8,7 @@
 Développeur Full-Stack · Strasbourg, France
 
 [![Live](https://img.shields.io/badge/🌐_Live-nawfel--dev.vercel.app-orange?style=flat-square)](https://nawfel-dev.vercel.app/)
-[![React](https://img.shields.io/badge/React-18-61DAFB?style=flat-square&logo=react&logoColor=black)](https://react.dev/)
+[![React](https://img.shields.io/badge/React-19-61DAFB?style=flat-square&logo=react&logoColor=black)](https://react.dev/)
 [![Vite](https://img.shields.io/badge/Vite-latest-646CFF?style=flat-square&logo=vite&logoColor=white)](https://vitejs.dev/)
 [![GSAP](https://img.shields.io/badge/GSAP-Animation-88CE02?style=flat-square&logo=greensock&logoColor=black)](https://gsap.com/)
 [![Vercel](https://img.shields.io/badge/Deployed_on-Vercel-000?style=flat-square&logo=vercel)](https://vercel.com/)
@@ -19,7 +19,7 @@ Développeur Full-Stack · Strasbourg, France
 
 ## ✦ Aperçu
 
-Portfolio développé entièrement from scratch, sans template, sans UI library, avec une attention particulière portée à l'animation, à la performance et à l'expérience utilisateur. L'objectif : que le site soit lui-même un projet à part entière.
+Portfolio professionnel développé entièrement from scratch, sans template, sans UI library, avec une attention particulière portée à l'animation, à la performance et à l'expérience utilisateur.
 
 **→ [nawfel-dev.vercel.app](https://nawfel-dev.vercel.app/)**
 
@@ -27,83 +27,95 @@ Portfolio développé entièrement from scratch, sans template, sans UI library,
 
 ## ⚙️ Stack technique
 
-| Couche | Technologie |
-|---|---|
-| Framework | React 18 + React Router v6 |
-| Build | Vite |
-| Animation | GSAP (ScrollTrigger, ticker, timeline) |
-| Canvas | API Canvas 2D native |
-| Routing | React Router DOM |
-| Déploiement | Vercel |
+| Couche      | Technologie                                    |
+| ----------- | ---------------------------------------------- |
+| Framework   | React 19                                       |
+| Build       | Vite 8                                         |
+| Routing     | React Router DOM 7                             |
+| Animation   | GSAP 3 avec ScrollTrigger, ticker et timelines |
+| Canvas      | API Canvas 2D native                           |
+| Styles      | CSS vanilla modulaire                          |
+| Déploiement | Vercel                                         |
 
-Aucune dépendance CSS externe. Tout le style est écrit en CSS vanilla modulaire.
+Aucune dépendance CSS externe n'est utilisée. Tout le style est écrit en CSS vanilla, organisé par pages, composants et variables graphiques.
+
+---
+
+## 📦 Dépendances principales
+
+Le projet utilise les dépendances suivantes :
+
+| Dépendance         | Rôle                                               |
+| ------------------ | -------------------------------------------------- |
+| `react`            | Création de l'interface utilisateur                |
+| `react-dom`        | Rendu de l'application React dans le DOM           |
+| `react-router-dom` | Gestion des routes et de la navigation             |
+| `gsap`             | Animations avancées, timelines et effets au scroll |
+
+---
+
+## 🛠️ Commandes disponibles
+
+```bash
+npm run dev
+```
+
+Lance le serveur de développement Vite.
+
+```bash
+npm run build
+```
+
+Génère la version de production du site.
 
 ---
 
 ## 🗂️ Structure du projet
 
-```
+```txt
 src/
-├── components/
-│   ├── Background.jsx      # Canvas animé (grille custom inclinée + soft lights)
-│   ├── CommandK.jsx        # Palette de commandes (Ctrl+K)
-│   ├── Contact.jsx         # Section contact avec orb cursor
-│   ├── CVSnippet.jsx       # Aperçu CV sur la homepage
-│   ├── Header.jsx          # Header Dynamic Island avec nav adaptative
-│   ├── Hero.jsx            # Section hero avec typewriter & stats GitHub live
-│   ├── PillButton.jsx      # Bouton pill réutilisable
-│   ├── ProjectCard.jsx     # Carte projet avec glow orb + étoile GSAP
-│   └── Projects.jsx        # Sliders infinis draggables (2 lignes)
+├── App.jsx                 # Composant racine, routes et palette de commandes
+├── main.jsx                # Point d'entrée React
 │
-├── pages/
-│   ├── Home.jsx            # Page d'accueil orchestrant les composants ci-dessus
-│   ├── CV.jsx              # Page CV avec sidebar sticky & collapse
-│   └── Project.jsx         # Page projet individuelle
+├── components/
+│   ├── Background.jsx      # Canvas animé et soft lights avec GSAP
+│   ├── CommandK.jsx        # Palette de commandes Ctrl+K
+│   ├── Contact.jsx         # Section contact avec formulaire contrôlé
+│   ├── CVSnippet.jsx       # Aperçu du CV sur la page d'accueil
+│   ├── Header.jsx          # Header desktop avec navigation adaptative
+│   ├── Hero.jsx            # Section hero avec typewriter et statistiques
+│   ├── MobileNav.jsx       # Navigation mobile
+│   ├── N8nWorkflow.jsx     # Affichage de workflows n8n dans les pages projet
+│   ├── PillButton.jsx      # Bouton réutilisable
+│   ├── ProjectCard.jsx     # Carte projet avec effets visuels
+│   └── Projects.jsx        # Sliders infinis de projets
 │
 ├── data/
-│   ├── projects.js         # Données de tous les projets
-│   ├── resume.js           # Données du CV (expériences, formations, compétences)
-│   └── deviconMap.js       # Mapping techno → icône Devicon
+│   ├── deviconMap.js       # Mapping entre technologies et icônes Devicon
+│   ├── projects.js         # Données des projets du portfolio
+│   └── resume.js           # Données du CV
 │
 ├── hooks/
-│   ├── usePageIntro.js     # Orchestration animation d'entrée cinématographique
-│   ├── useTypewriter.js    # Effet machine à écrire avec suppression
-│   └── useCursorGlow.js    # Hook orb cursor générique
+│   ├── useCursorGlow.js    # Effet glow suivant le curseur
+│   ├── useInfiniteSlider.js # Slider infini avec drag et inertie
+│   ├── usePageIntro.js     # Animation d'entrée de la page d'accueil
+│   └── useTypewriter.js    # Effet machine à écrire
+│
+├── pages/
+│   ├── CV.jsx              # Page CV complète
+│   ├── Home.jsx            # Page d'accueil
+│   ├── NotFound.jsx        # Page 404
+│   └── Project.jsx         # Page de détail d'un projet
 │
 └── styles/
-    ├── components.css      # Éléments de style des composants
-    ├── cv.css              # Design de la page du Curriculum Vitae
-    ├── global.css          # Éléments de style partagés par toutes les pages
-    ├── home.css            # Design de la page d'accueil
-    ├── project-page.css    # Design de la page projet
-    ├── responsive.css      # Feuille de style importée par `global.css` contenant le design responsive
-    ├── tokens.css          # Définition des variables liées à la direction artistique
+    ├── components.css      # Styles des composants réutilisables
+    ├── cv.css              # Styles de la page CV
+    ├── global.css          # Styles globaux
+    ├── home.css            # Styles de la page d'accueil
+    ├── notfound.css        # Styles de la page 404
+    ├── project-page.css    # Styles des pages projet
+    └── tokens.css          # Variables CSS et direction artistique
 ```
-
----
-
-## ✨ Fonctionnalités notables
-
-### Background canvas
-Grille inclinée à 10° avec défilement horizontal infini piloté par `gsap.ticker`, masques circulaires aux intersections via `destination-out`, et 5 soft lights animées avec parallaxe au scroll via `ScrollTrigger`.
-
-### Animation d'entrée cinématographique
-`usePageIntro` orchestre une timeline GSAP en 8 actes (background CRT → header → photo → H1 mot par mot → description → CTAs → pills → sections). Ne joue l'animation complète qu'à la première visite de session ; version abrégée au retour.
-
-### Palette de commandes (⌘K)
-Accessible via `Ctrl+K` ou le bouton header, la palette permet de naviguer vers toutes les sections, tous les projets et tous les liens externes. Navigation clavier complète (↑↓, Entrée, Échap) avec recherche filtrée en temps réel.
-
-### Sliders infinis
-Deux rangées de `ProjectCard` en défilement continu infini (une vers la gauche, une vers la droite), draggables à la souris et au touch, avec reprise automatique 5s après le relâchement. Les contenus sont triplés pour garantir l'absence de bord visible.
-
-### Header Dynamic Island
-Pill adaptative qui affiche le nom du projet courant lorsqu'on navigue sur une page `/project/:slug`. Se contracte au scroll avec transition blur → net.
-
-### Stats GitHub live
-Le hook `useStats` dans `Hero.jsx` interroge l'API GitHub Search Commits pour afficher le nombre de commits réels au chargement.
-
-### Footer interactif
-SVG outline `NAWFEL IDA-ALI` avec spotlight radial qui suit le curseur, rendu via masque SVG et gradient radial.
 
 ---
 
@@ -135,29 +147,31 @@ npm run preview
 
 ## 🗃️ Projets référencés
 
-Le portfolio présente actuellement **14 projets** couvrant plusieurs domaines de l'informatique :
+Le portfolio présente actuellement **15 projets** couvrant plusieurs domaines : développement web, applications mobiles, automatisation, IA, interfaces interactives, visualisation de données, UX/UI et game development.
 
-| Projet | Année | Stack principale |
-|---|---|---|
-| Pipeline Synthèse Comptable | 2026 | n8n, APIs comptables, Gemini |
-| Plateforme Onboarding Client | 2026 | n8n, Airtable, Gotenberg, MJML |
-| Usine Chocolat | 2026 | Laravel, React, WebSocket, CI/CD |
-| DI5 Festival | 2026 | Flutter, Firebase, Mapbox |
-| Discord Riot Bot | 2026 | Python, Riot API, Gemini |
-| Yasuragi | 2025 | Laravel, Drag & Drop HTML5 |
-| Blind Test Multijoueur | 2025 | Node.js, Socket.IO, PHP |
-| Mastermind Flutter | 2025 | Flutter, Dart |
-| LUMA | 2025 | JavaScript, Chart.js |
-| MutualMap | 2025 | Python, PyVis, Discord API |
-| Generosus | 2025 | JavaScript vanilla, Canvas API |
-| SAE401 — Symfony | 2025 | Symfony, Doctrine, Twig |
-| Era Explorer | 2024 | PHP, MySQL, AJAX, MVC |
+| Projet                       |    Date | Stack principale                              |
+| ---------------------------- | ------: | --------------------------------------------- |
+| Plateforme Onboarding Client | 05/2026 | n8n, Airtable, Gotenberg, MJML, IA            |
+| Pipeline Synthèse Comptable  | 03/2026 | n8n, APIs comptables, Outlook API, Gemini     |
+| Usine Chocolat               | 01/2026 | Laravel, React, WebSocket, MySQL, CI/CD       |
+| Mastermind Flutter           | 01/2026 | Flutter, Dart, Material Design                |
+| F.E.F.F.S                    | 12/2025 | Flutter, Firebase, Mapbox                     |
+| Yasuragi                     | 11/2025 | Laravel, PHP, JavaScript, MySQL               |
+| LUMA                         | 02/2025 | JavaScript, Chart.js, HTML, CSS               |
+| Era Explorer                 | 06/2024 | PHP, MySQL, AJAX, Twig, MVC                   |
+| Ranker                       | 05/2026 | JavaScript vanilla, HTML, CSS, algorithme Elo |
+| Yuumi - Compagnon Airtable   | 05/2026 | Extension Chrome, Manifest V3, Airtable, DOM  |
+| Shacolback                   | 04/2026 | Python, Discord API, Riot API, Gemini         |
+| MutualMap                    | 07/2025 | Python, JavaScript, PyVis, Discord API        |
+| Generosus                    | 06/2025 | JavaScript vanilla, Canvas API, Pixel Art     |
+| Blind Test Multijoueur       | 03/2025 | Node.js, Socket.IO, PHP, MySQL                |
+| Cook Quest                   | 06/2024 | Figma, UX/UI, Miro, tests utilisateurs        |
 
 ---
 
 ## 📄 Licence
 
-Code source disponible à titre de référence. Contenu (textes, visuels, design) — tous droits réservés © 2026 Nawfel Ida-Ali.
+Code source disponible à titre de référence. Contenu (textes, visuels, design) (tous droits réservés © 2026 Nawfel Ida-Ali Ou Lahsen).
 
 ---
 
