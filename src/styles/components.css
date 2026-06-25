@@ -54,14 +54,6 @@
   pointer-events: auto;
 }
 
-.header-right {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  pointer-events: auto;
-  justify-content: flex-end;
-}
-
 .header-island {
   display: flex;
   align-items: center;
@@ -246,7 +238,6 @@
   background: rgba(var(--gold-rgb), 0.2);
   flex-shrink: 0;
 }
-
 
 /* --- COMMAND PALETTE --- */
 .cmdk-overlay {
@@ -620,6 +611,7 @@
     right var(--t-fast),
     filter var(--t-fast);
 }
+
 .proj-card:hover .proj-card-star {
   width: 28px;
   height: 28px;
