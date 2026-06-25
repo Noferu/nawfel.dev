@@ -1,10 +1,19 @@
-import { Fragment, useState, useEffect, useRef } from "react";
+import {
+  Fragment,
+  useState,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useMemo,
+  useCallback,
+} from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import gsap from "gsap";
 import { projects } from "../data/projects";
 import "../styles/project-page.css";
 import N8nWorkflow from "../components/N8nWorkflow";
 import NotFound from "./NotFound";
+
 const IconArrowLeft = ({ className = "" }) => (
   <svg
     className={className}
@@ -80,9 +89,6 @@ const LONG_DESC_BLOCKS = [
   { key: "build", label: "Réalisation" },
 ];
 
-// Renvoie les paragraphes de présentation sous forme de blocs { label, text }.
-// Gère le format actuel (objet { genesis, overview, build }) et, par
-// sécurité, l'ancien format (chaîne avec paragraphes séparés par des sauts).
 function getDescBlocks(longDesc) {
   if (!longDesc) return [];
 
@@ -119,7 +125,6 @@ function formatProjectDate(value) {
   if (!value) return "";
 
   const str = String(value).trim();
-
   const monthYear = str.match(/^(\d{1,2})\/(\d{4})$/);
 
   if (monthYear) {
@@ -145,54 +150,228 @@ function formatProjectDate(value) {
   return str;
 }
 
+const SLIDE_ASPECT = 16 / 9;
+const COVER_MIN_RATIO = 1.2;
+
+function buildSlides(media, ratios, target = SLIDE_ASPECT) {
+  const slides = [];
+  let group = [];
+  let sum = 0;
+
+  const flush = () => {
+    if (group.length) {
+      slides.push({ items: group });
+      group = [];
+      sum = 0;
+    }
+  };
+
+  for (const m of media) {
+    const ratio = m.type === "image" ? ratios[m.url] : null;
+
+    if (ratio == null) {
+      flush();
+      slides.push({ items: [m] });
+      continue;
+    }
+
+    if (group.length && sum + ratio > target) flush();
+
+    group.push(m);
+    sum += ratio;
+
+    if (sum >= target) flush();
+  }
+
+  flush();
+
+  return slides;
+}
+
+const ZOOM_MIN = 1;
+const ZOOM_MAX = 6;
+const SWIPE_THRESHOLD = 60;
+
+const clamp = (v, min, max) => Math.max(min, Math.min(max, v));
+const dist = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
+
 export default function Project() {
   const { slug } = useParams();
   const navigate = useNavigate();
   const project = projects.find((p) => p.slug === slug);
-  const [mediaIdx, setMediaIdx] = useState(0);
-  const [fullscreenMedia, setFullscreenMedia] = useState(null);
+
   const pageRef = useRef(null);
+  const railRef = useRef(null);
+  const stageRef = useRef(null);
+  const pointers = useRef(new Map());
+  const pinch = useRef(null);
+  const pan = useRef(null);
+  const swipe = useRef(null);
 
   const allIdx = projects.findIndex((p) => p.slug === slug);
   const prev = allIdx > 0 ? projects[allIdx - 1] : null;
   const next = allIdx < projects.length - 1 ? projects[allIdx + 1] : null;
 
-  const allMedia = project
-    ? [
-        ...(project.hero
-          ? [
-              {
-                type: project.hero.type || "image",
-                url: project.hero.url,
-                alt: project.hero.alt || project.title,
-                poster: project.hero.poster || null,
-              },
-            ]
-          : []),
-        ...(project.media
-          ? project.media.map((m) => ({
-              type: m.type || "image",
-              url: m.url,
-              alt: m.alt || "",
-              poster: m.poster || null,
-            }))
-          : []),
-      ]
-    : [];
+  const allMedia = useMemo(() => {
+    if (!project) return [];
 
-  const safeIdx = Math.min(mediaIdx, Math.max(0, allMedia.length - 1));
-  const currentMedia = allMedia[safeIdx];
-  const projectDate = project ? formatProjectDate(project.period) : "";
-  const descBlocks = getDescBlocks(project?.longDesc);
+    return [
+      ...(project.hero
+        ? [
+            {
+              type: project.hero.type || "image",
+              url: project.hero.url,
+              alt: project.hero.alt || project.title,
+              poster: project.hero.poster || null,
+            },
+          ]
+        : []),
+      ...(project.media
+        ? project.media.map((m) => ({
+            type: m.type || "image",
+            url: m.url,
+            alt: m.alt || "",
+            poster: m.poster || null,
+          }))
+        : []),
+    ];
+  }, [project]);
 
-  const openFullscreen = (media) => {
-    if (!media || !["image", "video"].includes(media.type)) return;
-    setFullscreenMedia(media);
-  };
+  const images = useMemo(
+    () => allMedia.filter((m) => m.type === "image"),
+    [allMedia],
+  );
 
-  const closeFullscreen = () => {
-    setFullscreenMedia(null);
-  };
+  const [ratios, setRatios] = useState({});
+  const [slideIdx, setSlideIdx] = useState(0);
+  const [lightboxIdx, setLightboxIdx] = useState(null);
+  const [zoom, setZoom] = useState({ scale: 1, x: 0, y: 0 });
+  const [isLightboxInteracting, setIsLightboxInteracting] = useState(false);
+
+  useEffect(() => {
+    let cancelled = false;
+    const imgs = allMedia.filter((m) => m.type === "image");
+
+    if (!imgs.length) {
+      setRatios({});
+      return;
+    }
+
+    Promise.all(
+      imgs.map(
+        (m) =>
+          new Promise((resolve) => {
+            const img = new Image();
+
+            img.onload = () =>
+              resolve([
+                m.url,
+                img.naturalHeight ? img.naturalWidth / img.naturalHeight : 1,
+              ]);
+
+            img.onerror = () => resolve([m.url, 1]);
+            img.src = m.url;
+          }),
+      ),
+    ).then((entries) => {
+      if (!cancelled) setRatios(Object.fromEntries(entries));
+    });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [allMedia]);
+
+  const slides = useMemo(
+    () => buildSlides(allMedia, ratios),
+    [allMedia, ratios],
+  );
+
+  useLayoutEffect(() => {
+    setSlideIdx(0);
+
+    if (railRef.current) {
+      railRef.current.scrollLeft = 0;
+    }
+  }, [slug]);
+
+  const onRailScroll = useCallback(() => {
+    const rail = railRef.current;
+
+    if (!rail) return;
+
+    const center = rail.scrollLeft + rail.clientWidth / 2;
+    let best = 0;
+    let bestDist = Infinity;
+
+    Array.from(rail.children).forEach((child, i) => {
+      const c = child.offsetLeft + child.offsetWidth / 2;
+      const d = Math.abs(c - center);
+
+      if (d < bestDist) {
+        bestDist = d;
+        best = i;
+      }
+    });
+
+    setSlideIdx(best);
+  }, []);
+
+  const goToSlide = useCallback((i) => {
+    const rail = railRef.current;
+
+    if (!rail) return;
+
+    const child = rail.children[i];
+
+    if (!child) return;
+
+    rail.scrollTo({
+      left: child.offsetLeft - (rail.clientWidth - child.offsetWidth) / 2,
+      behavior: "smooth",
+    });
+  }, []);
+
+  const lightboxOpen = lightboxIdx != null && images[lightboxIdx];
+
+  const resetZoom = useCallback(() => {
+    pointers.current.clear();
+    pinch.current = null;
+    pan.current = null;
+    swipe.current = null;
+
+    setIsLightboxInteracting(false);
+    setZoom({ scale: 1, x: 0, y: 0 });
+  }, []);
+
+  const openLightbox = useCallback(
+    (media) => {
+      const idx = images.findIndex((m) => m.url === media.url);
+
+      if (idx === -1) return;
+
+      setLightboxIdx(idx);
+      resetZoom();
+    },
+    [images, resetZoom],
+  );
+
+  const closeLightbox = useCallback(() => {
+    setLightboxIdx(null);
+    resetZoom();
+  }, [resetZoom]);
+
+  const showPrevImage = useCallback(() => {
+    setLightboxIdx((i) =>
+      i == null ? i : (i - 1 + images.length) % images.length,
+    );
+    resetZoom();
+  }, [images.length, resetZoom]);
+
+  const showNextImage = useCallback(() => {
+    setLightboxIdx((i) => (i == null ? i : (i + 1) % images.length));
+    resetZoom();
+  }, [images.length, resetZoom]);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
@@ -215,45 +394,248 @@ export default function Project() {
 
   useEffect(() => {
     const handler = (e) => {
-      if (fullscreenMedia) return;
-
-      if (e.key === "ArrowLeft" && prev) {
-        navigate(`/project/${prev.slug}`);
-      }
-
-      if (e.key === "ArrowRight" && next) {
-        navigate(`/project/${next.slug}`);
-      }
+      if (lightboxIdx != null) return;
+      if (e.key === "ArrowLeft" && prev) navigate(`/project/${prev.slug}`);
+      if (e.key === "ArrowRight" && next) navigate(`/project/${next.slug}`);
     };
 
     window.addEventListener("keydown", handler);
 
-    return () => {
-      window.removeEventListener("keydown", handler);
-    };
-  }, [prev, next, navigate, fullscreenMedia]);
+    return () => window.removeEventListener("keydown", handler);
+  }, [prev, next, navigate, lightboxIdx]);
 
   useEffect(() => {
-    if (!fullscreenMedia) return;
+    if (lightboxIdx == null) return;
 
-    const handleKeyDown = (e) => {
-      if (e.key === "Escape") {
-        setFullscreenMedia(null);
-      }
+    const onKey = (e) => {
+      if (e.key === "Escape") closeLightbox();
+      else if (e.key === "ArrowLeft") showPrevImage();
+      else if (e.key === "ArrowRight") showNextImage();
     };
 
-    window.addEventListener("keydown", handleKeyDown);
+    window.addEventListener("keydown", onKey);
     document.body.style.overflow = "hidden";
 
     return () => {
-      window.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener("keydown", onKey);
       document.body.style.overflow = "";
     };
-  }, [fullscreenMedia]);
+  }, [lightboxIdx, closeLightbox, showPrevImage, showNextImage]);
+
+  useEffect(() => {
+    if (lightboxIdx == null) return;
+
+    const el = stageRef.current;
+
+    if (!el) return;
+
+    const onWheel = (e) => {
+      e.preventDefault();
+
+      const rect = el.getBoundingClientRect();
+      const cx = e.clientX - (rect.left + rect.width / 2);
+      const cy = e.clientY - (rect.top + rect.height / 2);
+
+      setZoom((z) => {
+        const factor = e.deltaY < 0 ? 1.12 : 1 / 1.12;
+        const ns = clamp(z.scale * factor, ZOOM_MIN, ZOOM_MAX);
+
+        if (ns === 1) return { scale: 1, x: 0, y: 0 };
+
+        const k = ns / z.scale;
+
+        return {
+          scale: ns,
+          x: k * z.x + cx * (1 - k),
+          y: k * z.y + cy * (1 - k),
+        };
+      });
+    };
+
+    el.addEventListener("wheel", onWheel, { passive: false });
+
+    return () => el.removeEventListener("wheel", onWheel);
+  }, [lightboxIdx]);
+
+  const onPointerDown = (e) => {
+    if (!stageRef.current) return;
+
+    setIsLightboxInteracting(true);
+    stageRef.current.setPointerCapture?.(e.pointerId);
+    pointers.current.set(e.pointerId, { x: e.clientX, y: e.clientY });
+
+    if (pointers.current.size === 2) {
+      const pts = [...pointers.current.values()];
+      pinch.current = { dist: dist(pts[0], pts[1]), scale: zoom.scale };
+      pan.current = null;
+      swipe.current = null;
+    } else if (pointers.current.size === 1) {
+      if (zoom.scale > 1) pan.current = { x: e.clientX, y: e.clientY };
+      else swipe.current = { x: e.clientX, y: e.clientY };
+    }
+  };
+
+  const onPointerMove = (e) => {
+    if (!pointers.current.has(e.pointerId)) return;
+
+    pointers.current.set(e.pointerId, { x: e.clientX, y: e.clientY });
+
+    const pts = [...pointers.current.values()];
+
+    if (pts.length >= 2 && pinch.current) {
+      const d = dist(pts[0], pts[1]);
+      const ns = clamp(
+        (pinch.current.scale * d) / pinch.current.dist,
+        ZOOM_MIN,
+        ZOOM_MAX,
+      );
+
+      setZoom((z) => {
+        const k = ns / z.scale;
+
+        return ns === 1
+          ? { scale: 1, x: 0, y: 0 }
+          : { scale: ns, x: k * z.x, y: k * z.y };
+      });
+    } else if (pts.length === 1 && pan.current && zoom.scale > 1) {
+      const dx = e.clientX - pan.current.x;
+      const dy = e.clientY - pan.current.y;
+
+      pan.current = { x: e.clientX, y: e.clientY };
+
+      setZoom((z) => ({ ...z, x: z.x + dx, y: z.y + dy }));
+    }
+  };
+
+  const onPointerUp = (e) => {
+    const wasSwipe = swipe.current;
+
+    pointers.current.delete(e.pointerId);
+
+    if (pointers.current.size < 2) {
+      pinch.current = null;
+    }
+
+    if (pointers.current.size === 0) {
+      setIsLightboxInteracting(false);
+
+      pan.current = null;
+      swipe.current = null;
+
+      if (wasSwipe && zoom.scale === 1) {
+        const dx = e.clientX - wasSwipe.x;
+
+        if (dx > SWIPE_THRESHOLD) showPrevImage();
+        else if (dx < -SWIPE_THRESHOLD) showNextImage();
+      }
+
+      setZoom((z) => (z.scale <= 1 ? { scale: 1, x: 0, y: 0 } : z));
+    } else if (pointers.current.size === 1) {
+      const p = [...pointers.current.values()][0];
+
+      if (zoom.scale > 1) {
+        pan.current = { x: p.x, y: p.y };
+      }
+    }
+  };
+
+  const onDoubleClick = (e) => {
+    const el = stageRef.current;
+
+    if (!el) return;
+
+    const rect = el.getBoundingClientRect();
+    const cx = e.clientX - (rect.left + rect.width / 2);
+    const cy = e.clientY - (rect.top + rect.height / 2);
+
+    setZoom((z) => {
+      if (z.scale > 1) return { scale: 1, x: 0, y: 0 };
+
+      const ns = 2.5;
+      const k = ns / 1;
+
+      return {
+        scale: ns,
+        x: cx * (1 - k),
+        y: cy * (1 - k),
+      };
+    });
+  };
 
   if (!project) {
     return <NotFound subtitle="Ce projet n'existe pas, ou n'existe plus." />;
   }
+
+  const projectDate = formatProjectDate(project.period);
+  const descBlocks = getDescBlocks(project.longDesc);
+  const currentImage = lightboxOpen ? images[lightboxIdx] : null;
+
+  const imgInteract = (m) => ({
+    onClick: () => openLightbox(m),
+    onKeyDown: (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        openLightbox(m);
+      }
+    },
+    role: "button",
+    tabIndex: 0,
+  });
+
+  const renderSingle = (m) => {
+    if (m.type === "image") {
+      const ratio = ratios[m.url];
+      const cover = ratio != null && ratio >= COVER_MIN_RATIO;
+
+      return (
+        <img
+          src={m.url}
+          alt={m.alt}
+          className={`proj-slide-img ${cover ? "proj-slide-img--cover" : ""}`}
+          loading="lazy"
+          {...imgInteract(m)}
+        />
+      );
+    }
+
+    if (m.type === "video") {
+      return (
+        <video
+          src={m.url}
+          className="proj-slide-video"
+          controls
+          loop
+          playsInline
+          poster={m.poster || undefined}
+        />
+      );
+    }
+
+    return (
+      <iframe
+        src={m.url}
+        title={project.title}
+        className="proj-slide-iframe"
+        allow="autoplay; fullscreen"
+      />
+    );
+  };
+
+  const renderCell = (m) => (
+    <div
+      className="proj-slide-cell"
+      key={m.url}
+      style={{ flex: `${ratios[m.url] || 1} 1 0` }}
+    >
+      <img
+        src={m.url}
+        alt={m.alt}
+        className="proj-slide-cell-img"
+        loading="lazy"
+        {...imgInteract(m)}
+      />
+    </div>
+  );
 
   return (
     <div className="page proj-page" ref={pageRef}>
@@ -319,82 +701,63 @@ export default function Project() {
             </div>
           </header>
 
-          {allMedia.length > 0 && currentMedia && (
+          {slides.length > 0 && (
             <div className="proj-carousel">
-              <div className="proj-carousel-inner">
-                {currentMedia.type === "image" ? (
-                  <img
-                    src={currentMedia.url}
-                    alt={currentMedia.alt}
-                    className="proj-carousel-img"
-                    onClick={() => openFullscreen(currentMedia)}
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter" || e.key === " ") {
-                        e.preventDefault();
-                        openFullscreen(currentMedia);
-                      }
-                    }}
-                    role="button"
-                    tabIndex={0}
-                  />
-                ) : currentMedia.type === "video" ? (
-                  <video
-                    src={currentMedia.url}
-                    className="proj-carousel-video"
-                    controls
-                    loop
-                    playsInline
-                    poster={currentMedia.poster || undefined}
-                    onClick={() => openFullscreen(currentMedia)}
-                  />
-                ) : (
-                  <iframe
-                    src={currentMedia.url}
-                    title={project.title}
-                    className="proj-carousel-iframe"
-                    allow="autoplay; fullscreen"
-                  />
-                )}
-
-                {allMedia.length > 1 && (
-                  <>
-                    <button
-                      className="proj-carousel-btn proj-carousel-btn--prev"
-                      onClick={() => setMediaIdx((i) => Math.max(0, i - 1))}
-                      disabled={safeIdx === 0}
-                      aria-label="Média précédent"
-                    >
-                      <IconArrowLeft className="proj-carousel-icon" />
-                    </button>
-
-                    <button
-                      className="proj-carousel-btn proj-carousel-btn--next"
-                      onClick={() =>
-                        setMediaIdx((i) => Math.min(allMedia.length - 1, i + 1))
-                      }
-                      disabled={safeIdx === allMedia.length - 1}
-                      aria-label="Média suivant"
-                    >
-                      <IconArrowRight className="proj-carousel-icon" />
-                    </button>
-                  </>
-                )}
+              <div
+                className="proj-carousel-rail"
+                ref={railRef}
+                onScroll={onRailScroll}
+              >
+                {slides.map((slide, i) => (
+                  <div
+                    className={`proj-slide ${
+                      slide.items.length > 1 ? "proj-slide--multi" : ""
+                    }`}
+                    key={i}
+                  >
+                    {slide.items.length > 1
+                      ? slide.items.map(renderCell)
+                      : renderSingle(slide.items[0])}
+                  </div>
+                ))}
               </div>
 
-              {allMedia.length > 1 && (
-                <div className="proj-progress" role="tablist">
-                  {allMedia.map((_, i) => (
-                    <div
-                      key={i}
-                      role="tab"
-                      aria-selected={i === safeIdx}
-                      className={`proj-progress-segment ${
-                        i === safeIdx ? "proj-progress-segment--active" : ""
-                      }`}
-                      onClick={() => setMediaIdx(i)}
-                    />
-                  ))}
-                </div>
+              {slides.length > 1 && (
+                <>
+                  <button
+                    className="proj-carousel-btn proj-carousel-btn--prev"
+                    onClick={() => goToSlide(Math.max(0, slideIdx - 1))}
+                    disabled={slideIdx === 0}
+                    aria-label="Slide précédente"
+                  >
+                    <IconArrowLeft className="proj-carousel-icon" />
+                  </button>
+
+                  <button
+                    className="proj-carousel-btn proj-carousel-btn--next"
+                    onClick={() =>
+                      goToSlide(Math.min(slides.length - 1, slideIdx + 1))
+                    }
+                    disabled={slideIdx === slides.length - 1}
+                    aria-label="Slide suivante"
+                  >
+                    <IconArrowRight className="proj-carousel-icon" />
+                  </button>
+
+                  <div className="proj-progress" role="tablist">
+                    {slides.map((_, i) => (
+                      <div
+                        key={i}
+                        role="tab"
+                        aria-selected={i === slideIdx}
+                        className={`proj-progress-segment ${
+                          i === slideIdx ? "proj-progress-segment--active" : ""
+                        }`}
+                        onClick={() => goToSlide(i)}
+                      />
+                    ))}
+                  </div>
+                </>
               )}
             </div>
           )}
@@ -545,44 +908,81 @@ export default function Project() {
         </div>
       </div>
 
-      {fullscreenMedia && (
+      {lightboxOpen && currentImage && (
         <div
           className="proj-lightbox"
-          onClick={closeFullscreen}
+          onClick={closeLightbox}
           role="dialog"
           aria-modal="true"
         >
           <button
             className="proj-lightbox-close"
             type="button"
-            onClick={closeFullscreen}
+            onClick={closeLightbox}
             aria-label="Fermer le plein écran"
           >
             ×
           </button>
 
+          {images.length > 1 && (
+            <>
+              <button
+                className="proj-lightbox-btn proj-lightbox-btn--prev"
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  showPrevImage();
+                }}
+                aria-label="Image précédente"
+              >
+                <IconArrowLeft className="proj-lightbox-icon" />
+              </button>
+
+              <button
+                className="proj-lightbox-btn proj-lightbox-btn--next"
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  showNextImage();
+                }}
+                aria-label="Image suivante"
+              >
+                <IconArrowRight className="proj-lightbox-icon" />
+              </button>
+            </>
+          )}
+
           <div
-            className="proj-lightbox-content"
+            className="proj-lightbox-stage"
+            ref={stageRef}
             onClick={(e) => e.stopPropagation()}
+            onDoubleClick={onDoubleClick}
+            onPointerDown={onPointerDown}
+            onPointerMove={onPointerMove}
+            onPointerUp={onPointerUp}
+            onPointerCancel={onPointerUp}
           >
-            {fullscreenMedia.type === "image" ? (
-              <img
-                src={fullscreenMedia.url}
-                alt={fullscreenMedia.alt}
-                className="proj-lightbox-img"
-              />
-            ) : (
-              <video
-                src={fullscreenMedia.url}
-                className="proj-lightbox-video"
-                controls
-                autoPlay
-                loop
-                playsInline
-                poster={fullscreenMedia.poster || undefined}
-              />
-            )}
+            <img
+              src={currentImage.url}
+              alt={currentImage.alt}
+              className={`proj-lightbox-img ${
+                zoom.scale > 1 ? "proj-lightbox-img--zoomed" : ""
+              }`}
+              draggable={false}
+              style={{
+                transform: `translate(${zoom.x}px, ${zoom.y}px) scale(${zoom.scale})`,
+                transition: isLightboxInteracting
+                  ? "none"
+                  : "transform 120ms ease-out",
+              }}
+            />
           </div>
+
+          {images.length > 1 && (
+            <div className="proj-lightbox-counter">
+              {lightboxIdx + 1} / {images.length}
+            </div>
+          )}
         </div>
       )}
     </div>

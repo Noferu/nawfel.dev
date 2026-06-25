@@ -184,39 +184,90 @@
     0 0 35px rgba(var(--gold-rgb), 0.035);
 }
 
-.proj-carousel-inner {
+.proj-carousel-rail {
+  display: flex;
+  width: 100%;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.proj-carousel-rail::-webkit-scrollbar {
+  display: none;
+}
+
+.proj-slide {
   position: relative;
+  flex: 0 0 100%;
+  scroll-snap-align: center;
   width: 100%;
   aspect-ratio: 16/9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #000;
   overflow: hidden;
 }
 
-.proj-carousel-img {
+/* Plusieurs images portrait côte à côte sur une même slide */
+.proj-slide--multi {
+  gap: 2px;
+  padding: 0;
+}
+
+.proj-slide-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  display: block;
+  cursor: zoom-in;
+  background: #000;
+}
+
+/* Image paysage seule : on remplit le cadre */
+.proj-slide-img--cover {
+  object-fit: cover;
+  object-position: top center;
+}
+
+/* Cellule d'une slide multi-images : largeur proportionnelle au ratio
+   (flex-grow inline = ratio de l'image), image entière à l'intérieur. */
+.proj-slide-cell {
+  height: 100%;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.proj-slide-cell-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  display: block;
+  cursor: zoom-in;
+  background: #000;
+}
+
+.proj-slide-video {
   width: 100%;
   height: 100%;
   object-fit: cover;
   object-position: top center;
   display: block;
-  cursor: zoom-in;
-  transition: opacity 300ms ease;
   background: #000;
 }
 
-.proj-carousel-iframe {
+.proj-slide-iframe {
   width: 100%;
   height: 100%;
   border: none;
   display: block;
-  background: #000;
-}
-
-.proj-carousel-video {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: top center;
-  display: block;
-  cursor: zoom-in;
   background: #000;
 }
 
@@ -295,21 +346,94 @@
   backdrop-filter: blur(10px);
 }
 
-.proj-lightbox-content {
+.proj-lightbox-stage {
+  position: relative;
+  display: grid;
+  place-items: center;
   max-width: min(1200px, 96vw);
   max-height: 90vh;
+  overflow: hidden;
+  touch-action: none;
+  cursor: default;
 }
 
-.proj-lightbox-img,
-.proj-lightbox-video {
+.proj-lightbox-img {
   display: block;
-  max-width: 100%;
+  max-width: 96vw;
   max-height: 90vh;
   object-fit: contain;
+  transform-origin: center center;
+  will-change: transform;
+  user-select: none;
+  -webkit-user-drag: none;
   border-radius: var(--panel-radius);
   box-shadow:
     0 24px 80px rgba(0, 0, 0, 0.55),
     0 0 35px rgba(var(--gold-rgb), 0.08);
+}
+
+.proj-lightbox-img--zoomed {
+  cursor: grab;
+}
+
+.proj-lightbox-img--zoomed:active {
+  cursor: grabbing;
+}
+
+.proj-lightbox-btn {
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10000;
+  width: 48px;
+  height: 48px;
+  border-radius: 999px;
+  background: rgba(var(--black-rgb), 0.72);
+  border: 1px solid rgba(var(--gold-rgb), 0.22);
+  color: var(--text);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: all var(--t-fast);
+  backdrop-filter: blur(8px);
+}
+
+.proj-lightbox-btn:hover {
+  border-color: rgba(var(--gold-rgb), 0.4);
+  background: rgba(var(--gold-rgb), 0.12);
+  color: var(--gold-light);
+}
+
+.proj-lightbox-btn--prev {
+  left: 1.5rem;
+}
+
+.proj-lightbox-btn--next {
+  right: 1.5rem;
+}
+
+.proj-lightbox-icon {
+  display: block;
+  width: 1.1rem;
+  height: 1.1rem;
+  pointer-events: none;
+}
+
+.proj-lightbox-counter {
+  position: fixed;
+  bottom: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10000;
+  font-family: var(--font-display);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  background: rgba(var(--black-rgb), 0.6);
+  border: 1px solid var(--border);
+  padding: 0.3rem 0.8rem;
+  border-radius: 999px;
+  backdrop-filter: blur(8px);
 }
 
 .proj-lightbox-close {
@@ -736,7 +860,7 @@
     line-height: 1.65;
   }
 
-  .proj-carousel-inner {
+  .proj-slide {
     aspect-ratio: 4/3;
   }
 
@@ -744,10 +868,22 @@
     padding: 1rem;
   }
 
-  .proj-lightbox-img,
-  .proj-lightbox-video {
+  .proj-lightbox-img {
     max-height: 82vh;
     border-radius: 16px;
+  }
+
+  .proj-lightbox-btn {
+    width: 40px;
+    height: 40px;
+  }
+
+  .proj-lightbox-btn--prev {
+    left: 0.6rem;
+  }
+
+  .proj-lightbox-btn--next {
+    right: 0.6rem;
   }
 
   .proj-lightbox-close {
