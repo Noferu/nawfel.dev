@@ -55,10 +55,15 @@ export const projects = [
     ],
     hero: {
       type: "image",
-      url: "/assets/img/projects/onboarding-hero.png",
-      alt: "Vue d'ensemble de la plateforme d'onboarding client",
+      url: "/assets/projects/plateforme-onboarding-client/hero.webp",
+      alt: "Vue d'ensemble du pipeline de synthèse comptable",
     },
-    thumbnail: "/assets/img/projects/onboarding-thumb.png",
+    workflows: [
+      {
+        label: "Onboarding",
+        src: "/assets/projects/plateforme-onboarding-client/workflows/onboarding-demo.json",
+      }
+    ],
   },
   {
     slug: "pipeline-synthese-comptable",
@@ -90,28 +95,27 @@ export const projects = [
     ],
     hero: {
       type: "image",
-      url: "/assets/img/projects/pipeline-hero.png",
+      url: "/assets/projects/pipeline-synthese-comptable/hero.webp",
       alt: "Vue d'ensemble du pipeline de synthèse comptable",
     },
     workflows: [
       {
         label: "Synthèse mensuelle Pennylane",
-        src: "/assets/workflows/synthese-comptable/synthese-demo.json",
+        src: "/assets/projects/pipeline-synthese-comptable/workflows/synthese-demo.json",
       },
       {
         label: "Calcul et envoi des synthèses",
-        src: "/assets/workflows/synthese-comptable/calculation_send-demo.json",
+        src: "/assets/projects/pipeline-synthese-comptable/workflows/calculation-send-demo.json",
       },
       {
         label: "Sélection des abonnements",
-        src: "/assets/workflows/synthese-comptable/subscribtion_selection-demo.json",
+        src: "/assets/projects/pipeline-synthese-comptable/workflows/subscribtion-selection-demo.json",
       },
       {
         label: "Portail de Gestion des Abonnements",
-        src: "/assets/workflows/synthese-comptable/subs_manager_form-demo.json",
+        src: "/assets/projects/pipeline-synthese-comptable/workflows/subs-manager-form-demo.json",
       },
     ],
-    thumbnail: "/assets/img/projects/pipeline-thumb.png",
   },
   {
     slug: "usine-chocolat",
