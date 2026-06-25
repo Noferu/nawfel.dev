@@ -1,34 +1,60 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="fr">
 
 <head>
+  <!-- Core metadata -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description"
-    content="Nawfel Ida-Ali — Développeur Full-Stack, Automatisation & IA. Master Informatique, Strasbourg." />
-  <meta property="og:title" content="Nawfel Ida-Ali — Portfolio" />
-  <meta property="og:description" content="Développeur Full-Stack, Automatisation & IA." />
-  <meta property="og:image" content="/assets/og-image.png" />
+
   <title>nawfel.dev</title>
+  <meta name="description"
+    content="Nawfel Ida-Ali - Développeur Full-Stack, Automatisation & IA. Portfolio personnel basé à Strasbourg." />
+
+  <!-- Social preview metadata -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Nawfel Ida-Ali (Portfolio)" />
+  <meta property="og:description" content="Développeur Full-Stack, Automatisation & IA." />
+  <meta property="og:url" content="https://nawfel-dev.vercel.app/" />
+  <meta property="og:image" content="https://nawfel-dev.vercel.app/assets/site/homepage.webp" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Nawfel Ida-Ali (Portfolio)" />
+  <meta name="twitter:description" content="Développeur Full-Stack, Automatisation & IA." />
+  <meta name="twitter:image" content="https://nawfel-dev.vercel.app/assets/site/homepage.webp" />
+
+  <!-- Icons -->
+  <link rel="icon" type="image/x-icon" href="/favico.ico" />
+
+  <!-- Performance hints for external resources -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link rel="icon" type="image/png" href="/favico.ico" />
   <link rel="preconnect" href="https://api.github.com" />
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+
+  <!-- Fonts -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap"
+    rel="stylesheet" />
+
+  <!-- Devicon stylesheet loaded without blocking the first render -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" media="print"
     onload="this.media='all'" />
   <noscript>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" />
   </noscript>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap"
-    rel="stylesheet" />
-  <script src="https://cdn.jsdelivr.net/npm/@webcomponents/webcomponentsjs@2.0.0/webcomponents-loader.js"></script>
-  <script src="https://www.unpkg.com/lit@2.0.0-rc.2/polyfill-support.js"></script>
+
+  <!-- n8n workflow viewer dependencies -->
+  <script defer
+    src="https://cdn.jsdelivr.net/npm/@webcomponents/webcomponentsjs@2.0.0/webcomponents-loader.js"></script>
+  <script defer src="https://www.unpkg.com/lit@2.0.0-rc.2/polyfill-support.js"></script>
   <script type="module" src="https://cdn.jsdelivr.net/npm/@n8n_io/n8n-demo-component/n8n-demo.bundled.js"></script>
 </head>
 
 <body>
+  <!-- React application mount point -->
   <div id="root"></div>
+
+  <!-- Vite entry point -->
   <script type="module" src="/src/main.jsx"></script>
 </body>
 
