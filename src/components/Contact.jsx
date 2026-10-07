@@ -214,9 +214,8 @@ export default function Contact() {
             <h2 className="contact-title">Travaillons ensemble.</h2>
 
             <p className="contact-sub">
-              En recherche d'une <strong>alternance</strong> à partir de{" "}
-              <strong>septembre 2026</strong> (Strasbourg ou Lille), dans le
-              développement, l'automatisation et l'ingénierie logicielle.
+              Ouvert aux échanges et aux opportunités autour du développement,
+              de l'automatisation et de l'ingénierie logicielle.
             </p>
 
             <form className="contact-form" onSubmit={handleSubmit} noValidate>

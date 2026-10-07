@@ -260,7 +260,7 @@ export default function Hero() {
             data-intro="badge"
           >
             <span className="hero-status-dot" aria-hidden="true" />
-            Disponible pour une alternance - Septembre 2026
+            Master Informatique - Informatique et Mobilité
           </a>
 
           <h1 className="hero-h1">
@@ -272,11 +272,11 @@ export default function Hero() {
           </h1>
 
           <p className="hero-desc" data-intro="desc">
-            Je suis <strong className="hero-name">Nawfel Ida-Ali</strong>, en
-            troisième année de BUT MMI. Je cherche une alternance pour
-            poursuivre en master informatique. Je construis des systèmes
-            complexes, automatise des processus métier et crée des expériences
-            numériques qui ont du sens, comme d'autres peignent des tableaux.
+            Je suis <strong className="hero-name">Nawfel Ida-Ali</strong>,
+            étudiant en Master Informatique, parcours Informatique et Mobilité à
+            l'Université de Haute-Alsace. Je construis des systèmes complexes,
+            automatise des processus métier et crée des expériences numériques
+            qui ont du sens, comme d'autres peignent des tableaux.
           </p>
 
           <div className="hero-ctas" data-intro="ctas">
