@@ -62,7 +62,7 @@ export const projects = [
       {
         label: "Onboarding",
         src: "/assets/projects/plateforme-onboarding-client/workflows/onboarding-demo.json",
-      }
+      },
     ],
   },
   {
@@ -407,6 +407,45 @@ export const projects = [
       {
         label: "GitHub",
         url: "https://github.com/Noferu/sae203",
+      },
+    ],
+  },
+  {
+    slug: "boids-3d",
+    title: "Boids 3D",
+    period: "10/2026",
+    featured: false,
+    category: "info",
+    tags: ["Three.js", "WebGPU", "JavaScript", "Simulation", "3D"],
+    shortDesc:
+      "Simulation 3D interactive d’un système multi-agents basé sur le modèle des Boids, avec comportements de cohésion, séparation et alignement configurables en temps réel.",
+    longDesc: {
+      genesis:
+        "Boids 3D est un projet académique réalisé dans le cadre d’un cours sur les systèmes avancés et les modèles émergents. Le sujet consistait à expérimenter un système multi-agents inspiré du comportement collectif des oiseaux ou des bancs de poissons. L’objectif était de partir de quelques règles simples appliquées individuellement à chaque agent pour observer l’apparition d’un comportement collectif plus complexe. J’ai choisi de pousser l’exercice en réalisant directement la simulation dans un environnement 3D interactif.",
+      overview:
+        "La simulation met en scène un banc de poissons évoluant librement dans un espace 3D. Chaque agent réagit à ses voisins selon trois règles principales : la séparation pour éviter les collisions, l’alignement pour suivre une direction commune et la cohésion pour rester proche du groupe. Une interface permet de modifier en temps réel la population, les vitesses, la perception, l’intensité des différents comportements ou encore l’évitement des limites. Il est également possible d’interagir directement avec le banc à la souris pour attirer ou repousser les poissons.",
+      build:
+        "Techniquement, j’ai développé la simulation en JavaScript avec Three.js et WebGPU. Chaque poisson est représenté par un agent autonome possédant sa propre position, sa vitesse et son accélération. À chaque frame, le programme détermine les voisins visibles, calcule les différentes forces de steering puis met à jour le déplacement et l’orientation de chaque agent. J’ai aussi ajouté un système de perception par cône, une gestion progressive des limites de la zone, le chargement d’un modèle 3D et un panneau de contrôle pour expérimenter facilement avec les paramètres. Ce projet m’a surtout permis de mieux comprendre comment des règles locales simples peuvent produire un comportement collectif beaucoup plus complexe.",
+    },
+    context: "Projet académique - Cours de systèmes avancés",
+    role: "Conception et développement complet de la simulation",
+    stack: ["Three.js", "WebGPU", "JavaScript", "HTML5", "CSS3"],
+    hero: {
+      type: "image",
+      url: "/assets/projects/boids/hero.webp",
+      alt: "Simulation 3D interactive d’un banc de poissons avec le modèle des Boids",
+    },
+    demo: "https://boids-nine.vercel.app/",
+    media: [
+      {
+        type: "iframe",
+        url: "https://boids-nine.vercel.app/",
+      },
+    ],
+    links: [
+      {
+        label: "GitHub",
+        url: "https://github.com/Noferu/boids",
       },
     ],
   },
