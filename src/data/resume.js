@@ -28,25 +28,29 @@ export const resume = {
   // Education
   education: [
     {
-      title: "Poursuite d’études en informatique",
-      specialization: "Formation Bac + 5 en alternance à définir",
-      institution: "France",
-      location: "France",
+      title: "Master Informatique",
+      specialization: "Parcours Informatique et Mobilité — Formation initiale",
+      institution:
+        "Université de Haute-Alsace — Faculté des Sciences et Techniques",
+      location: "Mulhouse, France",
       period: ["07/09/2026", "07/07/2028"],
 
       points: [
-        "Projet de poursuite d’études vers une formation supérieure en informatique, avec une orientation développement, ingénierie logicielle, systèmes numériques ou technologies web avancées.",
-        "Volonté d’approfondir les compétences liées à la conception logicielle, à l’architecture applicative, aux données, à l’automatisation et aux infrastructures numériques.",
-        "Recherche d’un parcours en alternance permettant de continuer à progresser dans un cadre professionnel, avec une mise en pratique sur des projets techniques concrets.",
+        "Master Informatique centré sur la conception et le développement de systèmes et services numériques, avec un axe fort sur la mobilité et la programmation.",
+        "Formation couvrant notamment la programmation mobile, le développement web, la sécurité, le génie logiciel ainsi que les systèmes et réseaux.",
+        "Approfondissement de domaines comme l’informatique décisionnelle, la science des données, le calcul massivement parallèle, le Big Data et la modélisation 2D/3D.",
+        "Parcours intégrant des projets, des stages et une initiation à la recherche.",
       ],
 
       tags: [
         "Informatique",
-        "Développement",
-        "Ingénierie logicielle",
-        "Architecture",
-        "Alternance",
-        "Bac+5",
+        "Développement logiciel",
+        "Mobile",
+        "Génie logiciel",
+        "Systèmes et réseaux",
+        "Big Data",
+        "Science des données",
+        "Sécurité",
       ],
     },
     {
@@ -100,6 +104,7 @@ export const resume = {
       location: "Sélestat, Grand Est, France",
       workMode: "Sur site",
       period: ["09/02/2026", "15/05/2026"],
+
       points: [
         "Conception et maintenance d’une infrastructure complète d’automatisation métier interconnectée à plusieurs APIs comptables et outils cloud dans un environnement de production réel.",
         "Développement de workflows avancés sous n8n couvrant différents besoins métiers : onboarding client, reporting financier automatisé, synchronisation de données, génération de documents PDF, systèmes de mailing, publication automatisée de contenus, alertes d’échéances et orchestration de processus internes.",
@@ -255,6 +260,7 @@ export const resume = {
         "Flutter",
         "Firebase",
         "Node.js",
+        "Three.js",
         "Tailwind",
         "Twig",
         "WordPress",
@@ -320,6 +326,8 @@ export const resume = {
         "Complexité",
         "Optimisation",
         "Automatisation",
+        "Systèmes multi-agents",
+        "Simulation",
       ],
     },
   ],
