@@ -411,6 +411,96 @@ export const projects = [
     ],
   },
   {
+    slug: "drone-ihm",
+    title: "Drone IHM",
+    period: "11/2026",
+    featured: false,
+    category: "info",
+    tags: ["TypeScript", "Cesium", "MediaPipe", "3D"],
+    shortDesc:
+      "Simulateur de drone pour survoler une ville, modifier une scène et comparer deux captures du même lieu.",
+    longDesc: {
+      genesis:
+        "Dans le module d’interactions homme-machine, j’ai travaillé sur le pilotage d’un drone virtuel. Le défi était de garder des commandes lisibles pendant le vol et de pouvoir retrouver le même point de vue après une intervention.",
+      overview:
+        "On survole une scène, on sélectionne un bâtiment et on y applique un sinistre fictif. La galerie conserve les vues avant et après. Le clavier permet de parcourir tout le scénario, du décollage à la comparaison des images.",
+      build:
+        "Cesium affiche la ville en 3D. Les commandes de vol, la sélection et les captures sont testées séparément. Une commande gestuelle par webcam est aussi implémentée. Sa validation en conditions réelles reste en cours.",
+    },
+    context: "Projet académique - Interactions homme-machine",
+    role: "Interface de pilotage et simulation",
+    stack: ["TypeScript", "Cesium", "MediaPipe", "Vite", "Vitest"],
+    hero: {
+      type: "image",
+      url: "/assets/projects/drone-ihm/hero.webp",
+      alt: "Interface de pilotage au-dessus d’une scène urbaine",
+    },
+    media: [
+      {
+        type: "image",
+        url: "/assets/projects/drone-ihm/avant.webp",
+        alt: "Scène avant le sinistre",
+      },
+      {
+        type: "image",
+        url: "/assets/projects/drone-ihm/apres.webp",
+        alt: "Même point de vue après le sinistre",
+      },
+    ],
+  },
+  {
+    slug: "isolde",
+    title: "Isolde",
+    period: "11/2026",
+    featured: false,
+    category: "info",
+    tags: ["Python", "FastAPI", "Chroma", "RAG"],
+    shortDesc:
+      "Assistant local pour interroger le code et les documents d’un projet, puis retrouver les passages qui étayent sa réponse.",
+    longDesc: {
+      genesis:
+        "Isolde est né d’une question concrète du cours de systèmes avancés. Comment retrouver, parmi des notes, des scripts et des résultats d’expérience, la source qui explique un choix technique ?",
+      overview:
+        "On importe une archive de projet, on vérifie son contenu puis on pose une question en français. La réponse renvoie aux extraits utilisés. On peut ainsi repartir du document ou du code pour vérifier l’explication.",
+      build:
+        "Le service Python extrait et découpe les fichiers avant de les indexer pour la recherche. Une campagne sur un corpus figé de huit fichiers a permis d’étudier la qualité des réponses et leur latence avec SQLite et NumPy. La recherche vectorielle a ensuite migré vers Chroma.",
+    },
+    context: "Projet académique - Systèmes avancés",
+    role: "Développement et évaluation de l’assistant",
+    stack: ["Python", "FastAPI", "Chroma", "NumPy", "SQLite"],
+    hero: {
+      type: "image",
+      url: "/assets/projects/isolde/hero.webp",
+      alt: "Isolde répond à une question sur K-means et affiche ses sources",
+    },
+  },
+  {
+    slug: "v2v-lab",
+    title: "V2V Lab",
+    period: "11/2026",
+    featured: false,
+    category: "info",
+    tags: ["C++", "Qt", "OpenStreetMap", "Graphes"],
+    shortDesc:
+      "Simulateur de communications entre véhicules sur le réseau routier de Mulhouse, avec comparaison de deux algorithmes de coloration.",
+    longDesc: {
+      genesis:
+        "Dans le cadre du master Informatique et Mobilité, j’ai travaillé sur les interférences entre véhicules proches. Une carte de Mulhouse permet de suivre l’évolution de leurs voisinages à mesure que le trafic se déplace.",
+      overview:
+        "Le scénario intégré place 2 000 véhicules sur le réseau routier du centre-ville. On délimite une zone, on fait avancer le temps puis on compare les colorations du graphe d’interférences pour une même situation de circulation.",
+      build:
+        "L’application utilise C++ et Qt Quick. Le réseau routier provient d’un extrait OpenStreetMap local. Deux méthodes attribuent les couleurs aux sommets du graphe, l’une suivant le degré décroissant et l’autre la saturation des voisins avec DSATUR.",
+    },
+    context: "Projet académique - Réseaux",
+    role: "Simulation et comparaison d’algorithmes",
+    stack: ["C++", "Qt", "QML", "CMake", "OpenStreetMap"],
+    hero: {
+      type: "image",
+      url: "/assets/projects/v2v-lab/hero.webp",
+      alt: "Véhicules et graphe radio superposés à la carte de Mulhouse",
+    },
+  },
+  {
     slug: "boids-3d",
     title: "Boids 3D",
     period: "10/2026",
