@@ -447,6 +447,9 @@ export const projects = [
         alt: "Même point de vue après le sinistre",
       },
     ],
+    links: [
+      { label: "GitHub", url: "https://github.com/Noferu/drone-ihm" },
+    ],
   },
   {
     slug: "isolde",
@@ -473,6 +476,9 @@ export const projects = [
       url: "/assets/projects/isolde/hero.webp",
       alt: "Isolde répond à une question sur K-means et affiche ses sources",
     },
+    links: [
+      { label: "GitHub", url: "https://github.com/Noferu/isolde" },
+    ],
   },
   {
     slug: "v2v-lab",
@@ -499,6 +505,9 @@ export const projects = [
       url: "/assets/projects/v2v-lab/hero.webp",
       alt: "Véhicules et graphe radio superposés à la carte de Mulhouse",
     },
+    links: [
+      { label: "Présentation sur GitHub", url: "https://github.com/Noferu/v2v-lab" },
+    ],
   },
   {
     slug: "boids-3d",
